@@ -1,0 +1,47 @@
+// Global variables
+BC_SHIFT_X=0
+BC_SHIFT_Y=0
+BC_SHIFT_Z=0
+
+N_REP = 1
+
+// Random generator
+rlx_level = 1
+rlx_start = new
+rlx_state = rand_state
+
+//Logger levels (default = -1)
+log:default = -1
+log:inverter = -1
+log:forcestat = 0
+
+// Pure gauge variables
+nhb   =   1
+nor   =   4
+nit   =   1 
+
+// Run control variables
+therm = 600
+run name = run1
+save freq = 12
+meas freq = 12
+//gauge start = random
+gauge start = unit
+//gauge start = run1_32x32x32x32nc2b2.800000n145300
+//rlx_state =
+//rlx_start =
+//Polyakov
+poly:make = true
+
+last conf = +2400
+rlx_seed = 12001
+GLB_X = 48
+GLB_Y = 48
+GLB_Z = 48
+GLB_T = 60
+NP_X = 4
+NP_Y = 4
+NP_Z = 4
+NP_T = 6
+beta = 7.7
+conf dir = config-nc4S48T60B7.7
