@@ -1,0 +1,6 @@
+raw_data
+processed_data
+metadata
+tmp
+input_files
+.snakemake
