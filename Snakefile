@@ -1,3 +1,6 @@
+channels = ["pseudoscalar", "vector", "axialvector", "scalar", "tensor", "axialtensor"]
+
+
 rule all:
     input:
         # "processed_data/Sp4/beta7.62/S24T48B7.62_mAS-1.13/S24T48B7.62_mAS-1.13.txt"
@@ -30,26 +33,35 @@ rule generate_fit_correlation_function_script:
 
 rule fit_correlation_function:
     input:
-        "processed_data/Sp{Nc}/beta{beta}/{slug}/fit_correlation_function.wls",
-        "processed_data/Sp{Nc}/beta{beta}/{slug}/correlators_{slug}.dat",
-        "processed_data/Sp{Nc}/beta{beta}/{slug}/plaquette_{slug}.dat"
+        script = "processed_data/Sp{Nc}/beta{beta}/{slug}/fit_correlation_function.wls",
+        correlators = "processed_data/Sp{Nc}/beta{beta}/{slug}/correlators_{slug}.dat",
+        plaquettes = "processed_data/Sp{Nc}/beta{beta}/{slug}/plaquette_{slug}.dat"
     output:
         expand(
-            "processed_data/Sp{{Nc}}/beta{{beta}}/{{slug}}/{{slug}}_{obs}boots.csv",
-            obs=["PSmass", "PSdecay", "Vmass", "Vdecay", "AVmass", "AVdecay", "Smass", "Tmass", "ATmass"]
+            "processed_data/Sp{{Nc}}/beta{{beta}}/{{slug}}/{{slug}}_{channel}_mass_boots.csv",
+            channel=channels,
+        ),
+        expand(
+            "processed_data/Sp{{Nc}}/beta{{beta}}/{{slug}}/{{slug}}_{channel}_decayconst_boots.csv",
+            channel=channels[:3],
         ),
         expand(
             "processed_data/Sp{{Nc}}/beta{{beta}}/{{slug}}/{channel}{suffix}.pdf",
-            channel=["g5", "vector", "axialvector", "scalar", "tensor", "atensor"],
+            channel=channels,
             suffix=["", "CSD"],
         ),
         expand(
             "processed_data/Sp{{Nc}}/beta{{beta}}/{{slug}}/output_{channel}.txt",
-            channel=["ps", "vec", "avec", "s", "ten", "aten"]
+            channel=channels,
         ),
         "processed_data/Sp{Nc}/beta{beta}/{slug}/{slug}.txt"
+    log:
+        "processed_data/Sp{Nc}/beta{beta}/{slug}/fit_correlation_function.wls"
+    resources:
+        mathematica_licenses = 1
     shell:
-        "wolframscript -file {input[0]}"
+        "wolframscript -file {input.script} > {log}"
+
 
 rule WilsonFlow:
     input:
