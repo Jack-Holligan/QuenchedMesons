@@ -5,17 +5,40 @@ betas = {
     6: [15.6, 16.1, 16.5, 16.7, 17.1],
     8: [26.5, 26.7, 26.8, 27.0, 27.3],
 }
-
+Ncs = [4, 6, 8]
+reps = ["F", "AS", "S"]
 channels = ["pseudoscalar", "vector", "axialvector", "scalar", "tensor", "axialtensor"]
-
+mass_channels = ["vector", "axialvector", "scalar", "tensor", "axialtensor"]
+decayconst_channels = ["pseudoscalar", "vector", "axialvector"]
+channel_observables = [
+    f"{channel}_masses" for channel in mass_channels
+] + [
+    f"{channel}_decayconsts" for channel in decayconst_channels
+]
 
 rule all:
     input:
-        # "processed_data/Sp4/beta7.62/S24T48B7.62_mAS-1.13/S24T48B7.62_mAS-1.13.txt"
-        # "processed_data/Sp4/beta7.62/wflow.pdf"
-        # "processed_data/Sp4/wflow.dat"
-        # "processed_data/Sp4/continuum/AS_data/S24T48B7.62_massPS_AS.txt"
-        "processed_data/Sp4/continuum/F/vector_mass_F_Sp4.dat"
+        expand(
+            "processed_data/largeN/{rep}_{channel_observable}.pdf",
+            rep=reps,
+            channel_observable=channel_observables,
+        ),
+        expand(
+            "processed_data/Sp{Nc}/continuum/chiral_mass_Sp{Nc}.pdf",
+            Nc=Ncs,
+        ),
+        expand(
+            "processed_data/Sp{Nc}/continuum/chiral_decayconst_Sp{Nc}.pdf",
+            Nc=Ncs,
+        ),
+        expand(
+            "processed_data/Sp{Nc}/continuum/{rep}/{channel_observable}_{rep}_Sp{Nc}.pdf",
+            rep=reps,
+            channel_observable=channel_observables,
+            Nc=Ncs,
+        )
+
+
 
 rule strip_mesons:
     input:
@@ -207,3 +230,47 @@ rule Boxplot:
         "processed_data/Sp{Nc}/continuum/boxplot.log"
     shell:
         "wolframscript -file {script} > {log}"
+
+rule GenerateLargeNScript:
+    input:
+        "src/largeN.wls"
+    output:
+        "processed_data/largeN/largeN_{observable}_{channel}_{rep}.wls"
+    shell:
+        "sed 's/_SED_REP_/{wildcards.rep}/;s/_SED_CHANNEL_/{wildcards.channel}/;s/_SED_OBSERVABLE_/{wildcards.observable}/' {input} > {output}"
+
+rule LargeN:
+    input:
+        "processed_data/largeN/largeN_{observable}_{channel}_{rep}.wls",
+        expand(
+            "processed_data/Sp{Nc}/Continuum/{{rep}}/{{rep}}_{{observable}}.txt"
+        )
+    output:
+        "processed_data/largeN/{rep}_{channel}_{observable}.pdf",
+        "processed_data/largeN/{rep}_{channel}_{observable}.txt"
+    log:
+        "processed_data/largeN/largeN_{observable}_{channel}_{rep}.log"
+    rule:
+        "wolframscript -file {script} > {log}"
+
+rule CollateMassesLargeN:
+    input:
+        expand(
+            "processed_data/largeN/{{rep}}_{channel}_masses.txt",
+            channel=mass_channels,
+        )
+    output:
+        "processed_data/largeN/{rep}_masses.txt"
+    rule:
+        "cat {input} > {output}"
+
+rule CollateDecayConstsLargeN:
+    input:
+        expand(
+            "processed_data/largeN/{{rep}}_{channel}_decayconsts.txt",
+            channel=decayconst_channels,
+        )
+    output:
+        "processed_data/largeN/{rep}_decayconsts.txt"
+    rule:
+        "cat {input} > {output}"
