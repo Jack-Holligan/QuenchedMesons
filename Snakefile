@@ -12,7 +12,10 @@ channels = ["pseudoscalar", "vector", "axialvector", "scalar", "tensor", "axialt
 rule all:
     input:
         # "processed_data/Sp4/beta7.62/S24T48B7.62_mAS-1.13/S24T48B7.62_mAS-1.13.txt"
-        "processed_data/Sp4/beta7.62/wflow.pdf"
+        # "processed_data/Sp4/beta7.62/wflow.pdf"
+        # "processed_data/Sp4/wflow.dat"
+        # "processed_data/Sp4/continuum/AS_data/S24T48B7.62_massPS_AS.txt"
+        "processed_data/Sp4/continuum/F/vector_mass_F_Sp4.dat"
 
 rule strip_mesons:
     input:
@@ -162,3 +165,45 @@ rule Continuum:
         mathematica_licenses = 1
     shell:
         "wolframscript -file {input.script} > {log}"
+
+rule CollateBoxplotInputs:
+    input:
+        expand(
+            "processed_data/Sp{{Nc}}/continuum/{{rep}}/mass_{channel}_{{rep}}_Sp{{Nc}}.dat",
+            channel=["vector axialvector scalar tensor axialtensor"],
+        ),
+        expand(
+            "processed_data/Sp{{Nc}}/continuum/{{rep}}/decayconst_{channel}_{{rep}}_Sp{{Nc}}.dat",
+            channel=["pseudoscalar vector axialvector"],
+        )
+    output:
+        expand(
+            "processed_data/Sp{{Nc}}/continuum/{{rep}}/{{rep}}_{observable}.txt",
+            observable=["masses", "decayconsts"],
+        )
+    shell:
+        "bash src/collate_boxplot_inputs.sh processed_data/Sp{Nc}/continuum {Nc}"
+
+rule GenerateBoxplotScript:
+    input:
+        "src/boxplot.wls"
+    output:
+        "processed_data/Sp{Nc}/continuum/boxplot.wls"
+    shell:
+        "sed 's/_SED_NC_/{wildcards.Nc}/' {input} > {output}"
+
+rule Boxplot:
+    input:
+        inputs = expand(
+            "processed_data/Sp{{Nc}}/{rep}/{rep}_{observable}.txt",
+            rep=["F", "AS", "S"],
+            observable=["masses", "decayconsts"],
+        ),
+        script = "processed_data/Sp{Nc}/continuum/boxplot.wls"
+    output:
+        "processed_data/Sp{Nc}/continuum/chiral_mass_Sp{Nc}.pdf",
+        "processed_data/Sp{Nc}/continuum/chiral_decayconst_Sp{Nc}.pdf"
+    log:
+        "processed_data/Sp{Nc}/continuum/boxplot.log"
+    shell:
+        "wolframscript -file {script} > {log}"
