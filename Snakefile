@@ -62,6 +62,8 @@ rule generate_fit_correlation_function_script:
         "metadata/ensembles.yaml"
     output:
         "processed_data/Sp{Nc}/beta{beta}/{slug}/fit_correlation_function.wls"
+    conda:
+        "environment.yml"
     shell:
         "python src/wrap_fit_correlation_function.py {wildcards.Nc} {wildcards.beta} {wildcards.slug} > {output}"
 
@@ -109,6 +111,8 @@ rule CollateMasses:
         w0 = "processed_data/Sp{Nc}/beta{beta}/wflow.dat"
     output:
         "processed_data/Sp{Nc}/continuum/{rep}_data/{volume}B{beta}_mass_{channel}_{rep}.txt"
+    conda:
+        "environment.yml"
     shell:
         "python src/collate_masses.py {input.spectrum} --w0_file {input.w0} --output_file {output}"
 
@@ -118,6 +122,8 @@ rule CollateDecayConsts:
         w0 = "processed_data/Sp{Nc}/beta{beta}/wflow.dat"
     output:
         "processed_data/Sp{Nc}/continuum/{rep}_data/{volume}B{beta}_decayconst_{channel}_{rep}.txt"
+    conda:
+        "environment.yml"
     shell:
         "python src/collate_masses.py {input.spectrum} --w0_file {input.w0} --output_file {output} --observable decayconst"
 
@@ -136,6 +142,8 @@ rule WilsonFlow:
     output:
         text = "processed_data/Sp{Nc}/beta{beta}/wflow.dat",
         plot = "processed_data/Sp{Nc}/beta{beta}/wflow.pdf"
+    conda:
+        "environment.yml"
     shell:
         "python src/WilsonFlow.py --beta {wildcards.beta} --flow_file {input.log} --metadata {input.ensembles} --output_file_main {output.text} --output_file_plot {output.plot}"
 
@@ -161,6 +169,8 @@ rule GenerateContinuumScript:
         "src/continuum.wls"
     output:
         "processed_data/Sp{Nc}/continuum/{rep}/continuum_{observable}_{channel}.wls"
+    conda:
+        "environment.yml"
     shell:
         "python src/wrap_continuum.py {wildcards.Nc} {wildcards.rep} {wildcards.channel} {wildcards.observable} > {output}"
 
