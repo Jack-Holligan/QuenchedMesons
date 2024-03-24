@@ -42,7 +42,6 @@ with open(args.flow_file, "r") as f:
                 flowtime_values.append(flowtime)
             if split_line[3] == "0.0000000000000000e+00":
                 if len(t2Eplaq_values) > 0 and len(t2Eplaq_values[-1]) != len(flowtime_values):
-                    breakpoint()
                     raise ValueError("Mismatched flow lengths.")
                 t2Eplaq_values.append([])
                 t2Esym_values.append([])
@@ -121,14 +120,14 @@ print("Clover: %f %f" % (mu1, std1))
 if args.output_file_main:
     with open(args.output_file_main, "w") as f:
         f.write("---------\n")
-        f.write("beta %f\nw %f\ndw %f\nW0 %f\n" % (args.beta, mu1, std1, scale))
+        f.write(f"beta {args.beta}\nw {mu1:.12f}\ndw {std1:.12f}\nW0 {scale}\n")
         f.write("---------\n")
 
 average1 = t2Esym.mean(axis=0)
 error1 = t2Esym.std(axis=0)
 
 wvalues1 = []
-for i in range(1, cnfg + 1):
+for i in range(1, nmeas):
     wvalue = w(average1, flowtimes, i)
     wvalues1.append(wvalue)
 
@@ -146,7 +145,7 @@ print("Plaquette: %f %f" % (mu2, std2))
 average2 = t2Eplaq.mean(axis=0)
 error2 = t2Eplaq.std(axis=0)
 
-wvalues2 = [w(average2, flowtimes, i) for i in range(1, cnfg + 1)]
+wvalues2 = [w(average2, flowtimes, i) for i in range(1, nmeas)]
 
 tw2 = flowtimes[:-1]
 

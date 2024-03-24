@@ -44,15 +44,15 @@ ChiSqCrit[dof_,percent_]:=Quiet[(\[Chi]/.NSolve[CDF[ChiSquareDistribution[dof],\
 BinWidth:=0.05
 If[FileExistsQ[StringJoin[Outputpath,"/output_pseudoscalar.txt"]],DeleteFile[StringJoin[Outputpath,"/output_pseudoscalar.txt"]]];If[FileExistsQ[StringJoin[Outputpath,"/output_vector.txt"]],DeleteFile[StringJoin[Outputpath,"/output_vector.txt"]]];If[FileExistsQ[StringJoin[Outputpath,"/output_axialvector.txt"]],DeleteFile[StringJoin[Outputpath,"/output_axialvector.txt"]]];If[FileExistsQ[StringJoin[Outputpath,"/output_scalar.txt"]],DeleteFile[StringJoin[Outputpath,"/output_scalar.txt"]]];If[FileExistsQ[StringJoin[Outputpath,"/output_tensor.txt"]],DeleteFile[StringJoin[Outputpath,"/output_tensor.txt"]]];If[FileExistsQ[StringJoin[Outputpath,"/output_axialtensor.txt"]],DeleteFile[StringJoin[Outputpath,"/output_axialtensor.txt"]]];
 If[FileExistsQ[StringJoin[Outputpath,"/pseudoscalarCSD.pdf"]],DeleteFile[StringJoin[Outputpath,"/pseudoscalarCSD.pdf"]]];If[FileExistsQ[StringJoin[Outputpath,"/vectorCSD.pdf"]],DeleteFile[StringJoin[Outputpath,"/vectorCSD.pdf"]]];If[FileExistsQ[StringJoin[Outputpath,"/axialvectorCSD.pdf"]],DeleteFile[StringJoin[Outputpath,"/axialvectorCSD.pdf"]]];If[FileExistsQ[StringJoin[Outputpath,"/scalarCSD.pdf"]],DeleteFile[StringJoin[Outputpath,"/scalarCSD.pdf"]]];If[FileExistsQ[StringJoin[Outputpath,"/tensorCSD.pdf"]],DeleteFile[StringJoin[Outputpath,"/tensorCSD.pdf"]]];If[FileExistsQ[StringJoin[Outputpath,"/axialtensorCSD.pdf"]],DeleteFile[StringJoin[Outputpath,"/axialtensorCSD.pdf"]]];
-If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug, "_pseudoscalar_mass_boots.csv"]],DeleteFile[StringJoin[Outputpath,"/S",ToString[NS],"T",ToString[NT],"B", ToString[NumberForm[beta,{Digitsb,DPb}]],"_",ToString[NumberForm[m,{Digitsm,DPm}]],"_",ToString[Rep],"_pseudoscalar_mass_boots.csv"]]];
-If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug, "_pseudoscalar_decayconst_boots.csv"]],DeleteFile[StringJoin[Outputpath,"/S",ToString[NS],"T",ToString[NT],"B", ToString[NumberForm[beta,{Digitsb,DPb}]],"_",ToString[NumberForm[m,{Digitsm,DPm}]],"_",ToString[Rep],"_pseudoscalar_decayconst_boots.csv"]]];
-If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug,"_vector_mass_boots.csv"]],DeleteFile[StringJoin[Outputpath, "/", FilenameSlug,"_vector_mass_boots.csv"]]];
-If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug,"_vector_decayconst_boots.csv"]],DeleteFile[StringJoin[Outputpath, "/", FilenameSlug,"_vector_decayconst_boots.csv"]]];
-If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_mass_boots.csv"]],DeleteFile[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_mass_boots.csv"]]];
-If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_decayconst_boots.csv"]],DeleteFile[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_decayboots.csv"]]];
-If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug,"_scalar_mass_boots.csv"]],DeleteFile[StringJoin[Outputpath, "/", FilenameSlug,"_scalar_mass_boots.csv"]]];
-If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug,"_tensor_mass_boots.csv"]],DeleteFile[StringJoin[Outputpath, "/", FilenameSlug,"_tensor_mass_boots.csv"]]];
-If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug,"_axialtensor_mass_boots.csv"]],DeleteFile[StringJoin[Outputpath, "/", FilenameSlug,"_axialtensor_mass_boots.csv"]]];
+If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug, "_pseudoscalar_masses_boots.csv"]],DeleteFile[StringJoin[Outputpath,"/S",ToString[NS],"T",ToString[NT],"B", ToString[NumberForm[beta,{Digitsb,DPb}]],"_",ToString[NumberForm[m,{Digitsm,DPm}]],"_",ToString[Rep],"_pseudoscalar_mass_boots.csv"]]];
+If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug, "_pseudoscalar_decayconsts_boots.csv"]],DeleteFile[StringJoin[Outputpath,"/S",ToString[NS],"T",ToString[NT],"B", ToString[NumberForm[beta,{Digitsb,DPb}]],"_",ToString[NumberForm[m,{Digitsm,DPm}]],"_",ToString[Rep],"_pseudoscalar_decayconsts_boots.csv"]]];
+If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug,"_vector_masses_boots.csv"]],DeleteFile[StringJoin[Outputpath, "/", FilenameSlug,"_vector_mass_boots.csv"]]];
+If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug,"_vector_decayconsts_boots.csv"]],DeleteFile[StringJoin[Outputpath, "/", FilenameSlug,"_vector_decayconsts_boots.csv"]]];
+If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_masses_boots.csv"]],DeleteFile[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_masses_boots.csv"]]];
+If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_decayconsts_boots.csv"]],DeleteFile[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_decayboots.csv"]]];
+If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug,"_scalar_masses_boots.csv"]],DeleteFile[StringJoin[Outputpath, "/", FilenameSlug,"_scalar_masses_boots.csv"]]];
+If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug,"_tensor_masses_boots.csv"]],DeleteFile[StringJoin[Outputpath, "/", FilenameSlug,"_tensor_masses_boots.csv"]]];
+If[FileExistsQ[StringJoin[Outputpath, "/", FilenameSlug,"_axialtensor_masses_boots.csv"]],DeleteFile[StringJoin[Outputpath, "/", FilenameSlug,"_axialtensor_masses_boots.csv"]]];
 (*Remove old data files to prevent them being used in subsequent plots*)
 
 
@@ -221,8 +221,8 @@ If[UsePS,FinalChiSq=FINALSPS[[-1,1]]];
 
 
 (* ::Input:: *)
-If[UsePS,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_pseudoscalar_mass_boots.csv"],(PSBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_pseudoscalar_mass_boots.csv"], ""]];
-If[UsePS,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_pseudoscalar_decayconst_boots.csv"],(ZA*PSBoots[[i,3]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_pseudoscalar_decayconst_boots.csv"], ""]];
+If[UsePS,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_pseudoscalar_masses_boots.csv"],(PSBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_pseudoscalar_masses_boots.csv"], ""]];
+If[UsePS,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_pseudoscalar_decayconsts_boots.csv"],(ZA*PSBoots[[i,3]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_pseudoscalar_decayconsts_boots.csv"], ""]];
 (*Write all bootstraps to an output file for use in the chiral extrapolation.*)
 
 
@@ -427,8 +427,8 @@ If[UseV,FinalChiSq=FINALSV[[-1,1]]];
 
 
 (* ::Input:: *)
-If[UseV,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_vector_mass_boots.csv"],(VBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_vector_mass_boots.csv"], ""]];
-If[UseV,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_vector_decayconst_boots.csv"],VBoots[[i,1]]*(ZV*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_vector_decayconst_boots.csv"], ""]];
+If[UseV,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_vector_masses_boots.csv"],(VBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_vector_masses_boots.csv"], ""]];
+If[UseV,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_vector_decayconsts_boots.csv"],VBoots[[i,1]]*(ZV*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_vector_decayconsts_boots.csv"], ""]];
 (*Write all bootstraps to an output file for use in the chiral extrapolation.*)
 
 
@@ -624,8 +624,8 @@ If[UseAV,FinalChiSq=FINALSAV[[-1,1]]];
 
 
 (* ::Input:: *)
-If[UseAV,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_mass_boots.csv"],(AVBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_mass_boots.csv"], ""]];
-If[UseAV,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_decayconst_boots.csv"],AVBoots[[i,1]]*(ZA*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_decayconst_boots.csv"], ""]];
+If[UseAV,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_masses_boots.csv"],(AVBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_masses_boots.csv"], ""]];
+If[UseAV,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_decayconsts_boots.csv"],AVBoots[[i,1]]*(ZA*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_decayconsts_boots.csv"], ""]];
 (*Write all bootstraps to an output file for use in the chiral extrapolation.*)
 
 
@@ -817,7 +817,7 @@ If[UseS,FinalChiSq=FINALSS[[-1,1]]];
 
 
 (* ::Input:: *)
-If[UseS,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_scalar_mass_boots.csv"],(SBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_scalar_mass_boots.csv"], ""]];
+If[UseS,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_scalar_masses_boots.csv"],(SBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_scalar_masses_boots.csv"], ""]];
 (*Write all bootstraps to an output file for use in the chiral extrapolation.*)
 
 
@@ -1009,7 +1009,7 @@ If[UseT,FinalChiSq=FINALST[[-1,1]]];
 
 
 (* ::Input:: *)
-If[UseT,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_tensor_mass_boots.csv"],(TBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_tensor_mass_boots.csv"], ""]];
+If[UseT,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_tensor_masses_boots.csv"],(TBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_tensor_masses_boots.csv"], ""]];
 (*Write all bootstraps to an output file for use in the chiral extrapolation.*)
 
 
@@ -1201,7 +1201,7 @@ If[UseAT,FinalChiSq=FINALSAT[[-1,1]]];
 
 
 (* ::Input:: *)
-If[UseAT,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialtensor_mass_boots.csv"],(ATBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialtensor_mass_boots.csv"], ""]];
+If[UseAT,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialtensor_masses_boots.csv"],(ATBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialtensor_masses_boots.csv"], ""]];
 (*Write all bootstraps to an output file for use in the chiral extrapolation.*)
 
 

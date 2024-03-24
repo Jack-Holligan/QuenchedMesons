@@ -31,14 +31,13 @@ rule all:
             "processed_data/Sp{Nc}/continuum/chiral_decayconst_Sp{Nc}.pdf",
             Nc=Ncs,
         ),
-        expand(
-            "processed_data/Sp{Nc}/continuum/{rep}/{channel_observable}_{rep}_Sp{Nc}.pdf",
-            rep=reps,
-            channel_observable=channel_observables,
-            Nc=Ncs,
-        )
-
-
+        [
+            f"processed_data/Sp{Nc}/continuum/{rep}/{channel_observable}_{rep}_Sp{Nc}.pdf"
+            for rep in reps
+            for channel_observable in channel_observables
+            for Nc in Ncs
+            if channel_observable.split("_")[0] in metadata.ensembles[Nc][rep]
+        ]
 
 rule strip_mesons:
     input:
@@ -74,12 +73,12 @@ rule fit_correlation_function:
         plaquettes = "processed_data/Sp{Nc}/beta{beta}/{slug}/plaquette_{slug}.dat"
     output:
         expand(
-            "processed_data/Sp{{Nc}}/beta{{beta}}/{{slug}}/{{slug}}_{channel}_mass_boots.csv",
+            "processed_data/Sp{{Nc}}/beta{{beta}}/{{slug}}/{{slug}}_{channel}_masses_boots.csv",
             channel=channels,
         ),
         expand(
-            "processed_data/Sp{{Nc}}/beta{{beta}}/{{slug}}/{{slug}}_{channel}_decayconst_boots.csv",
-            channel=channels[:3],
+            "processed_data/Sp{{Nc}}/beta{{beta}}/{{slug}}/{{slug}}_{channel}_decayconsts_boots.csv",
+            channel=decayconst_channels,
         ),
         expand(
             "processed_data/Sp{{Nc}}/beta{{beta}}/{{slug}}/{channel}{suffix}.pdf",
@@ -92,7 +91,7 @@ rule fit_correlation_function:
         ),
         "processed_data/Sp{Nc}/beta{beta}/{slug}/{slug}.txt"
     log:
-        "processed_data/Sp{Nc}/beta{beta}/{slug}/fit_correlation_function.wls"
+        "processed_data/Sp{Nc}/beta{beta}/{slug}/fit_correlation_function.log"
     resources:
         mathematica_licenses = 1
     shell:
@@ -110,7 +109,7 @@ rule CollateMasses:
         spectrum = ensemble_spectrum_datafiles,
         w0 = "processed_data/Sp{Nc}/beta{beta}/wflow.dat"
     output:
-        "processed_data/Sp{Nc}/continuum/{rep}_data/{volume}B{beta}_mass_{channel}_{rep}.txt"
+        "processed_data/Sp{Nc}/continuum/{rep}_data/{volume}B{beta}_masses_{channel}_{rep}.txt"
     conda:
         "environment.yml"
     shell:
@@ -121,7 +120,7 @@ rule CollateDecayConsts:
         spectrum = ensemble_spectrum_datafiles,
         w0 = "processed_data/Sp{Nc}/beta{beta}/wflow.dat"
     output:
-        "processed_data/Sp{Nc}/continuum/{rep}_data/{volume}B{beta}_decayconst_{channel}_{rep}.txt"
+        "processed_data/Sp{Nc}/continuum/{rep}_data/{volume}B{beta}_decayconsts_{channel}_{rep}.txt"
     conda:
         "environment.yml"
     shell:
@@ -178,9 +177,9 @@ def continuum_data(wildcards):
     filelist = []
     for slug in metadata.ensembles[int(wildcards.Nc)][wildcards.rep][wildcards.channel]:
         filelist.append(f"processed_data/Sp{{Nc}}/continuum/{{rep}}_data/{slug}_{{observable}}_{{channel}}_{{rep}}.txt")
-        filelist.append(f"processed_data/Sp{{Nc}}/continuum/{{rep}}_data/{slug}_mass_pseudoscalar_{{rep}}.txt")
+        filelist.append(f"processed_data/Sp{{Nc}}/continuum/{{rep}}_data/{slug}_masses_pseudoscalar_{{rep}}.txt")
         for mass in metadata.bare_masses[int(wildcards.Nc)][slug][wildcards.rep][wildcards.channel]:
-            filelist.append(f"processed_data/Sp{{Nc}}/continuum/{{rep}}_data/{slug}_m{{rep}}{mass}_pseudoscalar_mass_boots.csv")
+            filelist.append(f"processed_data/Sp{{Nc}}/continuum/{{rep}}_data/{slug}_m{{rep}}{mass}_pseudoscalar_masses_boots.csv")
             filelist.append(f"processed_data/Sp{{Nc}}/continuum/{{rep}}_data/{slug}_m{{rep}}{mass}_{{channel}}_{{observable}}_boots.csv")
 
     return filelist
@@ -193,29 +192,33 @@ rule Continuum:
         "processed_data/Sp{Nc}/continuum/{rep}/{channel}_{observable}_{rep}_Sp{Nc}.pdf",
         "processed_data/Sp{Nc}/continuum/{rep}/{channel}_{observable}_{rep}_Sp{Nc}.dat"
     log:
-        "processed_data/Sp{Nc}/continuum/{rep}/continuum_{observable}_{channel}.wls"
+        "processed_data/Sp{Nc}/continuum/{rep}/continuum_{observable}_{channel}.log"
     resources:
         mathematica_licenses = 1
     shell:
         "wolframscript -file {input.script} > {log}"
 
+def box_plot_sources(wildcards):
+    filelist = []
+    for channel in mass_channels:
+        for rep in reps:
+            if channel in metadata.ensembles[int(wildcards.Nc)][rep]:
+               filelist.append(f"processed_data/Sp{{Nc}}/continuum/{rep}/{channel}_masses_{rep}_Sp{{Nc}}.dat")
+               if channel in decayconst_channels:
+                  filelist.append(f"processed_data/Sp{{Nc}}/continuum/{rep}/{channel}_decayconsts_{rep}_Sp{{Nc}}.dat")
+    return filelist
+
 rule CollateBoxplotInputs:
     input:
-        expand(
-            "processed_data/Sp{{Nc}}/continuum/{{rep}}/mass_{channel}_{{rep}}_Sp{{Nc}}.dat",
-            channel=["vector axialvector scalar tensor axialtensor"],
-        ),
-        expand(
-            "processed_data/Sp{{Nc}}/continuum/{{rep}}/decayconst_{channel}_{{rep}}_Sp{{Nc}}.dat",
-            channel=["pseudoscalar vector axialvector"],
-        )
+        box_plot_sources
     output:
         expand(
-            "processed_data/Sp{{Nc}}/continuum/{{rep}}/{{rep}}_{observable}.txt",
+            "processed_data/Sp{{Nc}}/continuum/{rep}/{rep}_{observable}.txt",
             observable=["masses", "decayconsts"],
+            rep=reps,
         )
     shell:
-        "bash src/collate_boxplot_inputs.sh processed_data/Sp{Nc}/continuum {Nc}"
+        "bash src/collate_boxplot_inputs.sh processed_data/Sp{wildcards.Nc}/continuum {wildcards.Nc}"
 
 rule GenerateBoxplotScript:
     input:
@@ -228,7 +231,7 @@ rule GenerateBoxplotScript:
 rule Boxplot:
     input:
         inputs = expand(
-            "processed_data/Sp{{Nc}}/{rep}/{rep}_{observable}.txt",
+            "processed_data/Sp{{Nc}}/continuum/{rep}/{rep}_{observable}.txt",
             rep=["F", "AS", "S"],
             observable=["masses", "decayconsts"],
         ),
@@ -282,5 +285,5 @@ rule CollateDecayConstsLargeN:
         )
     output:
         "processed_data/largeN/{rep}_decayconsts.txt"
-    rule:
+    shell:
         "cat {input} > {output}"
