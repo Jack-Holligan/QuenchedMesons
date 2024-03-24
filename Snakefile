@@ -104,7 +104,7 @@ def ensemble_spectrum_datafiles(wildcards):
         mass=metadata.bare_masses[int(wildcards.Nc)][f"{wildcards.volume}B{wildcards.beta}"][wildcards.rep][wildcards.channel],
     )
 
-rule CollateMasses:
+rule collate_masses:
     input:
         spectrum = ensemble_spectrum_datafiles,
         w0 = "processed_data/Sp{Nc}/beta{beta}/wflow.dat"
@@ -115,7 +115,7 @@ rule CollateMasses:
     shell:
         "python src/collate_masses.py {input.spectrum} --w0_file {input.w0} --output_file {output}"
 
-rule CollateDecayConsts:
+rule collate_decay_consts:
     input:
         spectrum = ensemble_spectrum_datafiles,
         w0 = "processed_data/Sp{Nc}/beta{beta}/wflow.dat"
@@ -126,7 +126,7 @@ rule CollateDecayConsts:
     shell:
         "python src/collate_masses.py {input.spectrum} --w0_file {input.w0} --output_file {output} --observable decayconst"
 
-rule CollateBoots:
+rule collate_boots:
     input:
         "processed_data/Sp{Nc}/beta{beta}/{slug}B{beta}_m{rep}{mass}/{slug}B{beta}_m{rep}{mass}_{channel}_{observable}_boots.csv"
     output:
@@ -134,7 +134,7 @@ rule CollateBoots:
     shell:
         "cp {input} {output}"
 
-rule WilsonFlow:
+rule wilson_flow:
     input:
         log = "raw_data/Sp{Nc}/beta{beta}/out_wflow",
         ensembles = "metadata/puregauge.yaml"
@@ -153,7 +153,7 @@ def flow_datafiles(wildcards):
         beta=betas[int(wildcards.Nc)]
     )
 
-rule CombineWilsonFlow:
+rule combine_wilson_flow:
     input:
         flow_datafiles
     output:
@@ -161,7 +161,7 @@ rule CombineWilsonFlow:
     shell:
         "cat {input} > {output}"
 
-rule GenerateContinuumScript:
+rule generate_continuum_script:
     input:
         "metadata/ensembles.yaml",
         "metadata/puregauge.yaml",
@@ -184,7 +184,7 @@ def continuum_data(wildcards):
 
     return filelist
 
-rule Continuum:
+rule continuum:
     input:
         data = continuum_data,
         script = "processed_data/Sp{Nc}/continuum/{rep}/continuum_{observable}_{channel}.wls"
@@ -208,7 +208,7 @@ def box_plot_sources(wildcards):
                   filelist.append(f"processed_data/Sp{{Nc}}/continuum/{rep}/{channel}_decayconsts_{rep}_Sp{{Nc}}.dat")
     return filelist
 
-rule CollateBoxplotInputs:
+rule collate_box_plot_inputs:
     input:
         box_plot_sources
     output:
@@ -220,7 +220,7 @@ rule CollateBoxplotInputs:
     shell:
         "bash src/collate_boxplot_inputs.sh processed_data/Sp{wildcards.Nc}/continuum {wildcards.Nc}"
 
-rule GenerateBoxplotScript:
+rule generate_box_plot_scripts:
     input:
         "src/boxplot.wls"
     output:
@@ -228,7 +228,7 @@ rule GenerateBoxplotScript:
     shell:
         "sed 's/_SED_NC_/{wildcards.Nc}/' {input} > {output}"
 
-rule Boxplot:
+rule box_plot:
     input:
         inputs = expand(
             "processed_data/Sp{{Nc}}/continuum/{rep}/{rep}_{observable}.txt",
@@ -244,7 +244,7 @@ rule Boxplot:
     shell:
         "wolframscript -file {script} > {log}"
 
-rule GenerateLargeNScript:
+rule generate_large_N_script:
     input:
         "src/largeN.wls"
     output:
@@ -252,21 +252,22 @@ rule GenerateLargeNScript:
     shell:
         "sed 's/_SED_REP_/{wildcards.rep}/;s/_SED_CHANNEL_/{wildcards.channel}/;s/_SED_OBSERVABLE_/{wildcards.observable}/' {input} > {output}"
 
-rule LargeN:
+rule large_N:
     input:
         "processed_data/largeN/largeN_{observable}_{channel}_{rep}.wls",
         expand(
-            "processed_data/Sp{Nc}/Continuum/{{rep}}/{{rep}}_{{observable}}.txt"
+            "processed_data/Sp{Nc}/continuum/{{rep}}/{{rep}}_{{observable}}.txt",
+            Nc=Ncs,
         )
     output:
         "processed_data/largeN/{rep}_{channel}_{observable}.pdf",
         "processed_data/largeN/{rep}_{channel}_{observable}.txt"
     log:
         "processed_data/largeN/largeN_{observable}_{channel}_{rep}.log"
-    rule:
+    shell:
         "wolframscript -file {script} > {log}"
 
-rule CollateMassesLargeN:
+rule collate_masses_large_N:
     input:
         expand(
             "processed_data/largeN/{{rep}}_{channel}_masses.txt",
@@ -274,10 +275,10 @@ rule CollateMassesLargeN:
         )
     output:
         "processed_data/largeN/{rep}_masses.txt"
-    rule:
+    shell:
         "cat {input} > {output}"
 
-rule CollateDecayConstsLargeN:
+rule collate_decayconsts_large_N:
     input:
         expand(
             "processed_data/largeN/{{rep}}_{channel}_decayconsts.txt",
