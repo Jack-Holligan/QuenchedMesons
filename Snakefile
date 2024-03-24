@@ -141,10 +141,12 @@ rule wilson_flow:
     output:
         text = "processed_data/Sp{Nc}/beta{beta}/wflow.dat",
         plot = "processed_data/Sp{Nc}/beta{beta}/wflow.pdf"
+    log:
+        "processed_data/Sp{Nc}/beta{beta}/wflow.log"
     conda:
         "environment.yml"
     shell:
-        "python src/WilsonFlow.py --beta {wildcards.beta} --flow_file {input.log} --metadata {input.ensembles} --output_file_main {output.text} --output_file_plot {output.plot}"
+        "python src/WilsonFlow.py --beta {wildcards.beta} --flow_file {input.log} --metadata {input.ensembles} --output_file_main {output.text} --output_file_plot {output.plot} > {log}"
 
 
 def flow_datafiles(wildcards):
