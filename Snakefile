@@ -16,8 +16,10 @@ channel_observables = [
     f"{channel}_decayconsts" for channel in decayconst_channels
 ]
 
+
 rule all:
     input:
+        "tables/w0.tex",
         expand(
             "processed_data/largeN/{rep}_{channel_observable}.pdf",
             rep=reps,
@@ -308,3 +310,21 @@ rule finite_size:
         "processed_data/Sp6/beta15.6/finitesize.log"
     shell:
         "wolframscript -file src/FiniteSize.wls > {log}"
+
+def w0_data(wildcards):
+    return [
+        f"processed_data/Sp{Nc}/beta{beta}/wflow.dat"
+        for Nc, betas in betas.items()
+        for beta in betas
+    ]
+
+rule w0_table:
+    input:
+        metadata = "metadata/puregauge.yaml",
+        data = w0_data
+    output:
+        "tables/w0.tex"
+    conda:
+        "environment.yml"
+    shell:
+        "python src/tabulate_w0.py {input.metadata} --output_file {output}"
