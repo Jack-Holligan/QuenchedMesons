@@ -336,3 +336,16 @@ rule w0_table:
         "environment.yml"
     shell:
         "python {input.script} {input.metadata} --output_file {output}"
+
+rule contlim_tables:
+    input:
+        data = expand(
+            "processed_data/Sp{{Nc}}/continuum/{rep}/{channel_observable}_{rep}_Sp{{Nc}}.dat",
+            rep=reps,
+            channel_observable=channel_observables,
+        ),
+        script = "src/LatexChiral.sh"
+    output:
+        "tables/chiral_Sp{Nc}.tex"
+    shell:
+        "bash src/LatexChiral.sh ${wildcards.Nc} processed_data/Sp{wildcards.Nc}/continuum {output}"
