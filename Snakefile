@@ -20,6 +20,7 @@ channel_observables = [
 rule all:
     input:
         "tables/w0.tex",
+        expand("tables/chiral_Sp{Nc}.tex", Nc=Ncs),
         expand(
             "processed_data/largeN/{rep}_{channel_observable}.pdf",
             rep=reps,
@@ -43,11 +44,12 @@ rule all:
 
 rule strip_mesons:
     input:
-        "raw_data/Sp{Nc}/beta{beta}/{slug}.out"
+        data = "raw_data/Sp{Nc}/beta{beta}/{slug}.out",
+        script = "./src/mesfilter_new.sh"
     output:
         "processed_data/Sp{Nc}/beta{beta}/{slug}/correlators_{slug}.dat"
     shell:
-        "cat {input} | ./src/mesfilter_new.sh > {output}"
+        "cat {input.data} | {input.script} > {output}"
 
 rule strip_plaquettes:
     input:
@@ -59,14 +61,15 @@ rule strip_plaquettes:
 
 rule generate_fit_correlation_function_script:
     input:
-        "src/fit_correlation_function.wls",
-        "metadata/ensembles.yaml"
+        data = "src/fit_correlation_function.wls",
+        metadata = "metadata/ensembles.yaml",
+        script = "src/wrap_fit_correlation_function.py"
     output:
         "processed_data/Sp{Nc}/beta{beta}/{slug}/fit_correlation_function.wls"
     conda:
         "environment.yml"
     shell:
-        "python src/wrap_fit_correlation_function.py {wildcards.Nc} {wildcards.beta} {wildcards.slug} > {output}"
+        "python {input.script} {wildcards.Nc} {wildcards.beta} {wildcards.slug} > {output}"
 
 rule fit_correlation_function:
     input:
@@ -109,24 +112,26 @@ def ensemble_spectrum_datafiles(wildcards):
 rule collate_masses:
     input:
         spectrum = ensemble_spectrum_datafiles,
-        w0 = "processed_data/Sp{Nc}/beta{beta}/wflow.dat"
+        w0 = "processed_data/Sp{Nc}/beta{beta}/wflow.dat",
+        script = "src/collate_masses.py"
     output:
         "processed_data/Sp{Nc}/continuum/{rep}_data/{volume}B{beta}_masses_{channel}_{rep}.txt"
     conda:
         "environment.yml"
     shell:
-        "python src/collate_masses.py {input.spectrum} --w0_file {input.w0} --output_file {output}"
+        "python {input.script} {input.spectrum} --w0_file {input.w0} --output_file {output}"
 
 rule collate_decay_consts:
     input:
         spectrum = ensemble_spectrum_datafiles,
-        w0 = "processed_data/Sp{Nc}/beta{beta}/wflow.dat"
+        w0 = "processed_data/Sp{Nc}/beta{beta}/wflow.dat",
+        script = "src/collate_masses.py"
     output:
         "processed_data/Sp{Nc}/continuum/{rep}_data/{volume}B{beta}_decayconsts_{channel}_{rep}.txt"
     conda:
         "environment.yml"
     shell:
-        "python src/collate_masses.py {input.spectrum} --w0_file {input.w0} --output_file {output} --observable decayconst"
+        "python {input.script} {input.spectrum} --w0_file {input.w0} --output_file {output} --observable decayconst"
 
 rule collate_boots:
     input:
@@ -139,7 +144,8 @@ rule collate_boots:
 rule wilson_flow:
     input:
         log = "raw_data/Sp{Nc}/beta{beta}/out_wflow",
-        ensembles = "metadata/puregauge.yaml"
+        ensembles = "metadata/puregauge.yaml",
+        script = "src/WilsonFlow.py"
     output:
         text = "processed_data/Sp{Nc}/beta{beta}/wflow.dat",
         plot = "processed_data/Sp{Nc}/beta{beta}/wflow.pdf"
@@ -148,7 +154,7 @@ rule wilson_flow:
     conda:
         "environment.yml"
     shell:
-        "python src/WilsonFlow.py --beta {wildcards.beta} --flow_file {input.log} --metadata {input.ensembles} --output_file_main {output.text} --output_file_plot {output.plot} > {log}"
+        "python {input.script} --beta {wildcards.beta} --flow_file {input.log} --metadata {input.ensembles} --output_file_main {output.text} --output_file_plot {output.plot} > {log}"
 
 
 def flow_datafiles(wildcards):
@@ -214,7 +220,8 @@ def box_plot_sources(wildcards):
 
 rule collate_box_plot_inputs:
     input:
-        box_plot_sources
+        data = box_plot_sources,
+        script = "src/collate_boxplot_inputs.sh"
     output:
         expand(
             "processed_data/Sp{{Nc}}/continuum/{rep}/{rep}_{observable}.txt",
@@ -222,7 +229,7 @@ rule collate_box_plot_inputs:
             rep=reps,
         )
     shell:
-        "bash src/collate_boxplot_inputs.sh processed_data/Sp{wildcards.Nc}/continuum {wildcards.Nc}"
+        "bash {input.script} processed_data/Sp{wildcards.Nc}/continuum {wildcards.Nc}"
 
 rule generate_box_plot_scripts:
     input:
@@ -258,8 +265,8 @@ rule generate_large_N_script:
 
 rule large_N:
     input:
-        "processed_data/largeN/largeN_{observable}_{channel}_{rep}.wls",
-        expand(
+        script = "processed_data/largeN/largeN_{observable}_{channel}_{rep}.wls",
+        data = expand(
             "processed_data/Sp{Nc}/continuum/{{rep}}/{{rep}}_{{observable}}.txt",
             Nc=Ncs,
         )
@@ -269,7 +276,7 @@ rule large_N:
     log:
         "processed_data/largeN/largeN_{observable}_{channel}_{rep}.log"
     shell:
-        "wolframscript -file {script} > {log}"
+        "wolframscript -file {input.script} > {log}"
 
 rule collate_masses_large_N:
     input:
@@ -296,7 +303,7 @@ rule collate_decayconsts_large_N:
 rule finite_size:
     input:
         script = "src/FiniteSize.wls",
-        data=expand(
+        data = expand(
             "processed_data/Sp6/beta15.6/{volume}B15.6_mF{mass}/output_pseudoscalar.txt",
             volume=["S12T24","S16T32", "S20T40","S24T48"],
             mass=["-0.8", "-0.81", "-0.82"],
@@ -309,7 +316,7 @@ rule finite_size:
     log:
         "processed_data/Sp6/beta15.6/finitesize.log"
     shell:
-        "wolframscript -file src/FiniteSize.wls > {log}"
+        "wolframscript -file {input.script} > {log}"
 
 def w0_data(wildcards):
     return [
@@ -321,10 +328,11 @@ def w0_data(wildcards):
 rule w0_table:
     input:
         metadata = "metadata/puregauge.yaml",
-        data = w0_data
+        data = w0_data,
+        script = "src/tabulate_w0.py"
     output:
         "tables/w0.tex"
     conda:
         "environment.yml"
     shell:
-        "python src/tabulate_w0.py {input.metadata} --output_file {output}"
+        "python {input.script} {input.metadata} --output_file {output}"
