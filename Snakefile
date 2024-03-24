@@ -290,3 +290,21 @@ rule collate_decayconsts_large_N:
         "processed_data/largeN/{rep}_decayconsts.txt"
     shell:
         "cat {input} > {output}"
+
+rule finite_size:
+    input:
+        script = "src/FiniteSize.wls",
+        data=expand(
+            "processed_data/Sp6/beta15.6/{volume}B15.6_mF{mass}/output_pseudoscalar.txt",
+            volume=["S12T24","S16T32", "S20T40","S24T48"],
+            mass=["-0.8", "-0.81", "-0.82"],
+        )
+    output:
+        expand(
+            "processed_data/Sp6/beta15.6/Sp6_beta15.6_mF{mass}.pdf",
+            mass=["-0.8", "-0.81", "-0.82"],
+        )
+    log:
+        "processed_data/Sp6/beta15.6/finitesize.log"
+    shell:
+        "wolframscript -file src/FiniteSize.wls > {log}"
