@@ -7,7 +7,15 @@ betas = {
 }
 Ncs = [4, 6, 8]
 reps = ["F", "AS", "S"]
-channels = ["pseudoscalar", "vector", "axialvector", "scalar", "tensor", "axialtensor"]
+channel_names = {
+    "PS": "pseudoscalar",
+    "S": "scalar",
+    "V": "vector",
+    "AV": "axialvector",
+    "T": "tensor",
+    "AT": "axialtensor",
+}
+channels = list(channel_names.values())
 mass_channels = ["vector", "axialvector", "scalar", "tensor", "axialtensor"]
 decayconst_channels = ["pseudoscalar", "vector", "axialvector"]
 channel_observables = [
@@ -413,6 +421,27 @@ rule sum_rules:
         finite_N_data = contlim_table_inputs
     output:
         "tables/sumrules.tex"
+    conda:
+        "environment.yml"
+    shell:
+        "python {input.script} --output_file {output}"
+
+
+def ensemble_masses():
+    return [
+        "processed_data/Sp{Nc}/beta{beta}/S{NS}T{NT}B{beta}_m{Rep}{m}/output_{channel}"
+        for ensemble in metadata.metadata.values()
+        for channel, channel_name in channel_names.items()
+        if f"Use{channel}" in ensemble
+    ]
+
+rule ensemble_masses_csv:
+    input:
+        script = "src/ensemble_masses_csv",
+        metadata = "metadata/ensembles.yaml",
+        data = ensemble_masses,
+    output:
+        "csvs/ensemble_masses.csv"
     conda:
         "environment.yml"
     shell:
