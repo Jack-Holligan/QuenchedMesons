@@ -1,6 +1,11 @@
+plots
+tables
+
+input_files
 raw_data
 processed_data
 metadata
+
 tmp
-input_files
+
 .snakemake
