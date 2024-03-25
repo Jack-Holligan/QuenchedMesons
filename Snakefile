@@ -48,11 +48,11 @@ rule all:
 rule strip_mesons:
     input:
         data = "raw_data/Sp{Nc}/beta{beta}/{slug}.out",
-        script = "./src/mesfilter_new.sh"
+        script = "src/mesfilter_new.sh"
     output:
         "processed_data/Sp{Nc}/beta{beta}/{slug}/correlators_{slug}.dat"
     shell:
-        "cat {input.data} | {input.script} > {output}"
+        "cat {input.data} | bash {input.script} > {output}"
 
 rule strip_plaquettes:
     input:
