@@ -373,13 +373,17 @@ rule w0_table:
     shell:
         "python {input.script} {input.metadata} --output_file {output}"
 
+def contlim_table_inputs(wildcards):
+    return [
+        f"processed_data/Sp{{Nc}}/continuum/{rep}/{channel_observable}_{rep}_Sp{{Nc}}.dat"
+        for rep in reps
+        for channel_observable in channel_observables
+        if channel_observable.split("_")[0] in metadata.ensembles[int(wildcards.Nc)][rep]
+    ]
+
 rule contlim_tables:
     input:
-        data = expand(
-            "processed_data/Sp{{Nc}}/continuum/{rep}/{channel_observable}_{rep}_Sp{{Nc}}.dat",
-            rep=reps,
-            channel_observable=channel_observables,
-        ),
+        data = contlim_table_inputs,
         script = "src/LatexChiral.sh"
     output:
         "tables/chiral_Sp{Nc}.tex"
@@ -389,8 +393,9 @@ rule contlim_tables:
 rule large_N_table:
     input:
         data = expand(
-             "processed_data/largeN/{{rep}}_{observable}.txt",
+             "processed_data/largeN/{rep}_{observable}.txt",
              observable=["masses", "decayconsts"],
+             rep=reps,
         ),
         script = "src/LatexChiral_LargeN.sh",
     output:
