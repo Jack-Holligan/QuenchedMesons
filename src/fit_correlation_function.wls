@@ -247,7 +247,7 @@ StyleBox[\")\",\nFontSlant->\"Italic\",\nFontColor->RGBColor[0.5, 0, 0.5]]\)"]]]
 
 (* ::Input:: *)
 If[UsePS,Export[StringJoin[Outputpath,"/pseudoscalar.pdf"],FullPlotPS,"PDF"],Export[StringJoin[Outputpath,"/pseudoscalar.pdf"], ""]];
-If[UsePS,HistogramPlotPS=Histogram[PSBoots[[;;,-1]],{BinWidth},"Probability",ImageSize->600,ChartStyle->Darker[Blue],FrameLabel->{"\!\(\*SuperscriptBox[\(\[Chi]\), \(2\)]\)/d.o.f.","Normalised Frequency"},LabelStyle->Directive[20,Black],Frame->True,PlotRange->Automatic,AxesStyle->{Thick,Black},PlotLabel->StringJoin["\!\(\*SubscriptBox[\(\[Gamma]\), \(5\)]\). Sp(",ToString[Nc],"), ",ToString[Superscript[NS,"3"],FormatType->StandardForm],"\[Times]",ToString[NT], ", \[Beta]=",ToString[NumberForm[beta,{Digitsb,DPb}]],", \!\(\*SubscriptBox[\(m\), \(o\)]\)=",ToString[NumberForm[m,{Digitsm,DPm}]]]]]
+If[UsePS,HistogramPlotPS=Histogram[Select[PSBoots[[;;,-1]],And[#<BinWidth*1000,#>-BinWidth*1000]&],{BinWidth},"Probability",ImageSize->600,ChartStyle->Darker[Blue],FrameLabel->{"\!\(\*SuperscriptBox[\(\[Chi]\), \(2\)]\)/d.o.f.","Normalised Frequency"},LabelStyle->Directive[20,Black],Frame->True,PlotRange->Automatic,AxesStyle->{Thick,Black},PlotLabel->StringJoin["\!\(\*SubscriptBox[\(\[Gamma]\), \(5\)]\). Sp(",ToString[Nc],"), ",ToString[Superscript[NS,"3"],FormatType->StandardForm],"\[Times]",ToString[NT], ", \[Beta]=",ToString[NumberForm[beta,{Digitsb,DPb}]],", \!\(\*SubscriptBox[\(m\), \(o\)]\)=",ToString[NumberForm[m,{Digitsm,DPm}]]]]]
 
 
 (* ::Input:: *)
@@ -451,7 +451,7 @@ StyleBox[\")\",\nFontSlant->\"Italic\",\nFontColor->RGBColor[0.5, 0, 0.5]]\)"]]]
 
 (* ::Input:: *)
 If[UseV,Export[StringJoin[Outputpath,"/vector.pdf"],FullPlotV,"PDF"], Export[StringJoin[Outputpath,"/vector.pdf"], ""]];
-If[UseV,HistogramPlotV=Histogram[VBoots[[;;,-1]],{BinWidth},"Probability",ImageSize->600,ChartStyle->Darker[Blue],FrameLabel->{"\!\(\*SuperscriptBox[\(\[Chi]\), \(2\)]\)/d.o.f.","Normalised Frequency"},LabelStyle->Directive[20,Black],Frame->True,PlotRange->Automatic,AxesStyle->{Thick,Black},PlotLabel->StringJoin["\!\(\*SubscriptBox[\(\[Gamma]\), \(\[Mu]\)]\). Sp(",ToString[Nc],"), ",ToString[Superscript[NS,"3"],FormatType->StandardForm],"\[Times]",ToString[NT], ", \[Beta]=",ToString[NumberForm[beta,{Digitsb,DPb}]],", \!\(\*SubscriptBox[\(m\), \(o\)]\)=",ToString[NumberForm[m,{Digitsm,DPm}]]]]]
+If[UseV,HistogramPlotV=Histogram[Select[VBoots[[;;,-1]],And[#<BinWidth*1000,#>-BinWidth*1000]&],{BinWidth},"Probability",ImageSize->600,ChartStyle->Darker[Blue],FrameLabel->{"\!\(\*SuperscriptBox[\(\[Chi]\), \(2\)]\)/d.o.f.","Normalised Frequency"},LabelStyle->Directive[20,Black],Frame->True,PlotRange->Automatic,AxesStyle->{Thick,Black},PlotLabel->StringJoin["\!\(\*SubscriptBox[\(\[Gamma]\), \(\[Mu]\)]\). Sp(",ToString[Nc],"), ",ToString[Superscript[NS,"3"],FormatType->StandardForm],"\[Times]",ToString[NT], ", \[Beta]=",ToString[NumberForm[beta,{Digitsb,DPb}]],", \!\(\*SubscriptBox[\(m\), \(o\)]\)=",ToString[NumberForm[m,{Digitsm,DPm}]]]]]
 
 
 (* ::Input:: *)
@@ -648,7 +648,7 @@ StyleBox[\")\",\nFontSlant->\"Italic\",\nFontColor->RGBColor[0.5, 0, 0.5]]\)"]]]
 
 (* ::Input:: *)
 If[UseAV,Export[StringJoin[Outputpath,"/axialvector.pdf"],FullPlotAV,"PDF"], Export[StringJoin[Outputpath,"/axialvector.pdf"], ""]];
-If[UseAV,HistogramPlotAV=Histogram[AVBoots[[;;,-1]],{BinWidth},"Probability",ImageSize->600,ChartStyle->Darker[Blue],FrameLabel->{"\!\(\*SuperscriptBox[\(\[Chi]\), \(2\)]\)/d.o.f.","Normalised Frequency"},LabelStyle->Directive[20,Black],Frame->True,PlotRange->Automatic,AxesStyle->{Thick,Black},PlotLabel->StringJoin["\!\(\*SubscriptBox[\(\[Gamma]\), \(5\)]\)\!\(\*SubscriptBox[\(\[Gamma]\), \(\[Mu]\)]\). Sp(",ToString[Nc],"), ",ToString[Superscript[NS,"3"],FormatType->StandardForm],"\[Times]",ToString[NT], ", \[Beta]=",ToString[NumberForm[beta,{Digitsb,DPb}]],", \!\(\*SubscriptBox[\(m\), \(o\)]\)=",ToString[NumberForm[m,{Digitsm,DPm}]]]]]
+If[UseAV,HistogramPlotAV=Histogram[Select[AVBoots[[;;,-1]],And[#<BinWidth*1000,#>-BinWidth*1000]&],{BinWidth},"Probability",ImageSize->600,ChartStyle->Darker[Blue],FrameLabel->{"\!\(\*SuperscriptBox[\(\[Chi]\), \(2\)]\)/d.o.f.","Normalised Frequency"},LabelStyle->Directive[20,Black],Frame->True,PlotRange->Automatic,AxesStyle->{Thick,Black},PlotLabel->StringJoin["\!\(\*SubscriptBox[\(\[Gamma]\), \(5\)]\)\!\(\*SubscriptBox[\(\[Gamma]\), \(\[Mu]\)]\). Sp(",ToString[Nc],"), ",ToString[Superscript[NS,"3"],FormatType->StandardForm],"\[Times]",ToString[NT], ", \[Beta]=",ToString[NumberForm[beta,{Digitsb,DPb}]],", \!\(\*SubscriptBox[\(m\), \(o\)]\)=",ToString[NumberForm[m,{Digitsm,DPm}]]]]]
 
 
 (* ::Input:: *)
@@ -840,7 +840,7 @@ StyleBox[\")\",\nFontSlant->\"Italic\",\nFontColor->RGBColor[0.5, 0, 0.5]]\)"]]]
 
 (* ::Input:: *)
 If[UseS,Export[StringJoin[Outputpath,"/scalar.pdf"],FullPlotS,"PDF"], Export[StringJoin[Outputpath,"/scalar.pdf"], ""]];
-If[UseS,HistogramPlotS=Histogram[SBoots[[;;,-1]],{BinWidth},"Probability",ImageSize->600,ChartStyle->Darker[Blue],FrameLabel->{"\!\(\*SuperscriptBox[\(\[Chi]\), \(2\)]\)/d.o.f.","Normalised Frequency"},LabelStyle->Directive[20,Black],Frame->True,PlotRange->Automatic,AxesStyle->{Thick,Black},PlotLabel->StringJoin["\[DoubleStruckOne]. Sp(",ToString[Nc],"), ",ToString[Superscript[NS,"3"],FormatType->StandardForm],"\[Times]",ToString[NT], ", \[Beta]=",ToString[NumberForm[beta,{Digitsb,DPb}]],", \!\(\*SubscriptBox[\(m\), \(o\)]\)=",ToString[NumberForm[m,{Digitsm,DPm}]]]]]
+If[UseS,HistogramPlotS=Histogram[Select[SBoots[[;;,-1]],,And[#<BinWidth*1000,#>-BinWidth*1000]&],{BinWidth},"Probability",ImageSize->600,ChartStyle->Darker[Blue],FrameLabel->{"\!\(\*SuperscriptBox[\(\[Chi]\), \(2\)]\)/d.o.f.","Normalised Frequency"},LabelStyle->Directive[20,Black],Frame->True,PlotRange->Automatic,AxesStyle->{Thick,Black},PlotLabel->StringJoin["\[DoubleStruckOne]. Sp(",ToString[Nc],"), ",ToString[Superscript[NS,"3"],FormatType->StandardForm],"\[Times]",ToString[NT], ", \[Beta]=",ToString[NumberForm[beta,{Digitsb,DPb}]],", \!\(\*SubscriptBox[\(m\), \(o\)]\)=",ToString[NumberForm[m,{Digitsm,DPm}]]]]]
 
 
 (* ::Input:: *)
@@ -1032,7 +1032,7 @@ StyleBox[\")\",\nFontSlant->\"Italic\",\nFontColor->RGBColor[0.5, 0, 0.5]]\)"]]]
 
 (* ::Input:: *)
 If[UseT,Export[StringJoin[Outputpath,"/tensor.pdf"],FullPlotT,"PDF"], Export[StringJoin[Outputpath,"/tensor.pdf"], ""]];
-If[UseT,HistogramPlotT=Histogram[TBoots[[;;,-1]],{BinWidth},"Probability",ImageSize->600,ChartStyle->Darker[Blue],FrameLabel->{"\!\(\*SuperscriptBox[\(\[Chi]\), \(2\)]\)/d.o.f.","Normalised Frequency"},LabelStyle->Directive[20,Black],Frame->True,PlotRange->Automatic,AxesStyle->{Thick,Black},PlotLabel->StringJoin["\!\(\*SubscriptBox[\(\[Gamma]\), \(0\)]\)\!\(\*SubscriptBox[\(\[Gamma]\), \(\[Mu]\)]\). Sp(",ToString[Nc],"), ",ToString[Superscript[NS,"3"],FormatType->StandardForm],"\[Times]",ToString[NT], ", \[Beta]=",ToString[NumberForm[beta,{Digitsb,DPb}]],", \!\(\*SubscriptBox[\(m\), \(o\)]\)=",ToString[NumberForm[m,{Digitsm,DPm}]]]]]
+If[UseT,HistogramPlotT=Histogram[Select[TBoots[[;;,-1]],,And[#<BinWidth*1000,#>-BinWidth*1000]&],{BinWidth},"Probability",ImageSize->600,ChartStyle->Darker[Blue],FrameLabel->{"\!\(\*SuperscriptBox[\(\[Chi]\), \(2\)]\)/d.o.f.","Normalised Frequency"},LabelStyle->Directive[20,Black],Frame->True,PlotRange->Automatic,AxesStyle->{Thick,Black},PlotLabel->StringJoin["\!\(\*SubscriptBox[\(\[Gamma]\), \(0\)]\)\!\(\*SubscriptBox[\(\[Gamma]\), \(\[Mu]\)]\). Sp(",ToString[Nc],"), ",ToString[Superscript[NS,"3"],FormatType->StandardForm],"\[Times]",ToString[NT], ", \[Beta]=",ToString[NumberForm[beta,{Digitsb,DPb}]],", \!\(\*SubscriptBox[\(m\), \(o\)]\)=",ToString[NumberForm[m,{Digitsm,DPm}]]]]]
 
 
 (* ::Input:: *)
@@ -1224,7 +1224,7 @@ StyleBox[\")\",\nFontSlant->\"Italic\",\nFontColor->RGBColor[0.5, 0, 0.5]]\)"]]]
 
 (* ::Input:: *)
 If[UseAT,Export[StringJoin[Outputpath,"/axialtensor.pdf"],FullPlotAT,"PDF"], Export[StringJoin[Outputpath,"/axialtensor.pdf"], ""]];
-If[UseAT,HistogramPlotAT=Histogram[ATBoots[[;;,-1]],{BinWidth},"Probability",ImageSize->600,ChartStyle->Darker[Blue],FrameLabel->{"\!\(\*SuperscriptBox[\(\[Chi]\), \(2\)]\)/d.o.f.","Normalised Frequency"},LabelStyle->Directive[20,Black],Frame->True,PlotRange->Automatic,AxesStyle->{Thick,Black},PlotLabel->StringJoin["\!\(\*SubscriptBox[\(\[Gamma]\), \(5\)]\)\!\(\*SubscriptBox[\(\[Gamma]\), \(0\)]\)\!\(\*SubscriptBox[\(\[Gamma]\), \(\[Mu]\)]\). Sp(",ToString[Nc],"), ",ToString[Superscript[NS,"3"],FormatType->StandardForm],"\[Times]",ToString[NT], ", \[Beta]=",ToString[NumberForm[beta,{Digitsb,DPb}]],", \!\(\*SubscriptBox[\(m\), \(o\)]\)=",ToString[NumberForm[m,{Digitsm,DPm}]]]]]
+If[UseAT,HistogramPlotAT=Histogram[Select[ATBoots[[;;,-1]],,And[#<BinWidth*1000,#>-BinWidth*1000]&],{BinWidth},"Probability",ImageSize->600,ChartStyle->Darker[Blue],FrameLabel->{"\!\(\*SuperscriptBox[\(\[Chi]\), \(2\)]\)/d.o.f.","Normalised Frequency"},LabelStyle->Directive[20,Black],Frame->True,PlotRange->Automatic,AxesStyle->{Thick,Black},PlotLabel->StringJoin["\!\(\*SubscriptBox[\(\[Gamma]\), \(5\)]\)\!\(\*SubscriptBox[\(\[Gamma]\), \(0\)]\)\!\(\*SubscriptBox[\(\[Gamma]\), \(\[Mu]\)]\). Sp(",ToString[Nc],"), ",ToString[Superscript[NS,"3"],FormatType->StandardForm],"\[Times]",ToString[NT], ", \[Beta]=",ToString[NumberForm[beta,{Digitsb,DPb}]],", \!\(\*SubscriptBox[\(m\), \(o\)]\)=",ToString[NumberForm[m,{Digitsm,DPm}]]]]]
 
 
 (* ::Input:: *)
