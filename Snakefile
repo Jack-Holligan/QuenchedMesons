@@ -21,6 +21,7 @@ rule all:
     input:
         "tables/w0.tex",
         expand("tables/chiral_Sp{Nc}.tex", Nc=Ncs),
+        "tables/chiral_largeN.tex",
         expand(
             "processed_data/largeN/{rep}_{channel_observable}.pdf",
             rep=reps,
@@ -349,3 +350,15 @@ rule contlim_tables:
         "tables/chiral_Sp{Nc}.tex"
     shell:
         "bash src/LatexChiral.sh ${wildcards.Nc} processed_data/Sp{wildcards.Nc}/continuum {output}"
+
+rule large_N_table:
+    input:
+        data = expand(
+             "processed_data/largeN/{{rep}}_{observable}.txt",
+             observable=["masses", "decayconsts"],
+        ),
+        script = "src/LatexChiral_LargeN.sh",
+    output:
+        "tables/chiral_largeN.tex"
+    shell:
+        "bash {input.script} processed_data/largeN {output}"
