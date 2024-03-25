@@ -23,25 +23,27 @@ rule all:
         expand("tables/chiral_Sp{Nc}.tex", Nc=Ncs),
         "tables/chiral_largeN.tex",
         expand(
-            "processed_data/largeN/{rep}_{channel_observable}.pdf",
+            "plots/largeN_{rep}_{channel_observable}.pdf",
             rep=reps,
             channel_observable=channel_observables,
         ),
         expand(
-            "processed_data/Sp{Nc}/continuum/chiral_mass_Sp{Nc}.pdf",
+            "plots/chiral_{observable}_Sp{Nc}.pdf",
             Nc=Ncs,
-        ),
-        expand(
-            "processed_data/Sp{Nc}/continuum/chiral_decayconst_Sp{Nc}.pdf",
-            Nc=Ncs,
+            observable=["mass", "decayconst"],
         ),
         [
-            f"processed_data/Sp{Nc}/continuum/{rep}/{channel_observable}_{rep}_Sp{Nc}.pdf"
+            f"plots/continuum_Sp{Nc}_{channel_observable}_{rep}.pdf"
             for rep in reps
             for channel_observable in channel_observables
             for Nc in Ncs
             if channel_observable.split("_")[0] in metadata.ensembles[Nc][rep]
-        ]
+        ],
+        # awaiting data, so these won't yet generate
+        # expand(
+        #     "processed_data/Sp6/beta15.6/Sp6_beta15.6_mF{mass}.pdf",
+        #     mass=[-0.8, -0.81],
+        # )
 
 rule strip_mesons:
     input:
@@ -318,6 +320,39 @@ rule finite_size:
         "processed_data/Sp6/beta15.6/finitesize.log"
     shell:
         "wolframscript -file {input.script} > {log}"
+
+
+rule collate_large_N_plots:
+    input:
+        "processed_data/largeN/{rep}_{channel}_{observable}.pdf"
+    output:
+        "plots/largeN_{rep}_{channel}_{observable}.pdf"
+    shell:
+        "cp {input} {output}"
+
+rule collate_chiral_plots:
+    input:
+        "processed_data/Sp{Nc}/continuum/chiral_{observable}_Sp{Nc}.pdf"
+    output:
+        "plots/chiral_{observable}_Sp{Nc}.pdf"
+    shell:
+        "cp {input} {output}"
+
+rule collate_contlim_plots:
+    input:
+        "processed_data/Sp{Nc}/continuum/{rep}/{channel}_{observable}_{rep}_Sp{Nc}.pdf"
+    output:
+        "plots/continuum_Sp{Nc}_{channel}_{observable}_{rep}.pdf"
+    shell:
+        "cp {input} {output}"
+
+rule collate_finitesize_plots:
+    input:
+        "processed_data/Sp{Nc}/beta{beta}/Sp{Nc}_beta{beta}_m{rep}{mass}.pdf"
+    output:
+        "plots/finitesize_Sp{Nc}_beta{beta}_m{rep}{mass}.pdf"
+    shell:
+        "cp {input} {output}"
 
 def w0_data(wildcards):
     return [
