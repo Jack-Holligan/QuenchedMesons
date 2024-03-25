@@ -390,15 +390,30 @@ rule contlim_tables:
     shell:
         "bash src/LatexChiral.sh ${wildcards.Nc} processed_data/Sp{wildcards.Nc}/continuum {output}"
 
+def large_N_table_inputs(wildcards):
+    return expand(
+        "processed_data/largeN/{rep}_{observable}.txt",
+        observable=["masses", "decayconsts"],
+        rep=reps,
+    )
+
 rule large_N_table:
     input:
-        data = expand(
-             "processed_data/largeN/{rep}_{observable}.txt",
-             observable=["masses", "decayconsts"],
-             rep=reps,
-        ),
+        data = large_N_table_inputs,
         script = "src/LatexChiral_LargeN.sh",
     output:
         "tables/chiral_largeN.tex"
     shell:
         "bash {input.script} processed_data/largeN {output}"
+
+rule sum_rules:
+    input:
+        script = "src/sumrules.py",
+        large_N_data = large_N_table_inputs,
+        finite_N_data = contlim_table_inputs
+    output:
+        "tables/sumrules.tex"
+    conda:
+        "environment.yml"
+    shell:
+        "python {input.script} --output_file {output}"
