@@ -11,18 +11,21 @@ Needs["ErrorBarPlots`"];
 Needs["PlotLegends`"];
 Needs["MaTeX`"];
 
-Nc:=_SED_NC_
-Rep:=_SED_REP_
-Basepath:="_SED_BASEPATH_"
-Outputpath:="_SED_OUTPUTPATH_"
-volumes:={_SED_VOLUMES_}
-Data:={"beta", "baremass", "GradientFlow", "GradientFlowErr", "Observable", "ObservableErr"}
-betas:={_SED_BETAS_}
-colours:={_SED_COLOURS_} (*Blue, Orange, Darker[Green], Red, Purple *)
-f[x_,L_,m2_,W_,a_]:=x*(1+L*m2)+W*a
+SetSystemOptions["ParallelOptions" -> {"ParallelThreadNumber" -> 1}];
+
+Nc:=_SED_NC_;
+Rep:=_SED_REP_;
+Basepath:="_SED_BASEPATH_";
+Outputpath:="_SED_OUTPUTPATH_";
+volumes:={_SED_VOLUMES_};
+Data:={"beta", "baremass", "GradientFlow", "GradientFlowErr", "Observable", "ObservableErr"};
+betas:={_SED_BETAS_};
+colours:={_SED_COLOURS_}; (*Blue, Orange, Darker[Green], Red, Purple *)
+f[x_,L_,m2_,W_,a_]:=x*(1+L*m2)+W*a;
 Observable="_SED_OBSERVABLE_";
-channel="_SED_CHANNEL_";(*Observable (mass or decayconst) and channel (PS, V, AV, S, T, AT).*)
-SeedRandom[_SED_SEED_,Method->"MersenneTwister"]
+channel="_SED_CHANNEL_";
+shortchannel=<| "pseudoscalar" -> "PS", "vector" -> "V", "axialvector" -> "AV", "scalar" -> "S", "tensor" -> "T", "axialtensor" -> "AT" |>[[channel]];
+SeedRandom[_SED_SEED_,Method->"MersenneTwister"];
 
 
 
@@ -35,11 +38,11 @@ Evaluate[Symbol["Use"<>Observable<>channel]]=True;
 
 
 (* ::Input:: *)
-For[i=1,i<=Length[betas],++i,{Clear[Evaluate[StringJoin[Observable<>channel<>ToString[i]]]],Evaluate[Symbol[StringJoin[Observable<>channel<>ToString[i]]]]=Import[StringJoin[Basepath,"/",ToString[Rep],"_data/",ToString[volumes[[i]]],"_",Observable,"_",channel,"_",ToString[Rep],".txt"],"CSV","Numeric"->False]}]
+scrap={};
+For[i=1,i<=Length[betas],++i,{Clear[Evaluate[StringJoin[Observable<>channel<>ToString[i]]]],If[FileExistsQ[StringJoin[Basepath,"/",ToString[Rep],"_data/",ToString[volumes[[i]]],"_",Observable,"_",channel,"_",ToString[Rep],".txt"]],Evaluate[Symbol[StringJoin[Observable<>channel<>ToString[i]]]]=Import[StringJoin[Basepath,"/",ToString[Rep],"_data/",ToString[volumes[[i]]],"_",Observable,"_",channel,"_",ToString[Rep],".txt"],"CSV","Numeric"->False],AppendTo[scrap,i]]}]
 
 
 (* ::Input:: *)
-scrap={};For[i=1,i<=Length[betas],++i,If[Evaluate[Symbol[Observable<>channel<>ToString[i]]][[1,5]]=="",AppendTo[scrap,i]]]
 Betas=Volumes=Colours={};
 For[i=1,i<=Length[betas],++i,If[MemberQ[scrap,i],Continue[],{AppendTo[Betas,betas[[i]]],AppendTo[Volumes,volumes[[i]]],AppendTo[Colours,colours[[i]]]}]]
 (*Remove beta values for which there is no data*)
@@ -48,7 +51,7 @@ For[i=1,i<=Length[betas],++i,If[MemberQ[scrap,i],Continue[],{AppendTo[Betas,beta
 (* ::Input:: *)
 For[i=1,i<=Length[Betas],++i,{
 Clear[Evaluate[StringJoin["Xdata",ToString[i]]]];
-Evaluate[Symbol[StringJoin["Xdata",ToString[i]]]]=Import[StringJoin[Basepath,"/",ToString[Rep],"_data/",ToString[Volumes[[i]]],"_mass_pseudoscalar_",ToString[Rep],".txt"],"CSV","Numeric"->False]}](*Import as strings to avoid loss of trailing zeros when importing the data files.*)
+Evaluate[Symbol[StringJoin["Xdata",ToString[i]]]]=Import[StringJoin[Basepath,"/",ToString[Rep],"_data/",ToString[Volumes[[i]]],"_masses_pseudoscalar_",ToString[Rep],".txt"],"CSV","Numeric"->False]}](*Import as strings to avoid loss of trailing zeros when importing the data files.*)
 
 
 (* ::Input:: *)
@@ -69,7 +72,7 @@ Evaluate[Symbol["massPS"<>ToString[i]]]=tmp]
 
 (* ::Input:: *)
 massPSboots={};For[i=1,i<=Length[Betas],++i,For[j=1,j<=Length[Evaluate[Symbol["massPS"<>ToString[i]]][[;;,2]]],++j,
-{row=Flatten[Import[StringJoin[Basepath,"/",ToString[Rep],"_data/",ToString[Volumes[[i]]],"_m",ToString[Rep],ToString[Evaluate[Symbol["massPS"<>ToString[i]][[j,2]]]],"_pseudoscalar_mass_boots.csv"]]],gradient=ToExpression[Evaluate[Symbol["massPS"<>ToString[i]]][[j,3]]],AppendTo[massPSboots,gradient^2*row]}]];
+{row=Flatten[Import[StringJoin[Basepath,"/",ToString[Rep],"_data/",ToString[Volumes[[i]]],"_m",ToString[Rep],ToString[Evaluate[Symbol["massPS"<>ToString[i]][[j,2]]]],"_pseudoscalar_masses_boots.csv"]]],gradient=ToExpression[Evaluate[Symbol["massPS"<>ToString[i]]][[j,3]]],AppendTo[massPSboots,gradient^2*row]}]];
 (*Import bootstrap data for pseudoscalar mass multiplying by the relevant gradient flow scale*)
 
 
@@ -83,10 +86,10 @@ Evaluate[Symbol[Observable<>channel<>"boots"]]=tmpboots;(*Import bootstrap data 
 (* ::Input:: *)
 For[i=1,i<=Length[Betas],++i,{holder=Symbol[Evaluate[Observable<>channel<>ToString[i]]],
 For[j=1,j<=Dimensions[holder][[1]],++j,
-holder[[j]]=Flatten@ToExpression@StringSplit[holder[[j]]]],Clear[Evaluate[Observable<>channel<>ToString[i]]],Evaluate[Symbol[Observable<>channel<>ToString[i]]]=holder}]
+holder[[j]]=Flatten@Map[Interpreter["Number"],StringSplit[holder[[j]]]]],Clear[Evaluate[Observable<>channel<>ToString[i]]],Evaluate[Symbol[Observable<>channel<>ToString[i]]]=holder}]
 For[i=1,i<=Length[Betas],++i,{holder=Symbol[Evaluate["massPS"<>ToString[i]]],
 For[j=1,j<=Dimensions[holder][[1]],++j,
-holder[[j]]=Flatten@ToExpression@StringSplit[holder[[j]]]],Clear[Evaluate["massPS"<>ToString[i]]],Evaluate[Symbol["massPS"<>ToString[i]]]=holder}]
+holder[[j]]=Flatten@Map[Interpreter["Number"],StringSplit[holder[[j]]]]],Clear[Evaluate["massPS"<>ToString[i]]],Evaluate[Symbol["massPS"<>ToString[i]]]=holder}]
 
 
 (* ::Input:: *)
@@ -105,15 +108,16 @@ Clear[Evaluate[Observable<>channel<>ToString[i]]];Evaluate[Symbol[Observable<>ch
 
 
 (* ::Input:: *)
-If[StringMatchQ[Observable,"decayconst"],ylabel=MaTeX["\\hat{f}^2_{\\rm "<>channel<>"}",FontSize->24],If[StringMatchQ[Observable,"mass"],ylabel=MaTeX["\\hat{m}^2_{\\rm "<>channel<>"}",FontSize->24]]];
+ChannelSymbol=If[ToString[Rep]=="S","\\mathcal{"<>shortchannel<>"}","\\mathrm{"<>If[ToString[Rep]=="AS",ToLowerCase[shortchannel],shortchannel]<>"}"];
+If[StringMatchQ[Observable,"decayconsts"],ylabel=MaTeX["\\hat{f}^2_{"<>ChannelSymbol<>"}",FontSize->24],If[StringMatchQ[Observable,"masses"],ylabel=MaTeX["\\hat{m}^2_{"<>ChannelSymbol<>"}",FontSize->24]]];
 xvalues={};yvalues={};
 For[i=1,i<=Length[Betas],++i,{AppendTo[xvalues,Evaluate[Symbol["massPS"<>ToString[i]]][[;;,5]]+Evaluate[Symbol["massPS"<>ToString[i]]][[;;,6]]],AppendTo[xvalues,Evaluate[Symbol["massPS"<>ToString[i]]][[;;,5]]-Evaluate[Symbol["massPS"<>ToString[i]]][[;;,6]]]}]
 For[i=1,i<=Length[Betas],++i,{AppendTo[yvalues,Evaluate[Symbol[Observable<>channel<>ToString[i]]][[;;,5]]+Evaluate[Symbol[Observable<>channel<>ToString[i]]][[;;,6]]],AppendTo[yvalues,Evaluate[Symbol[Observable<>channel<>ToString[i]]][[;;,5]]-Evaluate[Symbol[Observable<>channel<>ToString[i]]][[;;,6]]]}]
 
 
 (* ::Input:: *)
-maxmassPS=0.6;(*1.0;*)
-minmassPS=0.0;
+maxmassPS=_SED_MAXMASSPS_;
+minmassPS=_SED_MINMASSPS_;
 
 
 (* ::Input:: *)
@@ -131,12 +135,12 @@ Evaluate[Symbol[Observable<>channel<>"final"]]={x/.tmp[[2,1]], L/.tmp[[2,2]], W/
 (* ::Input:: *)
 For[i=1,i<=Length[Betas],++i,
 Clear[Evaluate["plot"<>Observable<>channel<>ToString[i]]];
-Evaluate[Symbol["plot"<>Observable<>channel<>ToString[i]]]=ErrorListPlot[Table[{{Evaluate[Symbol["massPS"<>ToString[i]]][[t,5]],Evaluate[Symbol[StringJoin[Observable,channel,ToString[i]]]][[t,5]]},ErrorBar[Evaluate[Symbol["massPS"<>ToString[i]]][[t,6]],Evaluate[Symbol[StringJoin[Observable,channel,ToString[i]]]][[t,6]]]},{t,Dimensions[Evaluate[Symbol["massPS"<>ToString[i]]]][[1]]}],Frame->True,FrameLabel->{MaTeX["\\hat{m}^2_{\\rm PS}",FontSize->24],ylabel},LabelStyle->Directive[18,Black,FontFamily->Times],RotateLabel->False,PlotStyle->Echo[Colours[[i]]] ,PlotLegends->{MaTeX["\\beta="<>ToString[NumberForm[Betas[[i]],{3,2}]],FontSize->24]},PlotRange->{{-0.1,1.1Max[xvalues]},{0,1.1Max[yvalues]}}]]
+Evaluate[Symbol["plot"<>Observable<>channel<>ToString[i]]]=ErrorListPlot[Table[{{Evaluate[Symbol["massPS"<>ToString[i]]][[t,5]],Evaluate[Symbol[StringJoin[Observable,channel,ToString[i]]]][[t,5]]},ErrorBar[Evaluate[Symbol["massPS"<>ToString[i]]][[t,6]],Evaluate[Symbol[StringJoin[Observable,channel,ToString[i]]]][[t,6]]]},{t,Dimensions[Evaluate[Symbol["massPS"<>ToString[i]]]][[1]]}],Frame->True,FrameLabel->{MaTeX["\\hat{m}^2_{\\rm PS}",FontSize->24],ylabel},LabelStyle->Directive[18,Black,FontFamily->Times],RotateLabel->False,PlotStyle->Echo[Colours[[i]]] ,PlotLegends->{MaTeX["\\beta="<>ToString[NumberForm[Betas[[i]],{3,2}]],FontSize->24]},PlotRange->{{-0.1,1.1Max[xvalues]},{0,1.1Max[yvalues]}}]];
 
 
 (* ::Input:: *)
 showplots={};
-For[i=1,i<=Length[Betas],++i,AppendTo[showplots,Symbol["plot"<>Observable<>channel<>ToString[i]]]]
+For[i=1,i<=Length[Betas],++i,AppendTo[showplots,Symbol["plot"<>Observable<>channel<>ToString[i]]]];
 Show[showplots]
 
 
@@ -222,7 +226,7 @@ Evaluate[Symbol["limit"<>channel<>"2"]]=Rectangle[{If[minmassPS!=0,Min[0.1xvalue
 
 (* ::Input:: *)
 Clear[Evaluate["dash"<>channel<>Observable],Evaluate["limit"<>channel<>"1"],Evaluate["limit"<>channel<>"2"]]
-If[Evaluate[Symbol["Use"<>Observable<>channel]]==True,{Evaluate[Symbol["dash"<>channel<>Observable]]=ErrorListPlot[{{{0,Evaluate[Symbol["FINALS"<>channel<>Observable]][[1,1]]},ErrorBar[Evaluate[Symbol["FINALS"<>channel<>Observable]][[1,2]]]}},PlotMarkers->{"\[FilledUpTriangle]",15},PlotStyle->Black,PlotRange->{{-0.1,1.1Max[xvalues]},{0,1.1Max[yvalues,Evaluate[Symbol["FINALS"<>channel<>Observable]][[1,1]]+Evaluate[Symbol["FINALS"<>channel<>Observable]][[1,2]]]}},AxesOrigin->{-0.1,0},Frame->True,FrameLabel->{"\!\(\*SubsuperscriptBox[OverscriptBox[\(m\), \(^\)], \(PS\), \(2\)]\)",ylabel},LabelStyle->Directive[15,Black](*,PlotLegends\[Rule]{MaTeX["\\text{Extrapolation}",FontSize\[Rule]24]}*)];
+If[Evaluate[Symbol["Use"<>Observable<>channel]]==True,{Evaluate[Symbol["dash"<>channel<>Observable]]=ErrorListPlot[{{{0,Evaluate[Symbol["FINALS"<>channel<>Observable]][[1,1]]},ErrorBar[Evaluate[Symbol["FINALS"<>channel<>Observable]][[1,2]]]}},PlotMarkers->{"\[FilledUpTriangle]",15},PlotStyle->Black,PlotRange->{{-0.1,1.1Max[xvalues]},{0,1.1Max[yvalues,Evaluate[Symbol["FINALS"<>channel<>Observable]][[1,1]]+Evaluate[Symbol["FINALS"<>channel<>Observable]][[1,2]]]}},AxesOrigin->{-0.1,0},Frame->True,FrameLabel->{"\!\(\*SubsuperscriptBox[OverscriptBox[\(m\), \(^\)], \(PS\), \(2\)]\)",ylabel},LabelStyle->Directive[15,Black],PlotLegends->{MaTeX["\\text{Extrapolation (higher }\\beta)",FontSize->24]}];
 AppendTo[showplots,Evaluate[Symbol["dash"<>channel<>Observable]]];
 line=Plot[{f[Evaluate[Symbol["FINALS"<>channel<>Observable]][[1,1]],Evaluate[Symbol["FINALS"<>channel<>Observable]][[2,1]],x,Evaluate[Symbol["FINALS"<>channel<>Observable]][[3,1]],0]+Evaluate[Symbol["FINALS"<>channel<>Observable]][[1,2]],f[Evaluate[Symbol["FINALS"<>channel<>Observable]][[1,1]],Evaluate[Symbol["FINALS"<>channel<>Observable]][[2,1]],x,Evaluate[Symbol["FINALS"<>channel<>Observable]][[3,1]],0]-Evaluate[Symbol["FINALS"<>channel<>Observable]][[1,2]]},{x,0,1.1Max[xvalues]},PlotStyle->{{Dashed,Gray,Opacity[0.0001]},{Dashed,Gray,Opacity[0.0001]}},Filling->True,AxesOrigin->{-0.1,0},Frame->True,FrameLabel->{"\!\(\*SubsuperscriptBox[OverscriptBox[\(m\), \(^\)], \(PS\), \(2\)]\)",ylabel},LabelStyle->Directive[22,Black]];
 AppendTo[showplots,line];
