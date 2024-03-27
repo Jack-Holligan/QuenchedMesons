@@ -25,33 +25,44 @@ channel_observables = [
 ]
 
 
+csvs = ["csvs/w0.csv", "csvs/ensemble_masses.csv"]
+
+tables = [
+    "tables/w0.tex",
+    *expand("tables/chiral_Sp{Nc}.tex", Nc=Ncs),
+    "tables/chiral_largeN.tex",
+]
+
+largeN_plots = expand(
+    "plots/largeN_{rep}_{channel_observable}.pdf",
+    rep=reps,
+    channel_observable=channel_observables,
+)
+chiral_plots = expand(
+    "plots/chiral_{observable}_Sp{Nc}.pdf",
+    Nc=Ncs,
+    observable=["mass", "decayconst"],
+)
+continuum_plots = [
+    f"plots/continuum_Sp{Nc}_{channel_observable}_{rep}.pdf"
+    for rep in reps
+    for channel_observable in channel_observables
+    for Nc in Ncs
+    if channel_observable.split("_")[0] in metadata.ensembles[Nc][rep]
+]
+finitesize_plots = expand(
+    "processed_data/Sp6/beta15.6/Sp6_beta15.6_mF{mass}.pdf",
+    mass=[-0.8, -0.81],
+)
+
+plots = [largeN_plots, chiral_plots, continuum_plots] # TODO: finitesize_plots]
+
+
 rule all:
     input:
-        "tables/w0.tex",
-        expand("tables/chiral_Sp{Nc}.tex", Nc=Ncs),
-        "tables/chiral_largeN.tex",
-        expand(
-            "plots/largeN_{rep}_{channel_observable}.pdf",
-            rep=reps,
-            channel_observable=channel_observables,
-        ),
-        expand(
-            "plots/chiral_{observable}_Sp{Nc}.pdf",
-            Nc=Ncs,
-            observable=["mass", "decayconst"],
-        ),
-        [
-            f"plots/continuum_Sp{Nc}_{channel_observable}_{rep}.pdf"
-            for rep in reps
-            for channel_observable in channel_observables
-            for Nc in Ncs
-            if channel_observable.split("_")[0] in metadata.ensembles[Nc][rep]
-        ],
-        # awaiting data, so these won't yet generate
-        # expand(
-        #     "processed_data/Sp6/beta15.6/Sp6_beta15.6_mF{mass}.pdf",
-        #     mass=[-0.8, -0.81],
-        # )
+        csvs,
+        tables,
+        plots
 
 rule strip_mesons:
     input:
