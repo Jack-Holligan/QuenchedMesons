@@ -9,7 +9,7 @@ decayChannels="pseudoscalar vector axialvector"
 cd "${basedir}"
 for representation in ${Representations}
 do
-  cd $i
+  cd "${representation}"
   [[ -f ${representation}_decayconsts.txt ]] && rm ${representation}_decayconsts.txt
   [[ -f ${representation}_masses.txt ]] && rm ${representation}_masses.txt
   for channel in ${massChannels}

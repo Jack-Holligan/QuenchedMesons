@@ -1,6 +1,8 @@
 #!/usr/bin/env wolframscript
 (* ::Package:: *)
 
+SetSystemOptions["ParallelOptions" -> {"ParallelThreadNumber" -> 1}];
+
 Nc := _SED_NC_;
 BaseDir := Directory[] <> "/processed_data/Sp" <> ToString[Nc] <> "/continuum";
 OutputDir := BaseDir;
@@ -49,4 +51,4 @@ FinalDecayplots=Show[Decayplots,PlotRange->{All,{-0.01,0.2}},LabelStyle->Directi
 
 
 (* ::Input:: *)
-Export[StringJoin[NotebookDirectory[],"chiral_decayconst_Sp"<>ToString[Nc]<>".pdf"],FinalDecayplots,"PDF",AllowRasterization->False];
+Export[StringJoin[OutputDir,"/chiral_decayconst_Sp"<>ToString[Nc]<>".pdf"],FinalDecayplots,"PDF",AllowRasterization->False];
