@@ -93,15 +93,9 @@ def get_single_large_N_data(rep):
     data = {}
     for observable in observables:
         with open(f"processed_data/largeN/{rep}_{observable}.txt", "r") as f:
-            data = {
-                **data,
-                **{
-                    f"{(split_line := line.split())[0]}": ufloat(
-                        *map(float, split_line[1:3])
-                    )
-                    for line in f
-                },
-            }
+            for line in f:
+                split_line = line.split()
+                data[split_line[0]] = ufloat(*map(float, split_line[1:3]))
 
     return data
 
