@@ -76,7 +76,7 @@ Export[OutputDirectory<>"/"<>Rep<>"_"<>channel<>"_"<>observable<>".pdf",Extrapol
 
 
 (* ::Input:: *)
-Result={{shortchannel,largeN["Value"],largeN["Error"],ChiSq}};
+Result={{shortchannel,largeN["Value"],largeN["Error"],ChiSq,If[Length[Extrp]>2,a/.fit["BestFitParameters"],"--"],If[Length[Extrp]>2,fit["ParameterErrors"][[1]],"--"]}};
 
 
 (* ::Input:: *)

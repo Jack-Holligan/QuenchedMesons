@@ -491,6 +491,18 @@ rule large_N_table:
         "bash {input.script} processed_data/largeN {output}"
 
 
+rule large_N_csv:
+    input:
+        data=large_N_table_inputs,
+        script="src/largeN_csv.py",
+    output:
+        "csvs/large_N.csv",
+    conda:
+        "environment.yml"
+    shell:
+        "python {input.script} --output_csv {output}"
+
+
 rule sum_rules:
     input:
         script="src/sumrules.py",
