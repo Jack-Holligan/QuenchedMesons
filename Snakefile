@@ -485,11 +485,12 @@ rule sum_rules:
         large_N_data=large_N_table_inputs,
         finite_N_data=contlim_table_inputs,
     output:
-        "tables/sumrules.tex",
+        table="tables/sumrules.tex",
+        csv="csvs/sumrules.csv",
     conda:
         "environment.yml"
     shell:
-        "python {input.script} --output_file {output}"
+        "python {input.script} --output_table {output.table} --output_csv {output.csv}"
 
 
 def ensemble_masses():
