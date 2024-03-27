@@ -369,17 +369,18 @@ def w0_data(wildcards):
         for beta in betas
     ]
 
-rule w0_table:
+rule w0_table_csv:
     input:
         metadata = "metadata/puregauge.yaml",
         data = w0_data,
         script = "src/tabulate_w0.py"
     output:
-        "tables/w0.tex"
+        table = "tables/w0.tex",
+        csv = "csvs/w0.csv"
     conda:
         "environment.yml"
     shell:
-        "python {input.script} {input.metadata} --output_file {output}"
+        "python {input.script} {input.metadata} --output_table {output.table} --output_csv {output.csv}"
 
 def contlim_table_inputs(wildcards):
     return [
