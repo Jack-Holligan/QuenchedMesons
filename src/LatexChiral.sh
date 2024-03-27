@@ -1,8 +1,10 @@
 #!/bin/bash
 
+#set -eux
+
 N=$1
 basedir="$2"
-output_file="$3"
+output_file="${PWD}/$3"
 
 cd "${basedir}"
 
@@ -32,8 +34,8 @@ do
         echo -n "\\multirow{8}{*}{${representation}} & \$\\hat{f}_{\\mathcal{PS}}\$ & " >> "${output_file}"
     fi
 
-    o2=$(cat ${rep}/decayconsts_${channel}.dat | head -1 | awk '{print $1}')
-    oError2=$(cat ${rep}/decayconsts_${channel}.dat | head -1 | awk '{print $2}')
+    o2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $1}')
+    oError2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $2}')
 
     if [ ${o2} == "--" ]
     then
@@ -49,7 +51,7 @@ do
             num=`expr $(($num +1 ))`
         done
         oErrRounded=$(printf "%.${num}f" ${oError})
-        chi2=$(cat ${rep}/decayconsts_${channel}.dat | tail -1 | awk '{print $1}' | xargs printf "%1.2f")
+        chi2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | tail -1 | awk '{print $1}' | xargs printf "%1.2f")
 
         echo -n $(printf "%.${num}f" $o) >> "${output_file}"
         echo -n "(" >> "${output_file}"
@@ -78,8 +80,8 @@ do
         echo -n " & \$\\hat{f}_{\\mathcal{V}}\$ & " >> "${output_file}"
     fi
 
-    o2=$(cat ${rep}/decayconsts_${channel}.dat | head -1 | awk '{print $1}')
-    oError2=$(cat ${rep}/decayconsts_${channel}.dat | head -1 | awk '{print $2}')
+    o2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $1}')
+    oError2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $2}')
 
     if [ ${o2} == "--" ]
     then
@@ -95,7 +97,7 @@ do
             num=`expr $(($num +1 ))`
         done
         oErrRounded=$(printf "%.${num}f" ${oError})
-        chi2=$(cat ${rep}/decayconsts_${channel}.dat | tail -1 | awk '{print $1}' | xargs printf "%1.2f")
+        chi2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | tail -1 | awk '{print $1}' | xargs printf "%1.2f")
 
         echo -n $(printf "%.${num}f" $o) >> "${output_file}"
         echo -n "(" >> "${output_file}"
@@ -124,8 +126,8 @@ do
         echo -n " & \$\\hat{f}_{\\mathcal{AV}}\$ & " >> "${output_file}"
     fi
 
-    o2=$(cat ${rep}/decayconsts_${channel}.dat | head -1 | awk '{print $1}')
-    oError2=$(cat ${rep}/decayconsts_${channel}.dat | head -1 | awk '{print $2}')
+    o2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $1}')
+    oError2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $2}')
 
     if [ ${o2} == "--" ]
     then
@@ -141,7 +143,7 @@ do
             num=`expr $(($num +1 ))`
         done
         oErrRounded=$(printf "%.${num}f" ${oError})
-        chi2=$(cat ${rep}/decayconsts_${channel}.dat | tail -1 | awk '{print $1}' | xargs printf "%1.2f")
+        chi2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | tail -1 | awk '{print $1}' | xargs printf "%1.2f")
 
         echo -n $(printf "%.${num}f" $o) >> "${output_file}"
         echo -n "(" >> "${output_file}"
@@ -170,8 +172,8 @@ do
         echo -n " & \$\\hat{m}_{\\mathcal{V}}\$ & " >> "${output_file}"
     fi
 
-    o2=$(cat ${rep}/masses_${channel}.dat | head -1 | awk '{print $1}')
-    oError2=$(cat ${rep}/masses_${channel}.dat | head -1 | awk '{print $2}')
+    o2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $1}')
+    oError2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $2}')
 
     if [ ${o2} == "--" ]
     then
@@ -187,7 +189,7 @@ do
             num=`expr $(($num +1 ))`
         done
         oErrRounded=$(printf "%.${num}f" ${oError})
-        chi2=$(cat ${rep}/masses_${channel}.dat | tail -1 | awk '{print $1}' | xargs printf "%1.2f")
+        chi2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | tail -1 | awk '{print $1}' | xargs printf "%1.2f")
 
         echo -n $(printf "%.${num}f" $o) >> "${output_file}"
         echo -n "(" >> "${output_file}"
@@ -216,8 +218,8 @@ do
         echo -n " & \$\\hat{m}_{\\mathcal{AV}}\$ & " >> "${output_file}"
     fi
 
-    o2=$(cat ${rep}/masses_${channel}.dat | head -1 | awk '{print $1}')
-    oError2=$(cat ${rep}/masses_${channel}.dat | head -1 | awk '{print $2}')
+    o2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $1}')
+    oError2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $2}')
 
     if [ ${o2} == "--" ]
     then
@@ -233,7 +235,7 @@ do
             num=`expr $(($num +1 ))`
         done
         oErrRounded=$(printf "%.${num}f" ${oError})
-        chi2=$(cat ${rep}/masses_${channel}.dat | tail -1 | awk '{print $1}' | xargs printf "%1.2f")
+        chi2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | tail -1 | awk '{print $1}' | xargs printf "%1.2f")
 
         echo -n $(printf "%.${num}f" $o) >> "${output_file}"
         echo -n "(" >> "${output_file}"
@@ -262,8 +264,8 @@ do
         echo -n " & \$\\hat{m}_{\\mathcal{S}}\$ & " >> "${output_file}"
     fi
 
-    o2=$(cat ${rep}/masses_${channel}.dat | head -1 | awk '{print $1}')
-    oError2=$(cat ${rep}/masses_${channel}.dat | head -1 | awk '{print $2}')
+    o2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $1}')
+    oError2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $2}')
 
     if [ ${o2} == "--" ]
     then
@@ -279,7 +281,7 @@ do
             num=`expr $(($num +1 ))`
         done
         oErrRounded=$(printf "%.${num}f" ${oError})
-        chi2=$(cat ${rep}/masses_${channel}.dat | tail -1 | awk '{print $1}' | xargs printf "%1.2f")
+        chi2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | tail -1 | awk '{print $1}' | xargs printf "%1.2f")
 
         echo -n $(printf "%.${num}f" $o) >> "${output_file}"
         echo -n "(" >> "${output_file}"
@@ -308,8 +310,8 @@ do
         echo -n " & \$\\hat{m}_{\\mathcal{T}}\$ & " >> "${output_file}"
     fi
 
-    o2=$(cat ${rep}/masses_${channel}.dat | head -1 | awk '{print $1}')
-    oError2=$(cat ${rep}/masses_${channel}.dat | head -1 | awk '{print $2}')
+    o2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $1}')
+    oError2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $2}')
 
     if [ ${o2} == "--" ]
     then
@@ -325,7 +327,7 @@ do
             num=`expr $(($num +1 ))`
         done
         oErrRounded=$(printf "%.${num}f" ${oError})
-        chi2=$(cat ${rep}/masses_${channel}.dat | tail -1 | awk '{print $1}' | xargs printf "%1.2f")
+        chi2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | tail -1 | awk '{print $1}' | xargs printf "%1.2f")
 
         echo -n $(printf "%.${num}f" $o) >> "${output_file}"
         echo -n "(" >> "${output_file}"
@@ -354,8 +356,8 @@ do
         echo -n " & \$\\hat{m}_{\\mathcal{AT}}\$ & " >> "${output_file}"
     fi
 
-    o2=$(cat ${rep}/masses_${channel}.dat | head -1 | awk '{print $1}')
-    oError2=$(cat ${rep}/masses_${channel}.dat | head -1 | awk '{print $2}')
+    o2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $1}')
+    oError2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $2}')
 
     if [ ${o2} == "--" ]
     then
@@ -371,7 +373,7 @@ do
             num=`expr $(($num +1 ))`
         done
         oErrRounded=$(printf "%.${num}f" ${oError})
-        chi2=$(cat ${rep}/masses_${channel}.dat | tail -1 | awk '{print $1}' | xargs printf "%1.2f")
+        chi2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | tail -1 | awk '{print $1}' | xargs printf "%1.2f")
 
         echo -n $(printf "%.${num}f" $o) >> "${output_file}"
         echo -n "(" >> "${output_file}"

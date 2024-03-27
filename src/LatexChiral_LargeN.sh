@@ -1,7 +1,7 @@
 #!/bin/bash
-
+set -eux
 basedir="$1"
-output_file="$2"
+output_file="${PWD}/$2"
 
 cd "${basedir}"
 
@@ -30,8 +30,8 @@ do
         echo -n "\\multirow{8}{*}{Symmetric} & \$\\hat{f}^2_{\\mathcal{PS}}/N_c^2\$ & " >> "${output_file}"
     fi
 
-    o=$(cat ${i}_decayconsts.txt | grep -w ${channel} | awk '{print $2}')
-    oError=$(cat ${i}_decayconsts.txt | grep -w ${channel} | awk '{print $3}')
+    o=$(cat ${rep}_decayconsts.txt | grep -w ${channel} | awk '{print $2}')
+    oError=$(cat ${rep}_decayconsts.txt | grep -w ${channel} | awk '{print $3}')
 
     if [ ${o} == "--" ]
     then
@@ -45,13 +45,18 @@ do
             num=`expr $(($num +1 ))`
         done
         oErrRounded=$(printf "%.${num}f" ${oError})
-        chi2=$(cat ${i}_decayconsts.txt | grep -w ${channel} | awk '{print $4}' | xargs printf "%1.2f")
+        chi2=$(cat ${rep}_decayconsts.txt | grep -w ${channel} | awk '{print $4}')
+        if [[ "${chi2}" != "--" ]]
+        then
+            echo $chi2
+            chi2=$(echo ${chi2} | xargs printf "%1.2f")
+        fi
 
         echo -n $(printf "%.${num}f" $o) >> "${output_file}"
         echo -n "(" >> "${output_file}"
         echo -n $(printf "%s" "${oErrRounded}" | cut -c `expr $((${num}+1))`-) >> "${output_file}"
         echo -n ") & " >> "${output_file}"
-        if (( $(echo "${chi2} > 3.0" |bc -l) ));
+        if [[ "${chi2}" != "--" ]] && (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
         else
@@ -74,8 +79,8 @@ do
         echo -n " & \$\\hat{f}^2_{\\mathcal{V}}/N_c^2\$ & " >> "${output_file}"
     fi
 
-    o=$(cat ${i}_decayconsts.txt | grep -w ${channel} | awk '{print $2}')
-    oError=$(cat ${i}_decayconsts.txt | grep -w ${channel} | awk '{print $3}')
+    o=$(cat ${rep}_decayconsts.txt | grep -w ${channel} | awk '{print $2}')
+    oError=$(cat ${rep}_decayconsts.txt | grep -w ${channel} | awk '{print $3}')
 
     if [ ${o} == "--" ]
     then
@@ -89,13 +94,17 @@ do
             num=`expr $(($num +1 ))`
         done
         oErrRounded=$(printf "%.${num}f" ${oError})
-        chi2=$(cat ${i}_decayconsts.txt | grep -w ${channel} | awk '{print $4}' | xargs printf "%1.2f")
+        chi2=$(cat ${rep}_decayconsts.txt | grep -w ${channel} | awk '{print $4}')
+        if [[ "${chi2}" != "--" ]]
+        then
+            chi2=$(echo ${chi2} | xargs printf "%1.2f")
+        fi
 
         echo -n $(printf "%.${num}f" $o) >> "${output_file}"
         echo -n "(" >> "${output_file}"
         echo -n $(printf "%s" "${oErrRounded}" | cut -c `expr $((${num}+1))`-) >> "${output_file}"
         echo -n ") & " >> "${output_file}"
-        if (( $(echo "${chi2} > 3.0" |bc -l) ));
+        if [[ "${chi2}" != "--" ]] && (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
         else
@@ -118,8 +127,8 @@ do
         echo -n " & \$\\hat{f}^2_{\\mathcal{AV}}/N_c^2\$ & " >> "${output_file}"
     fi
 
-    o=$(cat ${i}_decayconsts.txt | grep -w ${channel} | awk '{print $2}')
-    oError=$(cat ${i}_decayconsts.txt | grep -w ${channel} | awk '{print $3}')
+    o=$(cat ${rep}_decayconsts.txt | grep -w ${channel} | awk '{print $2}')
+    oError=$(cat ${rep}_decayconsts.txt | grep -w ${channel} | awk '{print $3}')
 
     if [ ${o} == "--" ]
     then
@@ -133,13 +142,17 @@ do
             num=`expr $(($num +1 ))`
         done
         oErrRounded=$(printf "%.${num}f" ${oError})
-        chi2=$(cat ${i}_decayconsts.txt | grep -w ${channel} | awk '{print $4}' | xargs printf "%1.2f")
+        chi2=$(cat ${rep}_decayconsts.txt | grep -w ${channel} | awk '{print $4}')
+        if [[ "${chi2}" != "--" ]]
+        then
+            chi2=$(echo ${chi2} | xargs printf "%1.2f")
+        fi
 
         echo -n $(printf "%.${num}f" $o) >> "${output_file}"
         echo -n "(" >> "${output_file}"
         echo -n $(printf "%s" "${oErrRounded}" | cut -c `expr $((${num}+1))`-) >> "${output_file}"
         echo -n ") & " >> "${output_file}"
-        if (( $(echo "${chi2} > 3.0" |bc -l) ));
+        if [[ "${chi2}" != "--" ]] && (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
         else
@@ -162,8 +175,8 @@ do
         echo -n " & \$\\hat{m}^2_{\\mathcal{V}}\$ & " >> "${output_file}"
     fi
 
-    o=$(cat ${i}_masses.txt | grep -w ${channel} | awk '{print $2}')
-    oError=$(cat ${i}_masses.txt | grep -w ${channel} | awk '{print $3}')
+    o=$(cat ${rep}_masses.txt | grep -w ${channel} | awk '{print $2}')
+    oError=$(cat ${rep}_masses.txt | grep -w ${channel} | awk '{print $3}')
 
     if [ ${o} == "--" ]
     then
@@ -177,13 +190,17 @@ do
             num=`expr $(($num +1 ))`
         done
         oErrRounded=$(printf "%.${num}f" ${oError})
-        chi2=$(cat ${i}_masses.txt | grep -w ${channel} | awk '{print $4}' | xargs printf "%1.2f")
+        chi2=$(cat ${rep}_masses.txt | grep -w ${channel} | awk '{print $4}')
+        if [[ "${chi2}" != "--" ]]
+        then
+            chi2=$(echo ${chi2} | xargs printf "%1.2f")
+        fi
 
         echo -n $(printf "%.${num}f" $o) >> "${output_file}"
         echo -n "(" >> "${output_file}"
         echo -n $(printf "%s" "${oErrRounded}" | cut -c `expr $((${num}+1))`-) >> "${output_file}"
         echo -n ") & " >> "${output_file}"
-        if (( $(echo "${chi2} > 3.0" |bc -l) ));
+        if [[ "${chi2}" != "--" ]] && (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
         else
@@ -206,8 +223,8 @@ do
         echo -n " & \$\\hat{m}^2_{\\mathcal{AV}}\$ & " >> "${output_file}"
     fi
 
-    o=$(cat ${i}_masses.txt | grep -w ${channel} | awk '{print $2}')
-    oError=$(cat ${i}_masses.txt | grep -w ${channel} | awk '{print $3}')
+    o=$(cat ${rep}_masses.txt | grep -w ${channel} | awk '{print $2}')
+    oError=$(cat ${rep}_masses.txt | grep -w ${channel} | awk '{print $3}')
 
     if [ ${o} == "--" ]
     then
@@ -221,13 +238,17 @@ do
             num=`expr $(($num +1 ))`
         done
         oErrRounded=$(printf "%.${num}f" ${oError})
-        chi2=$(cat ${i}_masses.txt | grep -w ${channel} | awk '{print $4}' | xargs printf "%1.2f")
+        chi2=$(cat ${rep}_masses.txt | grep -w ${channel} | awk '{print $4}')
+        if [[ "${chi2}" != "--" ]]
+        then
+            chi2=$(echo ${chi2} | xargs printf "%1.2f")
+        fi
 
         echo -n $(printf "%.${num}f" $o) >> "${output_file}"
         echo -n "(" >> "${output_file}"
         echo -n $(printf "%s" "${oErrRounded}" | cut -c `expr $((${num}+1))`-) >> "${output_file}"
         echo -n ") & " >> "${output_file}"
-        if (( $(echo "${chi2} > 3.0" |bc -l) ));
+        if [[ "${chi2}" != "--" ]] && (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
         else
@@ -250,8 +271,8 @@ do
         echo -n " & \$\\hat{m}^2_{\\mathcal{S}}\$ & " >> "${output_file}"
     fi
 
-    o=$(cat ${i}_masses.txt | grep -w ${channel} | awk '{print $2}')
-    oError=$(cat ${i}_masses.txt | grep -w ${channel} | awk '{print $3}')
+    o=$(cat ${rep}_masses.txt | grep -w ${channel} | awk '{print $2}')
+    oError=$(cat ${rep}_masses.txt | grep -w ${channel} | awk '{print $3}')
 
     if [ ${o} == "--" ]
     then
@@ -265,13 +286,17 @@ do
             num=`expr $(($num +1 ))`
         done
         oErrRounded=$(printf "%.${num}f" ${oError})
-        chi2=$(cat ${i}_masses.txt | grep -w ${channel} | awk '{print $4}' | xargs printf "%1.2f")
+        chi2=$(cat ${rep}_masses.txt | grep -w ${channel} | awk '{print $4}')
+        if [[ "${chi2}" != "--" ]]
+        then
+            chi2=$(echo ${chi2} | xargs printf "%1.2f")
+        fi
 
         echo -n $(printf "%.${num}f" $o) >> "${output_file}"
         echo -n "(" >> "${output_file}"
         echo -n $(printf "%s" "${oErrRounded}" | cut -c `expr $((${num}+1))`-) >> "${output_file}"
         echo -n ") & " >> "${output_file}"
-        if (( $(echo "${chi2} > 3.0" |bc -l) ));
+        if [[ "${chi2}" != "--" ]] && (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
         else
@@ -294,8 +319,8 @@ do
         echo -n " & \$\\hat{m}^2_{\\mathcal{T}}\$ & " >> "${output_file}"
     fi
 
-    o=$(cat ${i}_masses.txt | grep -w ${channel} | awk '{print $2}')
-    oError=$(cat ${i}_masses.txt | grep -w ${channel} | awk '{print $3}')
+    o=$(cat ${rep}_masses.txt | grep -w ${channel} | awk '{print $2}')
+    oError=$(cat ${rep}_masses.txt | grep -w ${channel} | awk '{print $3}')
 
     if [ ${o} == "--" ]
     then
@@ -309,13 +334,17 @@ do
             num=`expr $(($num +1 ))`
         done
         oErrRounded=$(printf "%.${num}f" ${oError})
-        chi2=$(cat ${i}_masses.txt | grep -w ${channel} | awk '{print $4}' | xargs printf "%1.2f")
+        chi2=$(cat ${rep}_masses.txt | grep -w ${channel} | awk '{print $4}')
+        if [[ "${chi2}" != "--" ]]
+        then
+            chi2=$(echo ${chi2} | xargs printf "%1.2f")
+        fi
 
         echo -n $(printf "%.${num}f" $o) >> "${output_file}"
         echo -n "(" >> "${output_file}"
         echo -n $(printf "%s" "${oErrRounded}" | cut -c `expr $((${num}+1))`-) >> "${output_file}"
         echo -n ") & " >> "${output_file}"
-        if (( $(echo "${chi2} > 3.0" |bc -l) ));
+        if [[ "${chi2}" != "--" ]] && (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
         else
@@ -338,8 +367,8 @@ do
         echo -n " & \$\\hat{m}^2_{\\mathcal{AT}}\$ & " >> "${output_file}"
     fi
 
-    o=$(cat ${i}_masses.txt | grep -w ${channel} | awk '{print $2}')
-    oError=$(cat ${i}_masses.txt | grep -w ${channel} | awk '{print $3}')
+    o=$(cat ${rep}_masses.txt | grep -w ${channel} | awk '{print $2}')
+    oError=$(cat ${rep}_masses.txt | grep -w ${channel} | awk '{print $3}')
 
     if [ ${o} == "--" ]
     then
@@ -353,13 +382,17 @@ do
             num=`expr $(($num +1 ))`
         done
         oErrRounded=$(printf "%.${num}f" ${oError})
-        chi2=$(cat ${i}_masses.txt | grep -w ${channel} | awk '{print $4}' | xargs printf "%1.2f")
+        chi2=$(cat ${rep}_masses.txt | grep -w ${channel} | awk '{print $4}')
+        if [[ "${chi2}" != "--" ]]
+        then
+            chi2=$(echo ${chi2} | xargs printf "%1.2f")
+        fi
 
         echo -n $(printf "%.${num}f" $o) >> "${output_file}"
         echo -n "(" >> "${output_file}"
         echo -n $(printf "%s" "${oErrRounded}" | cut -c `expr $((${num}+1))`-) >> "${output_file}"
         echo -n ") & " >> "${output_file}"
-        if (( $(echo "${chi2} > 3.0" |bc -l) ));
+        if [[ "${chi2}" != "--" ]] && (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
         else
