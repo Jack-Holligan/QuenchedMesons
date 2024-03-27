@@ -28,6 +28,11 @@ def freeze_dd(dd):
 with open(os.environ.get("SP2N_METADATA_FILE", "metadata/ensembles.yaml"), "r") as f:
     metadata = yaml.safe_load(f)
 
+with open(
+    os.environ.get("SP2N_PUREGAUGE_METADATA_FILE", "metadata/puregauge.yaml"), "r"
+) as f:
+    puregauge_metadata = yaml.safe_load(f)
+
 betas = defaultdict(set)
 bare_masses = defaultdict(
     lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(set)))
@@ -47,6 +52,21 @@ for label, ens in metadata.items():
                 channel_names[channel]
             ].add(ens["m"])
             ensembles[ens["Nc"]][ens["Rep"]][channel_names[channel]].add(shortslug(ens))
+
+flow_ensembles = {
+    Nc: {
+        beta: sorted(
+            [
+                ensemble
+                for ensemble in puregauge_metadata.values()
+                if ensemble["Nc"] == Nc and ensemble["beta"] == beta
+            ],
+            key=lambda ensemble: (ensemble["Ns"], ensemble["Nt"]),
+        )[-1]
+        for beta in beta_set
+    }
+    for Nc, beta_set in betas.items()
+}
 
 freeze_dd(betas)
 freeze_dd(bare_masses)

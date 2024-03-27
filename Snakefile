@@ -174,9 +174,14 @@ rule collate_boots:
         "cp {input} {output}"
 
 
+def wflow_log(wildcards):
+    ensemble = metadata.flow_ensembles[int(wildcards.Nc)][float(wildcards.beta)]
+    return f"raw_data/Sp{{Nc}}/beta{{beta}}/wflow_nc{{Nc}}S{ensemble['Ns']}T{ensemble['Nt']}B{{beta}}.out"
+
+
 rule wilson_flow:
     input:
-        log="raw_data/Sp{Nc}/beta{beta}/out_wflow",
+        log=wflow_log,
         ensembles="metadata/puregauge.yaml",
         script="src/WilsonFlow.py",
     output:
