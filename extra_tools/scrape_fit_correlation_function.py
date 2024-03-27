@@ -44,15 +44,15 @@ def read_file(f):
 
     for line in f:
         for key, converter in [
-                ("NT", int),
-                ("NS", int),
-                ("beta", float),
-                ("Digitsb", int),
-                ("DPb", int),
-                ("Digitsm", int),
-                ("DPm", int),
-                ("Nc", int),
-                ("Rep", str),
+            ("NT", int),
+            ("NS", int),
+            ("beta", float),
+            ("Digitsb", int),
+            ("DPb", int),
+            ("Digitsm", int),
+            ("DPm", int),
+            ("Nc", int),
+            ("Rep", str),
         ]:
             if line.startswith(f'  RowBox[{{"{key}", ":=",'):
                 try:
@@ -91,7 +91,7 @@ def read_file(f):
             data["GradientFlow"] = get(line, float)
 
         if (
-                line.startswith('  RowBox[{"Use') and line.split()[1] == '"=",'
+            line.startswith('  RowBox[{"Use') and line.split()[1] == '"=",'
         ) or line.startswith('  RowBox[{"Automatic'):
             split_line = line.split('"')
             data[split_line[1]] = boolify(split_line[5])
@@ -132,10 +132,17 @@ def read_file(f):
 
 
 def clean_filename(filename):
-    Nc, NS, NT, beta, m, rep = re.match(r"originals/Sp([468])_S([0-9]+)T([0-9]+)B([0-9.]+)_([-0-9/.]+)_([A-Z]+)\.nb", filename).groups()
+    Nc, NS, NT, beta, m, rep = re.match(
+        r"originals/Sp([468])_S([0-9]+)T([0-9]+)B([0-9.]+)_([-0-9/.]+)_([A-Z]+)\.nb",
+        filename,
+    ).groups()
     return f"Nc{Nc}_S{NS}T{NT}B{beta}_m{rep}{m}"
 
-all_data = {clean_filename(filename): read_file_by_name(filename) for filename in glob("originals/*.nb")}
+
+all_data = {
+    clean_filename(filename): read_file_by_name(filename)
+    for filename in glob("originals/*.nb")
+}
 
 with open("ensembles.yaml", "w") as f:
     f.write(yaml.dump(all_data, Dumper=yaml.Dumper))

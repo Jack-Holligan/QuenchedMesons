@@ -5,7 +5,15 @@ import yaml
 
 
 representations = {"F": "fundamental", "AS": "antisymmetric", "S": "symmetric"}
-channels = {"PS": "pseudoscalar", "V": "vector", "AV": "axialvector", "S": "scalar", "T": "tensor", "AT": "axialtensor"}
+channels = {
+    "PS": "pseudoscalar",
+    "V": "vector",
+    "AV": "axialvector",
+    "S": "scalar",
+    "T": "tensor",
+    "AT": "axialtensor",
+}
+
 
 def get_args():
     from argparse import ArgumentParser, FileType
@@ -22,7 +30,15 @@ def get_single_line(key, line, content, result):
 
 
 def get_file_data(filename):
-    result = {key: None for key in ["mass_value", "mass_uncertainty", "decayconst_value", "decayconst_uncertainty"]}
+    result = {
+        key: None
+        for key in [
+            "mass_value",
+            "mass_uncertainty",
+            "decayconst_value",
+            "decayconst_uncertainty",
+        ]
+    }
     with open(filename, "r") as f:
         content = f.readlines()
 
@@ -63,7 +79,19 @@ def main():
     ensembles = yaml.safe_load(args.ensembles)
     writer = csv.DictWriter(
         args.output_file,
-        ["Nc", "beta", "NS", "NT", "representation", "channel", "valence_mass", "mass_value", "mass_uncertainty", "decayconst_value", "decayconst_uncertainty"],
+        [
+            "Nc",
+            "beta",
+            "NS",
+            "NT",
+            "representation",
+            "channel",
+            "valence_mass",
+            "mass_value",
+            "mass_uncertainty",
+            "decayconst_value",
+            "decayconst_uncertainty",
+        ],
     )
     writer.writeheader()
     for ensemble in ensembles.values():

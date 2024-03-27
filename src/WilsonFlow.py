@@ -29,7 +29,9 @@ with open(args.flow_file, "r") as f:
             scale = 0.28125 * (Nc + 1) / 5
 
         if line.startswith("[GEOMETRY_INIT][0]Global size is"):
-            num_sites_t, num_sites_x, num_sites_y, num_sites_z = map(int, line.split()[-1].split("x"))
+            num_sites_t, num_sites_x, num_sites_y, num_sites_z = map(
+                int, line.split()[-1].split("x")
+            )
             if not (num_sites_x == num_sites_y == num_sites_z):
                 raise ValueError("We asssume NX == NY == NZ")
 
@@ -38,10 +40,14 @@ with open(args.flow_file, "r") as f:
 
         if line.startswith("[WILSONFLOW][0]WF (t,E,t2*E,Esym,t2*Esym,TC) ="):
             split_line = line.split()
-            if (flowtime := float(split_line[3])) > max(flowtime_values + [-1]) and len(flowtime_values) < num_flowtimes:
+            if (flowtime := float(split_line[3])) > max(flowtime_values + [-1]) and len(
+                flowtime_values
+            ) < num_flowtimes:
                 flowtime_values.append(flowtime)
             if split_line[3] == "0.0000000000000000e+00":
-                if len(t2Eplaq_values) > 0 and len(t2Eplaq_values[-1]) != len(flowtime_values):
+                if len(t2Eplaq_values) > 0 and len(t2Eplaq_values[-1]) != len(
+                    flowtime_values
+                ):
                     raise ValueError("Mismatched flow lengths.")
                 t2Eplaq_values.append([])
                 t2Esym_values.append([])
@@ -59,6 +65,7 @@ cnfg, nmeas = t2Eplaq.shape
 with open(args.metadata, "r") as f:
     metadata = yaml.safe_load(f)
 random.seed(metadata[f"Sp{Nc}_S{num_sites_x}T{num_sites_t}B{args.beta}"]["seed"])
+
 
 def tInterval(EsymmAve, scale):
     """Returns the ARRAY NUMBERS of flow time between which the scale lives"""
@@ -159,7 +166,9 @@ plt.vlines(x=mu1**2, color="blue", ymin=0, ymax=scale)
 plt.hlines(y=scale, color="blue", xmin=0, xmax=mu1**2)
 plt.vlines(x=mu2**2, color="green", ymin=0, ymax=scale)
 plt.hlines(y=scale, linestyle="-", color="green", xmin=0, xmax=mu2**2)
-plt.title(r"$Sp(%d), %d^3\times%d, \beta=%1.1f$" % (Nc, num_sites_x, num_sites_t, args.beta))
+plt.title(
+    r"$Sp(%d), %d^3\times%d, \beta=%1.1f$" % (Nc, num_sites_x, num_sites_t, args.beta)
+)
 plt.grid()
 plt.legend(loc="best")
 plt.savefig(args.output_file_plot)

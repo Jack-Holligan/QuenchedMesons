@@ -11,7 +11,10 @@ def read_file(filename, row1, row2):
     if len(lines) < 4:
         return None
 
-    beta, bare_mass = map(float, re.match(".*B([0-9.]+)_m[FAS]+([-0-9.]+)$", filename.split("/")[-2]).groups())
+    beta, bare_mass = map(
+        float,
+        re.match(".*B([0-9.]+)_m[FAS]+([-0-9.]+)$", filename.split("/")[-2]).groups(),
+    )
     mass = float(lines[row1])
     mass_error = float(lines[row2])
 
@@ -37,6 +40,7 @@ def read_w0(filename):
 
 def get_args():
     from argparse import ArgumentParser, FileType
+
     parser = ArgumentParser()
     parser.add_argument("input_file", nargs="+")
     parser.add_argument("--output_file", type=FileType("w"), default=sys.stdout)
@@ -51,7 +55,7 @@ def format_output(values, w0):
         if beta != w0["beta"]:
             raise ValueError("betas don't match")
         output.append(f"{beta},{bare_mass},{w0['w']},{w0['dw']},{value},{error}")
-    return '\n'.join(output)
+    return "\n".join(output)
 
 
 def main():

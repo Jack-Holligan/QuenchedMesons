@@ -7,11 +7,15 @@ from random import randint
 
 get_seed = False
 
-metadata = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(dict))))
+metadata = defaultdict(
+    lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))
+)
+
 
 def stripreader(filename):
     for line in open(filename, "r"):
         yield line.strip()
+
 
 def freeze_dd(dd):
     result = {}
@@ -21,6 +25,7 @@ def freeze_dd(dd):
         else:
             result[key] = element
     return result
+
 
 name_map = {
     "Pseudoscalar": "pseudoscalar",
@@ -36,11 +41,16 @@ name_map = {
     "F": "F",
 }
 
+
 def get_metadata_node(Nc, rep, channel, observable):
     return metadata[f"Sp{Nc}"][name_map[rep]][name_map[channel]][name_map[observable]]
 
+
 for line in stripreader("notebooks_cat"):
-    if line.endswith('"Section",') and len(split_line := line.split('"')[1].split()) > 1:
+    if (
+        line.endswith('"Section",')
+        and len(split_line := line.split('"')[1].split()) > 1
+    ):
         channel, observable = split_line
     elif line.startswith('RowBox[{"Nc", ":=",'):
         Nc = int(line.split('"')[5])

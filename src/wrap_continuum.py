@@ -7,6 +7,7 @@ import yaml
 
 all_colours = ["Blue", "Orange", "Darker[Green]", "Red", "Purple"]
 
+
 def generate_wls(Nc, rep, channel, observable):
     with open("metadata/continuum.yaml", "r") as f:
         metadata = yaml.safe_load(f)
@@ -24,11 +25,11 @@ def generate_wls(Nc, rep, channel, observable):
         volumes.append(slug)
         betas.append(float(re.match(".*B(.*)", slug).groups()[0]))
 
-    colours = all_colours[:len(betas)]
+    colours = all_colours[: len(betas)]
 
     volumes_str = ", ".join(f'"{volume}"' for volume in volumes)
     betas_str = ", ".join(map(str, betas))
-    colours_str = ", ".join(f'{colour}' for colour in colours)
+    colours_str = ", ".join(f"{colour}" for colour in colours)
 
     input_dir = f"{os.getcwd()}/processed_data/Sp{Nc}/continuum"
     output_dir = f"{os.getcwd()}/processed_data/Sp{Nc}/continuum"
