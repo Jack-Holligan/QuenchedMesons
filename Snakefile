@@ -461,6 +461,18 @@ rule contlim_tables:
         "bash src/LatexChiral.sh {wildcards.Nc} processed_data/Sp{wildcards.Nc}/continuum {output}"
 
 
+rule contlim_csv:
+    input:
+        data=contlim_table_inputs,
+        script="src/contlim.py",
+    output:
+        "csvs/continuum.csv",
+    conda:
+        "environment.yml"
+    shell:
+        "python {input.script} --output_csv {output}"
+
+
 def large_N_table_inputs(wildcards):
     return expand(
         "processed_data/largeN/{rep}_{observable}.txt",
