@@ -30,8 +30,8 @@ def get_file_data(filename):
         get_single_line("mass_value", 2, content, result)
         get_single_line("mass_uncertainty", 3, content, result)
     if len(content) >= 8:
-        get_single_line("decayconst_value", 4, content, result)
-        get_single_line("decayconst_uncertainty", 5, content, result)
+        get_single_line("decayconst_value", 0, content, result)
+        get_single_line("decayconst_uncertainty", 1, content, result)
 
     return result
 
