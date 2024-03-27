@@ -34,10 +34,10 @@ do
         echo -n "\\multirow{8}{*}{${representation}} & \$\\hat{f}_{\\mathcal{PS}}\$ & " >> "${output_file}"
     fi
 
-    o2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $1}')
-    oError2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $2}')
+    o2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $1}') 2>/dev/null
+    oError2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $2}') 2>/dev/null
 
-    if [ ${o2} == "--" ]
+    if [[ "${o2}" == "--" ]] || [[ "${o2}" == "" ]]
     then
         echo "-- & -- \\\\" >> "${output_file}"
     else
@@ -80,10 +80,10 @@ do
         echo -n " & \$\\hat{f}_{\\mathcal{V}}\$ & " >> "${output_file}"
     fi
 
-    o2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $1}')
-    oError2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $2}')
+    o2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $1}') 2>/dev/null
+    oError2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $2}') 2>/dev/null
 
-    if [ ${o2} == "--" ]
+    if [[ "${o2}" == "--" ]] || [[ "${o2}" == "" ]]
     then
         echo "-- & -- \\\\" >> "${output_file}"
     else
@@ -126,10 +126,10 @@ do
         echo -n " & \$\\hat{f}_{\\mathcal{AV}}\$ & " >> "${output_file}"
     fi
 
-    o2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $1}')
-    oError2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $2}')
+    o2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $1}') 2>/dev/null
+    oError2=$(cat ${rep}/${channel}_decayconsts_${rep}_Sp${N}.dat | head -1 | awk '{print $2}') 2>/dev/null
 
-    if [ ${o2} == "--" ]
+    if [[ "${o2}" == "--" ]] || [[ "${o2}" == "" ]]
     then
         echo "-- & -- \\\\" >> "${output_file}"
     else
@@ -172,10 +172,10 @@ do
         echo -n " & \$\\hat{m}_{\\mathcal{V}}\$ & " >> "${output_file}"
     fi
 
-    o2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $1}')
-    oError2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $2}')
+    o2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $1}') 2>/dev/null
+    oError2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $2}') 2>/dev/null
 
-    if [ ${o2} == "--" ]
+    if [[ "${o2}" == "--" ]] || [[ "${o2}" == "" ]]
     then
         echo "-- & -- \\\\" >> "${output_file}"
     else
@@ -218,10 +218,10 @@ do
         echo -n " & \$\\hat{m}_{\\mathcal{AV}}\$ & " >> "${output_file}"
     fi
 
-    o2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $1}')
-    oError2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $2}')
+    o2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $1}') 2>/dev/null
+    oError2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $2}') 2>/dev/null
 
-    if [ ${o2} == "--" ]
+    if [[ "${o2}" == "--" ]] || [[ "${o2}" == "" ]]
     then
         echo "-- & -- \\\\" >> "${output_file}"
     else
@@ -264,10 +264,10 @@ do
         echo -n " & \$\\hat{m}_{\\mathcal{S}}\$ & " >> "${output_file}"
     fi
 
-    o2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $1}')
-    oError2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $2}')
+    o2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $1}') 2>/dev/null
+    oError2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $2}') 2>/dev/null
 
-    if [ ${o2} == "--" ]
+    if [[ "${o2}" == "--" ]] || [[ "${o2}" == "" ]]
     then
         echo "-- & -- \\\\" >> "${output_file}"
     else
@@ -310,10 +310,10 @@ do
         echo -n " & \$\\hat{m}_{\\mathcal{T}}\$ & " >> "${output_file}"
     fi
 
-    o2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $1}')
-    oError2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $2}')
+    o2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $1}') 2>/dev/null
+    oError2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $2}') 2>/dev/null
 
-    if [ ${o2} == "--" ]
+    if [[ "${o2}" == "--" ]] || [[ "${o2}" == "" ]]
     then
         echo "-- & -- \\\\" >> "${output_file}"
     else
@@ -356,10 +356,10 @@ do
         echo -n " & \$\\hat{m}_{\\mathcal{AT}}\$ & " >> "${output_file}"
     fi
 
-    o2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $1}')
-    oError2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $2}')
+    o2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $1}') 2>/dev/null
+    oError2=$(cat ${rep}/${channel}_masses_${rep}_Sp${N}.dat | head -1 | awk '{print $2}') 2>/dev/null
 
-    if [ ${o2} == "--" ]
+    if [[ "${o2}" == "--" ]] || [[ "${o2}" == "" ]]
     then
         echo "-- & -- \\\\" >> "${output_file}"
     else
