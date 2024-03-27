@@ -117,7 +117,7 @@ rule fit_correlation_function:
 def ensemble_spectrum_datafiles(wildcards):
     return expand(
         "processed_data/Sp{{Nc}}/beta{{beta}}/{{volume}}B{{beta}}_m{{rep}}{mass}/output_{{channel}}.txt",
-        mass=metadata.bare_masses[int(wildcards.Nc)][f"{wildcards.volume}B{wildcards.beta}"][wildcards.rep][wildcards.channel],
+        mass=sorted(metadata.bare_masses[int(wildcards.Nc)][f"{wildcards.volume}B{wildcards.beta}"][wildcards.rep][wildcards.channel], reverse=True),
     )
 
 rule collate_masses:
@@ -264,7 +264,7 @@ rule box_plot:
     log:
         "processed_data/Sp{Nc}/continuum/boxplot.log"
     shell:
-        "wolframscript -file {script} > {log}"
+        "wolframscript -file {input.script} > {log}"
 
 rule generate_large_N_script:
     input:
@@ -298,7 +298,7 @@ rule collate_masses_large_N:
     output:
         "processed_data/largeN/{rep}_masses.txt"
     shell:
-        "cat {input} > {output}"
+        "awk 1 {input} > {output}"
 
 rule collate_decayconsts_large_N:
     input:
@@ -309,7 +309,7 @@ rule collate_decayconsts_large_N:
     output:
         "processed_data/largeN/{rep}_decayconsts.txt"
     shell:
-        "cat {input} > {output}"
+        "awk 1 {input} > {output}"
 
 rule finite_size:
     input:
@@ -396,7 +396,7 @@ rule contlim_tables:
     output:
         "tables/chiral_Sp{Nc}.tex"
     shell:
-        "bash src/LatexChiral.sh ${wildcards.Nc} processed_data/Sp{wildcards.Nc}/continuum {output}"
+        "bash src/LatexChiral.sh {wildcards.Nc} processed_data/Sp{wildcards.Nc}/continuum {output}"
 
 def large_N_table_inputs(wildcards):
     return expand(
@@ -437,7 +437,7 @@ def ensemble_masses():
 
 rule ensemble_masses_csv:
     input:
-        script = "src/ensemble_masses_csv",
+        script = "src/ensemble_masses_csv.py",
         metadata = "metadata/ensembles.yaml",
         data = ensemble_masses,
     output:
