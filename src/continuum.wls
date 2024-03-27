@@ -239,7 +239,7 @@ FitBand=Show[Evaluate[Symbol["dash"<>channel<>Observable]],line]
 
 
 (* ::Input:: *)
-If[Evaluate[Symbol["Use"<>Observable<>channel]]==True,Show[AppendTo[showplots,FitBand],PlotLabel->MaTeX["\\chi^2/\\text{d.o.f.}="<>ToString[NumberForm[Evaluate[Symbol[Observable<>channel<>"final"]][[4]],{3,2}]],FontSize->24],Epilog->{Directive[Red,Opacity[0.1]],Evaluate[Symbol["limit"<>channel<>"1"]],Evaluate[Symbol["limit"<>channel<>"2"]]}]]
+If[Evaluate[Symbol["Use"<>Observable<>channel]]==True,Show[showplots],PlotLabel->MaTeX["\\chi^2/\\text{d.o.f.}="<>ToString[NumberForm[Evaluate[Symbol[Observable<>channel<>"final"]][[4]],{3,2}]],FontSize->24],Epilog->{Directive[Red,Opacity[0.1]],Evaluate[Symbol["limit"<>channel<>"1"]],Evaluate[Symbol["limit"<>channel<>"2"]]}]]
 
 
 (* ::Input:: *)
