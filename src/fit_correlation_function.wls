@@ -9,6 +9,8 @@ ClearAll;
 Needs["ErrorBarPlots`"];
 Needs["PlotLegends`"];
 
+SetSystemOptions["ParallelOptions" -> {"ParallelThreadNumber" -> 1}];
+
 
 (* ::Input:: *)
 NT := _SED_NT_ (*Temporal width*)
@@ -265,12 +267,12 @@ fPS=(GradientFlow*fPS)^2;]
 
 
 (* ::Input:: *)
-If[UsePS,FINALSPS[[1,1]]=amplitudePS["Value"];
-FINALSPS[[1,2]]=amplitudePS["Error"];
+If[UsePS,FINALSPS[[1,1]]=ZA^2*fPS["Value"];
+FINALSPS[[1,2]]=ZA^2*fPS["Error"];
 FINALSPS[[2,1]]=massPS["Value"];
 FINALSPS[[2,2]]=massPS["Error"];
-FINALSPS[[3,1]]=ZA^2*fPS["Value"];
-FINALSPS[[3,2]]=ZA^2*fPS["Error"];]
+FINALSPS[[3,1]]=amplitudePS["Value"];
+FINALSPS[[3,2]]=amplitudePS["Error"];]
 
 
 (* ::Input:: *)
