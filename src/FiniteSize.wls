@@ -1,6 +1,8 @@
 #!/usr/bin/env wolframscript
 (* ::Package:: *)
 
+SetSystemOptions["ParallelOptions" -> {"ParallelThreadNumber" -> 1}];
+
 (* ::Input:: *)
 Needs["MaTeX`"]
 Basepath=Directory[]<>"/_SED_BASEPATH_";
