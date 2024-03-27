@@ -18,9 +18,7 @@ channel_names = {
 channels = list(channel_names.values())
 mass_channels = ["vector", "axialvector", "scalar", "tensor", "axialtensor"]
 decayconst_channels = ["pseudoscalar", "vector", "axialvector"]
-channel_observables = [
-    f"{channel}_masses" for channel in mass_channels
-] + [
+channel_observables = [f"{channel}_masses" for channel in mass_channels] + [
     f"{channel}_decayconsts" for channel in decayconst_channels
 ]
 
@@ -55,49 +53,53 @@ finitesize_plots = expand(
     mass=[-0.8, -0.81],
 )
 
-plots = [largeN_plots, chiral_plots, continuum_plots] # TODO: finitesize_plots]
+plots = [largeN_plots, chiral_plots, continuum_plots]  # TODO: finitesize_plots]
 
 
 rule all:
     input:
         csvs,
         tables,
-        plots
+        plots,
+
 
 rule strip_mesons:
     input:
-        data = "raw_data/Sp{Nc}/beta{beta}/{slug}.out",
-        script = "src/mesfilter_new.sh"
+        data="raw_data/Sp{Nc}/beta{beta}/{slug}.out",
+        script="src/mesfilter_new.sh",
     output:
-        "processed_data/Sp{Nc}/beta{beta}/{slug}/correlators_{slug}.dat"
+        "processed_data/Sp{Nc}/beta{beta}/{slug}/correlators_{slug}.dat",
     shell:
         "cat {input.data} | bash {input.script} > {output}"
 
+
 rule strip_plaquettes:
     input:
-        "raw_data/Sp{Nc}/beta{beta}/{slug}.out"
+        "raw_data/Sp{Nc}/beta{beta}/{slug}.out",
     output:
-        "processed_data/Sp{Nc}/beta{beta}/{slug}/plaquette_{slug}.dat"
+        "processed_data/Sp{Nc}/beta{beta}/{slug}/plaquette_{slug}.dat",
     shell:
         """awk '/Plaquette/ {{gsub("Plaquette=", ""); print($8);}}' {input} > {output}"""
 
+
 rule generate_fit_correlation_function_script:
     input:
-        data = "src/fit_correlation_function.wls",
-        metadata = "metadata/ensembles.yaml",
-        script = "src/wrap_fit_correlation_function.py"
+        data="src/fit_correlation_function.wls",
+        metadata="metadata/ensembles.yaml",
+        script="src/wrap_fit_correlation_function.py",
     output:
-        "processed_data/Sp{Nc}/beta{beta}/{slug}/fit_correlation_function.wls"
+        "processed_data/Sp{Nc}/beta{beta}/{slug}/fit_correlation_function.wls",
     conda:
         "environment.yml"
     shell:
         "python {input.script} {wildcards.Nc} {wildcards.beta} {wildcards.slug} > {output}"
 
+
 rule fit_correlation_function:
     input:
-        script = "processed_data/Sp{Nc}/beta{beta}/{slug}/fit_correlation_function.wls",
-        correlators = "processed_data/Sp{Nc}/beta{beta}/{slug}/correlators_{slug}.dat",
-        plaquettes = "processed_data/Sp{Nc}/beta{beta}/{slug}/plaquette_{slug}.dat"
+        script="processed_data/Sp{Nc}/beta{beta}/{slug}/fit_correlation_function.wls",
+        correlators="processed_data/Sp{Nc}/beta{beta}/{slug}/correlators_{slug}.dat",
+        plaquettes="processed_data/Sp{Nc}/beta{beta}/{slug}/plaquette_{slug}.dat",
     output:
         expand(
             "processed_data/Sp{{Nc}}/beta{{beta}}/{{slug}}/{{slug}}_{channel}_masses_boots.csv",
@@ -116,11 +118,11 @@ rule fit_correlation_function:
             "processed_data/Sp{{Nc}}/beta{{beta}}/{{slug}}/output_{channel}.txt",
             channel=channels,
         ),
-        "processed_data/Sp{Nc}/beta{beta}/{slug}/{slug}.txt"
+        "processed_data/Sp{Nc}/beta{beta}/{slug}/{slug}.txt",
     log:
-        "processed_data/Sp{Nc}/beta{beta}/{slug}/fit_correlation_function.log"
+        "processed_data/Sp{Nc}/beta{beta}/{slug}/fit_correlation_function.log",
     resources:
-        mathematica_licenses = 1
+        mathematica_licenses=1,
     shell:
         "wolframscript -file {input.script} > {log}"
 
@@ -128,51 +130,60 @@ rule fit_correlation_function:
 def ensemble_spectrum_datafiles(wildcards):
     return expand(
         "processed_data/Sp{{Nc}}/beta{{beta}}/{{volume}}B{{beta}}_m{{rep}}{mass}/output_{{channel}}.txt",
-        mass=sorted(metadata.bare_masses[int(wildcards.Nc)][f"{wildcards.volume}B{wildcards.beta}"][wildcards.rep][wildcards.channel], reverse=True),
+        mass=sorted(
+            metadata.bare_masses[int(wildcards.Nc)][
+                f"{wildcards.volume}B{wildcards.beta}"
+            ][wildcards.rep][wildcards.channel],
+            reverse=True,
+        ),
     )
+
 
 rule collate_masses:
     input:
-        spectrum = ensemble_spectrum_datafiles,
-        w0 = "processed_data/Sp{Nc}/beta{beta}/wflow.dat",
-        script = "src/collate_masses.py"
+        spectrum=ensemble_spectrum_datafiles,
+        w0="processed_data/Sp{Nc}/beta{beta}/wflow.dat",
+        script="src/collate_masses.py",
     output:
-        "processed_data/Sp{Nc}/continuum/{rep}_data/{volume}B{beta}_masses_{channel}_{rep}.txt"
+        "processed_data/Sp{Nc}/continuum/{rep}_data/{volume}B{beta}_masses_{channel}_{rep}.txt",
     conda:
         "environment.yml"
     shell:
         "python {input.script} {input.spectrum} --w0_file {input.w0} --output_file {output}"
 
+
 rule collate_decay_consts:
     input:
-        spectrum = ensemble_spectrum_datafiles,
-        w0 = "processed_data/Sp{Nc}/beta{beta}/wflow.dat",
-        script = "src/collate_masses.py"
+        spectrum=ensemble_spectrum_datafiles,
+        w0="processed_data/Sp{Nc}/beta{beta}/wflow.dat",
+        script="src/collate_masses.py",
     output:
-        "processed_data/Sp{Nc}/continuum/{rep}_data/{volume}B{beta}_decayconsts_{channel}_{rep}.txt"
+        "processed_data/Sp{Nc}/continuum/{rep}_data/{volume}B{beta}_decayconsts_{channel}_{rep}.txt",
     conda:
         "environment.yml"
     shell:
         "python {input.script} {input.spectrum} --w0_file {input.w0} --output_file {output} --observable decayconst"
 
+
 rule collate_boots:
     input:
-        "processed_data/Sp{Nc}/beta{beta}/{slug}B{beta}_m{rep}{mass}/{slug}B{beta}_m{rep}{mass}_{channel}_{observable}_boots.csv"
+        "processed_data/Sp{Nc}/beta{beta}/{slug}B{beta}_m{rep}{mass}/{slug}B{beta}_m{rep}{mass}_{channel}_{observable}_boots.csv",
     output:
-        "processed_data/Sp{Nc}/continuum/{rep}_data/{slug}B{beta}_m{rep}{mass}_{channel}_{observable}_boots.csv"
+        "processed_data/Sp{Nc}/continuum/{rep}_data/{slug}B{beta}_m{rep}{mass}_{channel}_{observable}_boots.csv",
     shell:
         "cp {input} {output}"
 
+
 rule wilson_flow:
     input:
-        log = "raw_data/Sp{Nc}/beta{beta}/out_wflow",
-        ensembles = "metadata/puregauge.yaml",
-        script = "src/WilsonFlow.py"
+        log="raw_data/Sp{Nc}/beta{beta}/out_wflow",
+        ensembles="metadata/puregauge.yaml",
+        script="src/WilsonFlow.py",
     output:
-        text = "processed_data/Sp{Nc}/beta{beta}/wflow.dat",
-        plot = "processed_data/Sp{Nc}/beta{beta}/wflow.pdf"
+        text="processed_data/Sp{Nc}/beta{beta}/wflow.dat",
+        plot="processed_data/Sp{Nc}/beta{beta}/wflow.pdf",
     log:
-        "processed_data/Sp{Nc}/beta{beta}/wflow.log"
+        "processed_data/Sp{Nc}/beta{beta}/wflow.log",
     conda:
         "environment.yml"
     shell:
@@ -181,197 +192,227 @@ rule wilson_flow:
 
 def flow_datafiles(wildcards):
     return expand(
-        "processed_data/Sp{{Nc}}/beta{beta}/wflow.dat",
-        beta=betas[int(wildcards.Nc)]
+        "processed_data/Sp{{Nc}}/beta{beta}/wflow.dat", beta=betas[int(wildcards.Nc)]
     )
+
 
 rule combine_wilson_flow:
     input:
-        flow_datafiles
+        flow_datafiles,
     output:
-        "processed_data/Sp{Nc}/wflow.dat"
+        "processed_data/Sp{Nc}/wflow.dat",
     shell:
         "cat {input} > {output}"
+
 
 rule generate_continuum_script:
     input:
         "metadata/ensembles.yaml",
         "metadata/puregauge.yaml",
-        "src/continuum.wls"
+        "src/continuum.wls",
     output:
-        "processed_data/Sp{Nc}/continuum/{rep}/continuum_{observable}_{channel}.wls"
+        "processed_data/Sp{Nc}/continuum/{rep}/continuum_{observable}_{channel}.wls",
     conda:
         "environment.yml"
     shell:
         "python src/wrap_continuum.py {wildcards.Nc} {wildcards.rep} {wildcards.channel} {wildcards.observable} > {output}"
 
+
 def continuum_data(wildcards):
     filelist = []
     for slug in metadata.ensembles[int(wildcards.Nc)][wildcards.rep][wildcards.channel]:
-        filelist.append(f"processed_data/Sp{{Nc}}/continuum/{{rep}}_data/{slug}_{{observable}}_{{channel}}_{{rep}}.txt")
-        filelist.append(f"processed_data/Sp{{Nc}}/continuum/{{rep}}_data/{slug}_masses_pseudoscalar_{{rep}}.txt")
-        for mass in metadata.bare_masses[int(wildcards.Nc)][slug][wildcards.rep][wildcards.channel]:
-            filelist.append(f"processed_data/Sp{{Nc}}/continuum/{{rep}}_data/{slug}_m{{rep}}{mass}_pseudoscalar_masses_boots.csv")
-            filelist.append(f"processed_data/Sp{{Nc}}/continuum/{{rep}}_data/{slug}_m{{rep}}{mass}_{{channel}}_{{observable}}_boots.csv")
+        filelist.append(
+            f"processed_data/Sp{{Nc}}/continuum/{{rep}}_data/{slug}_{{observable}}_{{channel}}_{{rep}}.txt"
+        )
+        filelist.append(
+            f"processed_data/Sp{{Nc}}/continuum/{{rep}}_data/{slug}_masses_pseudoscalar_{{rep}}.txt"
+        )
+        for mass in metadata.bare_masses[int(wildcards.Nc)][slug][wildcards.rep][
+            wildcards.channel
+        ]:
+            filelist.append(
+                f"processed_data/Sp{{Nc}}/continuum/{{rep}}_data/{slug}_m{{rep}}{mass}_pseudoscalar_masses_boots.csv"
+            )
+            filelist.append(
+                f"processed_data/Sp{{Nc}}/continuum/{{rep}}_data/{slug}_m{{rep}}{mass}_{{channel}}_{{observable}}_boots.csv"
+            )
 
     return filelist
 
+
 rule continuum:
     input:
-        data = continuum_data,
-        script = "processed_data/Sp{Nc}/continuum/{rep}/continuum_{observable}_{channel}.wls"
+        data=continuum_data,
+        script="processed_data/Sp{Nc}/continuum/{rep}/continuum_{observable}_{channel}.wls",
     output:
         "processed_data/Sp{Nc}/continuum/{rep}/{channel}_{observable}_{rep}_Sp{Nc}.pdf",
-        "processed_data/Sp{Nc}/continuum/{rep}/{channel}_{observable}_{rep}_Sp{Nc}.dat"
+        "processed_data/Sp{Nc}/continuum/{rep}/{channel}_{observable}_{rep}_Sp{Nc}.dat",
     log:
-        "processed_data/Sp{Nc}/continuum/{rep}/continuum_{observable}_{channel}.log"
+        "processed_data/Sp{Nc}/continuum/{rep}/continuum_{observable}_{channel}.log",
     resources:
-        mathematica_licenses = 1
+        mathematica_licenses=1,
     shell:
         "wolframscript -file {input.script} > {log}"
+
 
 def box_plot_sources(wildcards):
     filelist = []
     for channel in mass_channels:
         for rep in reps:
             if channel in metadata.ensembles[int(wildcards.Nc)][rep]:
-               filelist.append(f"processed_data/Sp{{Nc}}/continuum/{rep}/{channel}_masses_{rep}_Sp{{Nc}}.dat")
-               if channel in decayconst_channels:
-                  filelist.append(f"processed_data/Sp{{Nc}}/continuum/{rep}/{channel}_decayconsts_{rep}_Sp{{Nc}}.dat")
+                filelist.append(
+                    f"processed_data/Sp{{Nc}}/continuum/{rep}/{channel}_masses_{rep}_Sp{{Nc}}.dat"
+                )
+                if channel in decayconst_channels:
+                    filelist.append(
+                        f"processed_data/Sp{{Nc}}/continuum/{rep}/{channel}_decayconsts_{rep}_Sp{{Nc}}.dat"
+                    )
     return filelist
+
 
 rule collate_box_plot_inputs:
     input:
-        data = box_plot_sources,
-        script = "src/collate_boxplot_inputs.sh"
+        data=box_plot_sources,
+        script="src/collate_boxplot_inputs.sh",
     output:
         expand(
             "processed_data/Sp{{Nc}}/continuum/{rep}/{rep}_{observable}.txt",
             observable=["masses", "decayconsts"],
             rep=reps,
-        )
+        ),
     shell:
         "bash {input.script} processed_data/Sp{wildcards.Nc}/continuum {wildcards.Nc}"
 
+
 rule generate_box_plot_scripts:
     input:
-        "src/boxplot.wls"
+        "src/boxplot.wls",
     output:
-        "processed_data/Sp{Nc}/continuum/boxplot.wls"
+        "processed_data/Sp{Nc}/continuum/boxplot.wls",
     shell:
         "sed 's/_SED_NC_/{wildcards.Nc}/' {input} > {output}"
 
+
 rule box_plot:
     input:
-        inputs = expand(
+        inputs=expand(
             "processed_data/Sp{{Nc}}/continuum/{rep}/{rep}_{observable}.txt",
             rep=["F", "AS", "S"],
             observable=["masses", "decayconsts"],
         ),
-        script = "processed_data/Sp{Nc}/continuum/boxplot.wls"
+        script="processed_data/Sp{Nc}/continuum/boxplot.wls",
     output:
         "processed_data/Sp{Nc}/continuum/chiral_mass_Sp{Nc}.pdf",
-        "processed_data/Sp{Nc}/continuum/chiral_decayconst_Sp{Nc}.pdf"
+        "processed_data/Sp{Nc}/continuum/chiral_decayconst_Sp{Nc}.pdf",
     log:
-        "processed_data/Sp{Nc}/continuum/boxplot.log"
+        "processed_data/Sp{Nc}/continuum/boxplot.log",
     shell:
         "wolframscript -file {input.script} > {log}"
+
 
 rule generate_large_N_script:
     input:
-        "src/largeN.wls"
+        "src/largeN.wls",
     output:
-        "processed_data/largeN/largeN_{observable}_{channel}_{rep}.wls"
+        "processed_data/largeN/largeN_{observable}_{channel}_{rep}.wls",
     shell:
         "sed 's/_SED_REP_/{wildcards.rep}/;s/_SED_CHANNEL_/{wildcards.channel}/;s/_SED_OBSERVABLE_/{wildcards.observable}/' {input} > {output}"
 
+
 rule large_N:
     input:
-        script = "processed_data/largeN/largeN_{observable}_{channel}_{rep}.wls",
-        data = expand(
+        script="processed_data/largeN/largeN_{observable}_{channel}_{rep}.wls",
+        data=expand(
             "processed_data/Sp{Nc}/continuum/{{rep}}/{{rep}}_{{observable}}.txt",
             Nc=Ncs,
-        )
+        ),
     output:
         "processed_data/largeN/{rep}_{channel}_{observable}.pdf",
-        "processed_data/largeN/{rep}_{channel}_{observable}.txt"
+        "processed_data/largeN/{rep}_{channel}_{observable}.txt",
     log:
-        "processed_data/largeN/largeN_{observable}_{channel}_{rep}.log"
+        "processed_data/largeN/largeN_{observable}_{channel}_{rep}.log",
     shell:
         "wolframscript -file {input.script} > {log}"
+
 
 rule collate_masses_large_N:
     input:
         expand(
             "processed_data/largeN/{{rep}}_{channel}_masses.txt",
             channel=mass_channels,
-        )
+        ),
     output:
-        "processed_data/largeN/{rep}_masses.txt"
+        "processed_data/largeN/{rep}_masses.txt",
     shell:
         "awk 1 {input} > {output}"
+
 
 rule collate_decayconsts_large_N:
     input:
         expand(
             "processed_data/largeN/{{rep}}_{channel}_decayconsts.txt",
             channel=decayconst_channels,
-        )
+        ),
     output:
-        "processed_data/largeN/{rep}_decayconsts.txt"
+        "processed_data/largeN/{rep}_decayconsts.txt",
     shell:
         "awk 1 {input} > {output}"
 
+
 rule finite_size:
     input:
-        script = "src/FiniteSize.wls",
-        data = expand(
+        script="src/FiniteSize.wls",
+        data=expand(
             "processed_data/Sp6/beta15.6/{volume}B15.6_mF{mass}/output_pseudoscalar.txt",
-            volume=["S12T24","S16T32", "S20T40","S24T48"],
+            volume=["S12T24", "S16T32", "S20T40", "S24T48"],
             mass=["-0.8", "-0.81", "-0.82"],
-        )
+        ),
     output:
         expand(
             "processed_data/Sp6/beta15.6/Sp6_beta15.6_mF{mass}.pdf",
             mass=["-0.8", "-0.81", "-0.82"],
-        )
+        ),
     log:
-        "processed_data/Sp6/beta15.6/finitesize.log"
+        "processed_data/Sp6/beta15.6/finitesize.log",
     shell:
         "wolframscript -file {input.script} > {log}"
 
 
 rule collate_large_N_plots:
     input:
-        "processed_data/largeN/{rep}_{channel}_{observable}.pdf"
+        "processed_data/largeN/{rep}_{channel}_{observable}.pdf",
     output:
-        "plots/largeN_{rep}_{channel}_{observable}.pdf"
+        "plots/largeN_{rep}_{channel}_{observable}.pdf",
     shell:
         "cp {input} {output}"
+
 
 rule collate_chiral_plots:
     input:
-        "processed_data/Sp{Nc}/continuum/chiral_{observable}_Sp{Nc}.pdf"
+        "processed_data/Sp{Nc}/continuum/chiral_{observable}_Sp{Nc}.pdf",
     output:
-        "plots/chiral_{observable}_Sp{Nc}.pdf"
+        "plots/chiral_{observable}_Sp{Nc}.pdf",
     shell:
         "cp {input} {output}"
+
 
 rule collate_contlim_plots:
     input:
-        "processed_data/Sp{Nc}/continuum/{rep}/{channel}_{observable}_{rep}_Sp{Nc}.pdf"
+        "processed_data/Sp{Nc}/continuum/{rep}/{channel}_{observable}_{rep}_Sp{Nc}.pdf",
     output:
-        "plots/continuum_Sp{Nc}_{channel}_{observable}_{rep}.pdf"
+        "plots/continuum_Sp{Nc}_{channel}_{observable}_{rep}.pdf",
     shell:
         "cp {input} {output}"
 
+
 rule collate_finitesize_plots:
     input:
-        "processed_data/Sp{Nc}/beta{beta}/Sp{Nc}_beta{beta}_m{rep}{mass}.pdf"
+        "processed_data/Sp{Nc}/beta{beta}/Sp{Nc}_beta{beta}_m{rep}{mass}.pdf",
     output:
-        "plots/finitesize_Sp{Nc}_beta{beta}_m{rep}{mass}.pdf"
+        "plots/finitesize_Sp{Nc}_beta{beta}_m{rep}{mass}.pdf",
     shell:
         "cp {input} {output}"
+
 
 def w0_data(wildcards):
     return [
@@ -380,35 +421,40 @@ def w0_data(wildcards):
         for beta in betas
     ]
 
+
 rule w0_table_csv:
     input:
-        metadata = "metadata/puregauge.yaml",
-        data = w0_data,
-        script = "src/tabulate_w0.py"
+        metadata="metadata/puregauge.yaml",
+        data=w0_data,
+        script="src/tabulate_w0.py",
     output:
-        table = "tables/w0.tex",
-        csv = "csvs/w0.csv"
+        table="tables/w0.tex",
+        csv="csvs/w0.csv",
     conda:
         "environment.yml"
     shell:
         "python {input.script} {input.metadata} --output_table {output.table} --output_csv {output.csv}"
+
 
 def contlim_table_inputs(wildcards):
     return [
         f"processed_data/Sp{{Nc}}/continuum/{rep}/{channel_observable}_{rep}_Sp{{Nc}}.dat"
         for rep in reps
         for channel_observable in channel_observables
-        if channel_observable.split("_")[0] in metadata.ensembles[int(wildcards.Nc)][rep]
+        if channel_observable.split("_")[0]
+        in metadata.ensembles[int(wildcards.Nc)][rep]
     ]
+
 
 rule contlim_tables:
     input:
-        data = contlim_table_inputs,
-        script = "src/LatexChiral.sh"
+        data=contlim_table_inputs,
+        script="src/LatexChiral.sh",
     output:
-        "tables/chiral_Sp{Nc}.tex"
+        "tables/chiral_Sp{Nc}.tex",
     shell:
         "bash src/LatexChiral.sh {wildcards.Nc} processed_data/Sp{wildcards.Nc}/continuum {output}"
+
 
 def large_N_table_inputs(wildcards):
     return expand(
@@ -417,22 +463,24 @@ def large_N_table_inputs(wildcards):
         rep=reps,
     )
 
+
 rule large_N_table:
     input:
-        data = large_N_table_inputs,
-        script = "src/LatexChiral_LargeN.sh",
+        data=large_N_table_inputs,
+        script="src/LatexChiral_LargeN.sh",
     output:
-        "tables/chiral_largeN.tex"
+        "tables/chiral_largeN.tex",
     shell:
         "bash {input.script} processed_data/largeN {output}"
 
+
 rule sum_rules:
     input:
-        script = "src/sumrules.py",
-        large_N_data = large_N_table_inputs,
-        finite_N_data = contlim_table_inputs
+        script="src/sumrules.py",
+        large_N_data=large_N_table_inputs,
+        finite_N_data=contlim_table_inputs,
     output:
-        "tables/sumrules.tex"
+        "tables/sumrules.tex",
     conda:
         "environment.yml"
     shell:
@@ -447,13 +495,14 @@ def ensemble_masses():
         if f"Use{channel}" in ensemble
     ]
 
+
 rule ensemble_masses_csv:
     input:
-        script = "src/ensemble_masses_csv.py",
-        metadata = "metadata/ensembles.yaml",
-        data = ensemble_masses,
+        script="src/ensemble_masses_csv.py",
+        metadata="metadata/ensembles.yaml",
+        data=ensemble_masses,
     output:
-        "csvs/ensemble_masses.csv"
+        "csvs/ensemble_masses.csv",
     conda:
         "environment.yml"
     shell:
