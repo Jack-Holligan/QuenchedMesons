@@ -5,8 +5,11 @@
 N=$1
 basedir="$2"
 output_file="${PWD}/$3"
+caption_file="${PWD}/$4"
 
 cd "${basedir}"
+
+caption_chisquare=""
 
 Reps="F AS S"
 [ -f "${output_file}" ] && rm "${output_file}"
@@ -60,6 +63,10 @@ do
         if (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
+            if [[ "" == "${caption_chisquare}" ]]
+            then
+                caption_chisquare=${chi2}
+            fi
         else
             echo -n "${chi2}" >> "${output_file}"
         fi
@@ -106,6 +113,10 @@ do
         if (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
+            if [[ "" == "${caption_chisquare}" ]]
+            then
+                caption_chisquare=${chi2}
+            fi
         else
             echo -n "${chi2}" >> "${output_file}"
         fi
@@ -152,6 +163,10 @@ do
         if (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
+            if [[ "" == "${caption_chisquare}" ]]
+            then
+                caption_chisquare=${chi2}
+            fi
         else
             echo -n "${chi2}" >> "${output_file}"
         fi
@@ -198,6 +213,10 @@ do
         if (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
+            if [[ "" == "${caption_chisquare}" ]]
+            then
+                caption_chisquare=${chi2}
+            fi
         else
             echo -n "${chi2}" >> "${output_file}"
         fi
@@ -244,6 +263,10 @@ do
         if (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
+            if [[ "" == "${caption_chisquare}" ]]
+            then
+                caption_chisquare=${chi2}
+            fi
         else
             echo -n ${chi2} >> "${output_file}"
         fi
@@ -290,6 +313,10 @@ do
         if (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
+            if [[ "" == "${caption_chisquare}" ]]
+            then
+                caption_chisquare=${chi2}
+            fi
         else
             echo -n "${chi2}" >> "${output_file}"
         fi
@@ -336,6 +363,10 @@ do
         if (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
+            if [[ "" == "${caption_chisquare}" ]]
+            then
+                caption_chisquare=${chi2}
+            fi
         else
             echo -n "${chi2}" >> "${output_file}"
         fi
@@ -382,6 +413,10 @@ do
         if (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
+            if [[ "" == "${caption_chisquare}" ]]
+            then
+                caption_chisquare=${chi2}
+            fi
         else
             echo -n ${chi2} >> "${output_file}"
         fi
@@ -396,3 +431,4 @@ done
 sed -i '' -e '$ d' "${output_file}"
 
 echo "\\end{tabular}" >> "${output_file}"
+echo "captionchisquaresp${N} ${caption_chisquare}" >> "${caption_file}"

@@ -55,12 +55,15 @@ finitesize_plots = expand(
 
 plots = [largeN_plots, chiral_plots, continuum_plots]  # TODO: finitesize_plots]
 
+definitions = "definitions.tex"
+
 
 rule all:
     input:
         csvs,
         tables,
         plots,
+        definitions,
 
 
 rule strip_mesons:
@@ -456,9 +459,10 @@ rule contlim_tables:
         data=contlim_table_inputs,
         script="src/LatexChiral.sh",
     output:
-        "tables/chiral_Sp{Nc}.tex",
+        table="tables/chiral_Sp{Nc}.tex",
+        caption="processed_data/Sp{{Nc}}/continuum/caption_vars.tex",
     shell:
-        "bash src/LatexChiral.sh {wildcards.Nc} processed_data/Sp{wildcards.Nc}/continuum {output}"
+        "bash src/LatexChiral.sh {wildcards.Nc} processed_data/Sp{wildcards.Nc}/continuum {output.table} {output.caption}"
 
 
 rule contlim_csv:
@@ -486,9 +490,10 @@ rule large_N_table:
         data=large_N_table_inputs,
         script="src/LatexChiral_LargeN.sh",
     output:
-        "tables/chiral_largeN.tex",
+        table="tables/chiral_largeN.tex",
+        caption="processed_data/largeN/caption_vars.tex",
     shell:
-        "bash {input.script} processed_data/largeN {output}"
+        "bash {input.script} processed_data/largeN {output.table} {output.caption}"
 
 
 rule large_N_csv:
@@ -537,3 +542,18 @@ rule ensemble_masses_csv:
         "environment.yml"
     shell:
         "python {input.script} --output_file {output}"
+
+
+rule collate_latex_definitions:
+    input:
+        all_definitions=[
+            expand("processed_data/Sp{{Nc}}/continuum/caption_vars.tex", Nc=Ncs),
+            "processed_data/largeN/caption_vars.tex",
+        ],
+        script="src/collate_latex_definitions.py",
+    output:
+        definitions,
+    conda:
+        "environment.yml"
+    shell:
+        "python {input.script} {input.all_definitions} --output_tex {output}"

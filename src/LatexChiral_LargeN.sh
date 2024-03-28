@@ -2,8 +2,11 @@
 set -eux
 basedir="$1"
 output_file="${PWD}/$2"
+caption_file="${PWD}/$3"
 
 cd "${basedir}"
+
+caption_chisquare=""
 
 Reps="F AS S"
 [ -f "${output_file}" ] && rm "${output_file}"
@@ -59,6 +62,10 @@ do
         if [[ "${chi2}" != "--" ]] && (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
+            if [[ "" == "${caption_chisquare}" ]]
+            then
+                caption_chisquare=${chi2}
+            fi
         else
             echo -n "${chi2}" >> "${output_file}"
         fi
@@ -107,6 +114,10 @@ do
         if [[ "${chi2}" != "--" ]] && (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
+            if [[ "" == "${caption_chisquare}" ]]
+            then
+                caption_chisquare=${chi2}
+            fi
         else
             echo -n "${chi2}" >> "${output_file}"
         fi
@@ -155,6 +166,10 @@ do
         if [[ "${chi2}" != "--" ]] && (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
+            if [[ "" == "${caption_chisquare}" ]]
+            then
+                caption_chisquare=${chi2}
+            fi
         else
             echo -n "${chi2}" >> "${output_file}"
         fi
@@ -203,6 +218,10 @@ do
         if [[ "${chi2}" != "--" ]] && (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
+            if [[ "" == "${caption_chisquare}" ]]
+            then
+                caption_chisquare=${chi2}
+            fi
         else
             echo -n "${chi2}" >> "${output_file}"
         fi
@@ -251,6 +270,10 @@ do
         if [[ "${chi2}" != "--" ]] && (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
+            if [[ "" == "${caption_chisquare}" ]]
+            then
+                caption_chisquare=${chi2}
+            fi
         else
             echo -n "${chi2}" >> "${output_file}"
         fi
@@ -299,6 +322,10 @@ do
         if [[ "${chi2}" != "--" ]] && (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
+            if [[ "" == "${caption_chisquare}" ]]
+            then
+                caption_chisquare=${chi2}
+            fi
         else
             echo -n "${chi2}" >> "${output_file}"
         fi
@@ -347,6 +374,10 @@ do
         if [[ "${chi2}" != "--" ]] && (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
+            if [[ "" == "${caption_chisquare}" ]]
+            then
+                caption_chisquare=${chi2}
+            fi
         else
             echo -n "${chi2}" >> "${output_file}"
         fi
@@ -395,6 +426,10 @@ do
         if [[ "${chi2}" != "--" ]] && (( $(echo "${chi2} > 3.0" |bc -l) ));
         then
             echo -n "\\textcolor{red}{${chi2}}" >> "${output_file}"
+            if [[ "" == "${caption_chisquare}" ]]
+            then
+                caption_chisquare=${chi2}
+            fi
         else
             echo -n "${chi2}" >> "${output_file}"
         fi
@@ -407,5 +442,5 @@ done
 
 sed -i '' -e '$ d' "${output_file}"
 
-# Write captions and labels for the LaTeX tables.
 echo "\\end{tabular}" >> "${output_file}"
+echo "captionchisquarelargeN ${caption_chisquare}" >> "${caption_file}"

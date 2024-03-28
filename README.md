@@ -57,14 +57,29 @@ components are joined together using Make. The code has been tested with
   The `--retries` option is needed
   because sometimes Mathematica will fail for no specific reason.
 
-  Plots will be created in the `plots` directory,
-  tables in the `tables` directory,
-  and CSV files of final presented data in the `csvs` directory.
-  Intermediary files not included in the publication
-  are held in the `processed_data` directory.
-  Each of these will be created by Snakemake automatically.
 * On eight Apple M1 CPU cores,
   the full analysis takes around three hours.
+
+
+## Output
+
+The following classes of output are created:
+
+* The `plots` directory contains all plots included in the paper.
+* The `tables` directory contains
+  LaTeX source for all numerical tables included in the paper.
+* The file `definitions.tex` defines macros for
+  all numbers quoted in the paper
+  that are outputs of the analysis.
+* The `csvs` directory contains CSV files,
+  including all data presented in plots or tables,
+  for ease of those who wish to build on our results in future work.
+  Pre-generated versions of these
+  are available from the data release. <!-- TODO ADD LINK -->
+* The `processed_data` directory contains
+  intermediary files not included in the publication.
+
+All directories are created automatically.
 
 
 ## Reproducibility and reusability
