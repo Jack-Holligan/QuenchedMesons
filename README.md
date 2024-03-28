@@ -29,9 +29,10 @@ components are joined together using Make. The code has been tested with
 * Download and extract the data, [available from Zenodo][data] [TODO].
   Specifically,
   * Download the file `raw_data.zip`
-    and unzip its contents into the `raw_data` directory.
+    and unzip its contents into the root directory
+    to create the `raw_data` subdirectory.
   * Download the file `metadata.zip`
-    and unzip its contents into the `metadata` directory.
+    and unzip its contents into the `metadata` subdirectory.
 
 ### Running the analysis
 
