@@ -153,7 +153,9 @@ def output_table(finite_N, large_N, extras, output_file=stdout):
     )
     print(r"\hline\hline", file=output_file)
     for label, s_data in extras.items():
-        print_single(label, s_data)
+        print_single(label, s_data, output_file=output_file)
+    print(r"\hline", file=output_file)
+    print(r"\end{tabular}", file=output_file)
 
 
 def compute_single_s(datum):

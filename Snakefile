@@ -29,6 +29,7 @@ tables = [
     "tables/w0.tex",
     *expand("tables/chiral_Sp{Nc}.tex", Nc=Ncs),
     "tables/chiral_largeN.tex",
+    "tables/sumrules.tex",
 ]
 
 largeN_plots = expand(
@@ -444,14 +445,17 @@ rule w0_table_csv:
         "python {input.script} {input.metadata} --output_table {output.table} --output_csv {output.csv}"
 
 
-def contlim_table_inputs(wildcards):
+def all_continua(Nc):
     return [
-        f"processed_data/Sp{{Nc}}/continuum/{rep}/{channel_observable}_{rep}_Sp{{Nc}}.dat"
+        f"processed_data/Sp{Nc}/continuum/{rep}/{channel_observable}_{rep}_Sp{Nc}.dat"
         for rep in reps
         for channel_observable in channel_observables
-        if channel_observable.split("_")[0]
-        in metadata.ensembles[int(wildcards.Nc)][rep]
+        if channel_observable.split("_")[0] in metadata.ensembles[Nc][rep]
     ]
+
+
+def contlim_table_inputs(wildcards):
+    return all_continua(int(wildcards.Nc))
 
 
 rule contlim_tables:
@@ -512,7 +516,7 @@ rule sum_rules:
     input:
         script="src/sumrules.py",
         large_N_data=large_N_table_inputs,
-        finite_N_data=contlim_table_inputs,
+        finite_N_data=[all_continua(Nc) for Nc in Ncs],
     output:
         table="tables/sumrules.tex",
         csv="csvs/sumrules.csv",
@@ -543,7 +547,7 @@ rule ensemble_masses_csv:
     conda:
         "environment.yml"
     shell:
-        "python {input.script} --output_file {output}"
+        "python {input.script} {input.metadata} --output_file {output}"
 
 
 rule collate_latex_definitions:
