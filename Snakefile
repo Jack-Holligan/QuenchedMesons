@@ -50,11 +50,11 @@ continuum_plots = [
     if channel_observable.split("_")[0] in metadata.ensembles[Nc][rep]
 ]
 finitesize_plots = expand(
-    "processed_data/Sp6/beta15.6/Sp6_beta15.6_mF{mass}.pdf",
+    "plots/Sp6_beta15.6_mF{mass}_finitesize.pdf",
     mass=[-0.8, -0.81],
 )
 
-plots = [largeN_plots, chiral_plots, continuum_plots]  # TODO: finitesize_plots]
+plots = [largeN_plots, chiral_plots, continuum_plots, finitesize_plots]
 
 definitions = "definitions.tex"
 
@@ -368,9 +368,18 @@ rule collate_decayconsts_large_N:
         "awk 1 {input} > {output}"
 
 
+rule generate_finite_size_script:
+    input:
+        "src/FiniteSize.wls",
+    output:
+        "processed_data/Sp{Nc}/beta{beta}/FiniteSize.wls",
+    shell:
+        "sed 's:_SED_BASEPATH_:processed_data/Sp{wildcards.Nc}/beta{wildcards.beta}:;s:_SED_OUTPUTPATH_:processed_data/Sp{wildcards.Nc}/beta{wildcards.beta}:' {input} > {output}"
+
+
 rule finite_size:
     input:
-        script="src/FiniteSize.wls",
+        script="processed_data/Sp6/beta15.6/FiniteSize.wls",
         data=expand(
             "processed_data/Sp6/beta15.6/{volume}B15.6_mF{mass}/output_pseudoscalar.txt",
             volume=["S12T24", "S16T32", "S20T40", "S24T48"],
@@ -385,6 +394,15 @@ rule finite_size:
         "processed_data/Sp6/beta15.6/finitesize.log",
     shell:
         "wolframscript -file {input.script} > {log}"
+
+
+rule relocate_finite_size:
+    input:
+        "processed_data/Sp{Nc}/beta{beta}/Sp{Nc}_beta{beta}_m{Rep}{mass}.pdf",
+    output:
+        "plots/Sp{Nc}_beta{beta}_m{Rep}{mass}_finitesize.pdf",
+    shell:
+        "cp {input} {output}"
 
 
 rule collate_large_N_plots:

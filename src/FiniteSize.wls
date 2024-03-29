@@ -15,8 +15,8 @@ Rep="F";
 Representation="Fundamental";
 Allmasses={};
 For[mass=1,mass<=Length[baremasses],++mass,{onemass={};
-For[dir=1,dir<=Length[Directories],++dir,data=Import[Basepath<>"/"<>Directories[[dir]]<>"_m"<>Rep<>baremasses[[mass]]<>"/"<>Directories[[dir]]<>"m_"<>baremasses[[mass]]<>"_"<>Rep<>".txt","Table"];
-AppendTo[onemass,{NumberForm[baremasses[[mass]]],Volumes[[dir]],data[[2,2]],data[[2,3]]}/.{a_,b_,c_,d_}->{a,b,Around[c,d]}]]};
+For[dir=1,dir<=Length[Directories],++dir,data=Import[Basepath<>"/"<>Directories[[dir]]<>"_m"<>Rep<>baremasses[[mass]]<>"/"<>"output_pseudoscalar.txt","Table"];
+AppendTo[onemass,{NumberForm[baremasses[[mass]]],Volumes[[dir]],data[[3,1]],data[[4,1]]}/.{a_,b_,c_,d_}->{a,b,Sqrt[Around[c,d]]}]]};
 AppendTo[Allmasses,onemass];]
 FiniteSize[minf_,A_,L_]:=minf(1+A Exp[-minf*L]/(minf*L)^(3/2))
 
@@ -32,4 +32,4 @@ Show[lplot,pplot,ImageSize->800,Frame->True,FrameLabel->{MaTeX["m_{\\infty}L",Fo
 
 
 (* ::Input:: *)
-Do[Export[Outputpath<>"/sp6_"<>Rep<>"_"<>ToString[baremasses[[i]]]<>".pdf",Plotter[i],"PDF",AllowRasterization->False],{i,3}];
+Do[Export[Outputpath<>"/sp6_beta15.6_m"<>Rep<>ToString[baremasses[[i]]]<>".pdf",Plotter[i],"PDF",AllowRasterization->False],{i,3}];
