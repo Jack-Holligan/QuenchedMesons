@@ -59,7 +59,7 @@ components are joined together using Make. The code has been tested with
   because sometimes Mathematica will fail for no specific reason.
 
 * On eight Apple M1 CPU cores,
-  the full analysis takes around three hours.
+  the full analysis takes around an hour and a half.
 
 
 ## Output
