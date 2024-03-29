@@ -460,7 +460,7 @@ rule contlim_tables:
         script="src/LatexChiral.sh",
     output:
         table="tables/chiral_Sp{Nc}.tex",
-        caption="processed_data/Sp{{Nc}}/continuum/caption_vars.tex",
+        caption="processed_data/Sp{Nc}/continuum/caption_vars.tex",
     shell:
         "bash src/LatexChiral.sh {wildcards.Nc} processed_data/Sp{wildcards.Nc}/continuum {output.table} {output.caption}"
 
@@ -522,9 +522,11 @@ rule sum_rules:
         "python {input.script} --output_table {output.table} --output_csv {output.csv}"
 
 
-def ensemble_masses():
+def ensemble_masses(wildcards):
     return [
-        "processed_data/Sp{Nc}/beta{beta}/S{NS}T{NT}B{beta}_m{Rep}{m}/output_{channel}"
+        "processed_data/Sp{Nc}/beta{beta}/S{NS}T{NT}B{beta}_m{Rep}{m}/output_{channel}.txt".format(
+            channel=channel_name, **ensemble
+        )
         for ensemble in metadata.metadata.values()
         for channel, channel_name in channel_names.items()
         if f"Use{channel}" in ensemble
@@ -547,7 +549,7 @@ rule ensemble_masses_csv:
 rule collate_latex_definitions:
     input:
         all_definitions=[
-            expand("processed_data/Sp{{Nc}}/continuum/caption_vars.tex", Nc=Ncs),
+            expand("processed_data/Sp{Nc}/continuum/caption_vars.tex", Nc=Ncs),
             "processed_data/largeN/caption_vars.tex",
         ],
         script="src/collate_latex_definitions.py",
