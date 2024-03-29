@@ -1099,7 +1099,7 @@ meffATplot=ErrorListPlot[Table[{{meffAT[[t,1]],meffAT[[t,2]]},ErrorBar[meffAT[[t
 
 
 (* ::Input:: *)
-Export[StringJoin[Outputpath,"/atensor.pdf"],meffATplot,"PDF"];
+Export[StringJoin[Outputpath,"/axialtensor.pdf"],meffATplot,"PDF"];
 
 
 (* ::Input:: *)
