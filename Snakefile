@@ -257,6 +257,7 @@ rule continuum:
     output:
         "processed_data/Sp{Nc}/continuum/{rep}/{channel}_{observable}_{rep}_Sp{Nc}.pdf",
         "processed_data/Sp{Nc}/continuum/{rep}/{channel}_{observable}_{rep}_Sp{Nc}.dat",
+        "processed_data/Sp{Nc}/continuum/{rep}/{channel}_{observable}_{rep}_Sp{Nc}_highbeta.dat",
     log:
         "processed_data/Sp{Nc}/continuum/{rep}/continuum_{observable}_{channel}.log",
     resources:

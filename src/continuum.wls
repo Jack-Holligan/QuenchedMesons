@@ -27,13 +27,14 @@ channel="_SED_CHANNEL_";
 shortchannel=<| "pseudoscalar" -> "PS", "vector" -> "V", "axialvector" -> "AV", "scalar" -> "S", "tensor" -> "T", "axialtensor" -> "AT" |>[[channel]];
 SeedRandom[_SED_SEED_,Method->"MersenneTwister"];
 
+OutputFilenameBase=Outputpath<>"/"<>ToString[Rep]<>"/"<>channel<>"_"<>Observable<>"_"<>ToString[Rep]<>"_Sp"<>ToString[Nc];
 
 
 (* ::Section:: *)
 (* Computation *)
 
 (* ::Input:: *)
-UseObservable=True;
+UseObservable=_SED_USE_;
 
 
 (* ::Input:: *)
@@ -140,7 +141,7 @@ For[i=1,i<=Length[Betas],++i,AppendTo[showplots,Symbol["plot"<>Observable<>chann
 
 
 (* ::Input:: *)
-(*Export[Outputpath<>"/"<>ToString[Rep]<>"/"<>channel<>"_"<>Observable<>"_"<>ToString[Rep]<>"_Sp"<>ToString[Nc]<>".pdf",Show[showplots],"PDF"];*)
+(*Export[OutputFilenameBase<>".pdf",Show[showplots],"PDF"];*)
 
 
 (* ::Input:: *)
@@ -233,7 +234,8 @@ DashHighBeta=ErrorListPlot[{{{0,CombinedResultsHighBeta[[1,1]]},ErrorBar[Combine
 AppendTo[showplots,DashHighBeta];
 LineHighBeta=Plot[{f[CombinedResultsHighBeta[[1,1]],CombinedResultsHighBeta[[2,1]],x,CombinedResultsHighBeta[[3,1]],0]+CombinedResultsHighBeta[[1,2]],f[CombinedResultsHighBeta[[1,1]],CombinedResultsHighBeta[[2,1]],x,CombinedResultsHighBeta[[3,1]],0]-CombinedResultsHighBeta[[1,2]]},{x,0,1.1Max[xvalues]},PlotStyle->{{Dashed,Gray,Opacity[0.0001]},{Dashed,Gray,Opacity[0.0001]}},Filling->True,AxesOrigin->{-0.1,0},Frame->True,FrameLabel->{"\!\(\*SubsuperscriptBox[OverscriptBox[\(m\), \(^\)], \(PS\), \(2\)]\)",ylabel},LabelStyle->Directive[22,Black]];
 AppendTo[showplots,LineHighBeta];
-Export[Outputpath<>"/"<>ToString[Rep]<>"/"<>channel<>"_"<>Observable<>"_"<>ToString[Rep]<>"_Sp"<>ToString[Nc]<>"_highbeta.dat",CombinedResultsHighBeta,"Table","FieldSeparators"->" "]];
+Export[OutputFilenameBase<>"_highbeta.dat",CombinedResultsHighBeta,"Table","FieldSeparators"->" "],
+Export[OutputFilenameBase<>"_highbeta.dat",Array["--"&,{4,2}],"Table","FieldSeparators"->" "]];
 
 
 (* ::Input:: *)
@@ -241,8 +243,8 @@ FinalPlot=If[UseObservable,Show[showplots,PlotLabel->MaTeX["\\chi^2/\\text{d.o.f
 
 
 (* ::Input:: *)
-If[UseObservable,{Export[Outputpath<>"/"<>ToString[Rep]<>"/"<>channel<>"_"<>Observable<>"_"<>ToString[Rep]<>"_Sp"<>ToString[Nc]<>".pdf",FinalPlot,"PDF",AllowRasterization->False,ImageResolution->1200];}];
+If[UseObservable,Export[OutputFilenameBase<>".pdf",FinalPlot,"PDF",AllowRasterization->False,ImageResolution->1200];];
 
 
 (* ::Input:: *)
-If[UseObservable,{Export[Outputpath<>"/"<>ToString[Rep]<>"/"<>channel<>"_"<>Observable<>"_"<>ToString[Rep]<>"_Sp"<>ToString[Nc]<>".dat",CombinedResultsFinal,"Table","FieldSeparators"->" "];},{Export[Basepath<>"/"<>ToString[Rep]<>"/"<>channel<>"_"<>Observable<>"_"<>ToString[Rep]<>"_Sp"<>ToString[Nc]".dat",Array["--"&,{4,2}],"Table","FieldSeparators"->" "];}];
+If[UseObservable,{Export[OutputFilenameBase<>".dat",CombinedResultsFinal,"Table","FieldSeparators"->" "];},{Export[OutputFilenameBase<>".dat",Array["--"&,{4,2}],"Table","FieldSeparators"->" "];Export[OutputFilenameBase<>".pdf",""];}];
