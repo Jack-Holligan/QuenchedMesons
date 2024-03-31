@@ -61,6 +61,7 @@ def get_single_N_rep_data(Nc, rep, channel_observable):
             if (
                 len(lines := f.readlines()) == 0
                 or len(split_line := lines[0].split()) < 2
+                or "--" in split_line
             ):
                 return
     except FileNotFoundError:
