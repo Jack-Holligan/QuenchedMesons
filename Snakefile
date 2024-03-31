@@ -216,15 +216,16 @@ rule combine_wilson_flow:
 
 rule generate_continuum_script:
     input:
-        "metadata/ensembles.yaml",
+        "metadata/continuum.yaml",
         "metadata/puregauge.yaml",
-        "src/continuum.wls",
+        source="src/continuum.wls",
+        script="src/wrap_continuum.py",
     output:
         "processed_data/Sp{Nc}/continuum/{rep}/continuum_{observable}_{channel}.wls",
     conda:
         "environment.yml"
     shell:
-        "python src/wrap_continuum.py {wildcards.Nc} {wildcards.rep} {wildcards.channel} {wildcards.observable} > {output}"
+        "python {input.script} {wildcards.Nc} {wildcards.rep} {wildcards.channel} {wildcards.observable} > {output}"
 
 
 def continuum_data(wildcards):
