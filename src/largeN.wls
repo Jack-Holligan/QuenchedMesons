@@ -64,7 +64,7 @@ ChiSq=If[Length[Extrp]>2,Sum[(fit[1/ToExpression[Nc[[i]]]]-Extrp[[i,2]]["Value"]
 
 
 (* ::Input:: *)
-ExtrapolationPlot=Show[{ListPlot[Extrp,PlotStyle->Blue,PlotLegends->{MaTeX["\\text{Finite }N_c",FontSize->24]}],ListPlot[{{0, largeN}},PlotStyle->Black,PlotMarkers->"\[FilledSquare]",PlotLegends->MaTeX["\\text{Large-}N_c\\text{ limit}",FontSize->24]],Plot[fit[x],{x,0,0.3},PlotStyle->{Red,Dashed},PlotLegends->{MaTeX["\\text{Extrapolation}",FontSize->24]}]},Frame->True,LabelStyle->Directive[18,Black,FontFamily->Times],FrameLabel->{MaTeX["1/N_c",FontSize->24],MaTeX[Labels,FontSize->24]},RotateLabel->False,PlotLabel->MaTeX["\\chi^2/\\text{d.o.f.}="<>ToString[NumberForm[ChiSq,{3,2}]],FontSize->24],PlotRange->{{0,0.3},All},Axes->False];
+ExtrapolationPlot=Show[{ListPlot[Extrp,PlotStyle->Blue,PlotLegends->{MaTeX["\\text{Finite }N_c",FontSize->24]}],ListPlot[{{0, largeN}},PlotStyle->Black,PlotMarkers->"\[FilledSquare]",PlotLegends->{MaTeX["\\text{Large-}N_c\\text{ limit}",FontSize->24]}],Plot[fit[x],{x,0,0.3},PlotStyle->{Red,Dashed},PlotLegends->{MaTeX["\\text{Extrapolation}",FontSize->24]}]},Frame->True,LabelStyle->Directive[18,Black,FontFamily->Times],FrameLabel->{MaTeX["1/N_c",FontSize->24],MaTeX[Labels,FontSize->24]},RotateLabel->False,PlotLabel->MaTeX["\\chi^2/\\text{d.o.f.}="<>ToString[NumberForm[ChiSq,{3,2}]],FontSize->24],PlotRange->{{0,0.3},All},Axes->False];
 
 
 (* ::Input:: *)
