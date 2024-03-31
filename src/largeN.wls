@@ -40,7 +40,7 @@ data=Table[(ArrayReshape[Import[BaseDirectory<>"/Sp"<>ToString[Nc[[n]]]<>"/Conti
 
 
 (* ::Input:: *)
-Extrp=Select[Table[{1/ToExpression@Nc[[n]],data[[n]]},{n,1,Length[Nc]}],Length[#[[2]]]>0&];
+Extrp=Select[Table[{1/ToExpression@Nc[[n]],data[[n]]},{n,1,Length[Nc]}],And[Length[#[[2]]]>0,NumericQ[#[[2]]["Value"]]]&];
 
 
 (* ::Input:: *)
