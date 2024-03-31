@@ -9,18 +9,23 @@ decayChannels="pseudoscalar vector axialvector"
 cd "${basedir}"
 for representation in ${Representations}
 do
+  masses_filename="${representation}_masses.txt"
+  decayconsts_filename="${representation}_decayconsts.txt"
+
   cd "${representation}"
-  [[ -f ${representation}_decayconsts.txt ]] && rm ${representation}_decayconsts.txt
-  [[ -f ${representation}_masses.txt ]] && rm ${representation}_masses.txt
+  [[ -f "${masses_filename}" ]] && rm "${masses_filename}"
+  [[ -f "${decayconsts_filename}" ]] && rm "${decayconsts_filename}"
   for channel in ${massChannels}
   do
-    cat ${channel}_masses_${representation}_Sp${Nc}.dat | head -1 | awk '{print $1}' >> ${representation}_masses.txt;
-    cat ${channel}_masses_${representation}_Sp${Nc}.dat | head -1 | awk '{print $2}' >> ${representation}_masses.txt;
+    cat ${channel}_masses_${representation}_Sp${Nc}.dat 2>/dev/null | head -1 | awk '{print $1} END {if(NR==0) {print "--"}}' >> "${masses_filename}"
+    cat ${channel}_masses_${representation}_Sp${Nc}.dat 2>/dev/null | head -1 | awk '{print $2} END {if(NR==0) {print "--"}}' >> "${masses_filename}"
   done
+
+
   for channel in ${decayChannels}
   do
-    cat ${channel}_decayconsts_${representation}_Sp${Nc}.dat | head -1 | awk '{print $1}' >> ${representation}_decayconsts.txt;
-    cat ${channel}_decayconsts_${representation}_Sp${Nc}.dat | head -1 | awk '{print $2}' >> ${representation}_decayconsts.txt;
+    cat ${channel}_decayconsts_${representation}_Sp${Nc}.dat 2>/dev/null | head -1 | awk '{print $1} END {if(NR==0) {print "--"}}' >> "${decayconsts_filename}"
+    cat ${channel}_decayconsts_${representation}_Sp${Nc}.dat 2>/dev/null | head -1 | awk '{print $2} END {if(NR==0) {print "--"}}' >> "${decayconsts_filename}"
   done
   cd ..
 done
