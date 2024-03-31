@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#set -eux
-
 N=$1
 basedir="$2"
 output_file="${PWD}/$3"

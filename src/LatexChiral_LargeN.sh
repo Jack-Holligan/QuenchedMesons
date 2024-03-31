@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eux
+
 basedir="$1"
 output_file="${PWD}/$2"
 caption_file="${PWD}/$3"
