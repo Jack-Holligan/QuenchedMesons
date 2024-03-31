@@ -25,11 +25,17 @@ def generate_wls(Nc, rep, channel, observable):
         volumes.append(slug)
         betas.append(float(re.match(".*B(.*)", slug).groups()[0]))
 
-    colours = all_colours[: len(betas)]
+    exclude_volumes = metadata[f"Sp{Nc}"].get("exclude_volumes", [])
+    include_volumes = [volume for volume in volumes if volume not in exclude_volumes]
 
-    volumes_str = ", ".join(f'"{volume}"' for volume in volumes)
-    betas_str = ", ".join(map(str, betas))
-    colours_str = ", ".join(f"{colour}" for colour in colours)
+    include_betas = [
+        ensembles[f"Sp{Nc}_{volume}"]["beta"] for volume in include_volumes
+    ]
+    colours = all_colours[: len(include_betas)]
+
+    volumes_str = ", ".join(f'"{volume}"' for volume in include_volumes)
+    betas_str = ", ".join(map(str, include_betas))
+    colours_str = ", ".join(f'"{colour}"' for colour in colours)
 
     input_dir = f"{os.getcwd()}/processed_data/Sp{Nc}/continuum"
     output_dir = f"{os.getcwd()}/processed_data/Sp{Nc}/continuum"
