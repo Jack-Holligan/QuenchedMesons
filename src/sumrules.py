@@ -242,7 +242,7 @@ def main():
     }
     large_N_results = {r"\infty": compute_s(large_N_squared_data)}
     su3_results = {
-        r"$SU(3)$, $N_{(\mathrm{f})}=2$ ($m_\pi=139.6\textnormal{ MeV}$)": compute_single_s(
+        r"$SU(3)$, $N_{(\mathrm{f})}=2$ ($m_\pi=139.6\textnormal{ MeV}$)": (
             compute_single_s(su3_squared_data)
         )
     }
