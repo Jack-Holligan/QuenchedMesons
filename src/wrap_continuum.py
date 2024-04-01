@@ -35,7 +35,7 @@ def generate_wls(Nc, rep, channel, observable):
 
     volumes_str = ", ".join(f'"{volume}"' for volume in include_volumes)
     betas_str = ", ".join(map(str, include_betas))
-    colours_str = ", ".join(f'"{colour}"' for colour in colours)
+    colours_str = ", ".join(colours)
 
     input_dir = f"{os.getcwd()}/processed_data/Sp{Nc}/continuum"
     output_dir = f"{os.getcwd()}/processed_data/Sp{Nc}/continuum"
