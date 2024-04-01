@@ -219,7 +219,7 @@ doft=0;
 For[i=2,i<=Length[Betas],++i,doft+=Length[Select[Select[Evaluate[Symbol["massPS"<>ToString[i]]][[;;,5]],#<=maxmassPS&],#>=minmassPS&]]];
 ObservableDofHighBeta=doft-3;
 SecondBetaIndex=1+Length[Evaluate[Symbol[Observable<>channel<>"1"]]];
-tmp=NMinimize[{Sum[Sum[Boole[Evaluate[Symbol["massPS"<>ToString[i]]][[k,5]]<=maxmassPS&&Evaluate[Symbol["massPS"<>ToString[i]]][[k,5]]>=minmassPS]*(f[x,L,Evaluate[Symbol["massPS"<>ToString[i]]][[k,5]],W,1/Evaluate[Symbol["massPS"<>ToString[i]]][[k,3]]]-Evaluate[Symbol[Observable<>channel<>ToString[i]][[k,5]]])^2/(Evaluate[Symbol[Observable<>channel<>ToString[i]][[k,6]]])^2,{k,1,Dimensions[Evaluate[Symbol["massPS"<>ToString[i]]]][[1]]}],{i,1,Length[Betas]}],x>=0},{x,L,W},Method->"DifferentialEvolution"];
+tmp=NMinimize[{Sum[Sum[Boole[Evaluate[Symbol["massPS"<>ToString[i]]][[k,5]]<=maxmassPS&&Evaluate[Symbol["massPS"<>ToString[i]]][[k,5]]>=minmassPS]*(f[x,L,Evaluate[Symbol["massPS"<>ToString[i]]][[k,5]],W,1/Evaluate[Symbol["massPS"<>ToString[i]]][[k,3]]]-Evaluate[Symbol[Observable<>channel<>ToString[i]][[k,5]]])^2/(Evaluate[Symbol[Observable<>channel<>ToString[i]][[k,6]]])^2,{k,1,Dimensions[Evaluate[Symbol["massPS"<>ToString[i]]]][[1]]}],{i,2,Length[Betas]}],x>=0},{x,L,W},Method->"DifferentialEvolution"];
 FinalHighBeta={x/.tmp[[2,1]], L/.tmp[[2,2]], W/.tmp[[2,3]], tmp[[1]]/ObservableDofHighBeta};
 massPSbootsHighBeta=Table[massPSboots[[i]], {i, SecondBetaIndex, Length[massPSboots]}];
 ObservableBootsHighBeta=Table[ObservableBoots[[i]], {i,SecondBetaIndex,Length[ObservableBoots]}];
