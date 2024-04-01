@@ -16,8 +16,7 @@ Nc={"4","6","8"};
 ChannelSymbol=If[Rep=="S","\\mathcal{"<>shortchannel<>"}","\\mathrm{"<>If[Rep=="AS",ToLowerCase[shortchannel],shortchannel]<>"}"];
 Labels=If[observable=="decayconsts","\\frac{\\hat{f}^2_{\\rm "<>ChannelSymbol<>"}}{N_c^2}", "\\hat{m}^2_{"<>ChannelSymbol<>"}"];
 
-fitforms=<|"F" -> a*x+b, "AS" -> a*x^2+b, "S" -> a*x^2+b |>;
-fitform=fitforms[Rep];
+fitform=a*x+b;
 
 (* ::Input:: *)
 BaseDirectory=Directory[]<>"/processed_data";
@@ -56,7 +55,7 @@ fit=NonlinearModelFit[extrapdata,fitform,{a,b},x,Weights->1/extraperrors^2,Varia
 
 
 (* ::Input:: *)
-largeN=If[Length[Extrp]>2,Around[b/.fit["BestFitParameters"],fit["ParameterErrors"][[2]]],(Extrp[[1, 2]]/Extrp[[1, 1]]^2 - Extrp[[2, 2]]/Extrp[[2, 1]]^2)/(1/Extrp[[1, 1]]^2 - 1/Extrp[[2, 1]]^2)];
+largeN=If[Length[Extrp]>2,Around[b/.fit["BestFitParameters"],fit["ParameterErrors"][[2]]],(Extrp[[1, 2]]/Extrp[[1, 1]] - Extrp[[2, 2]]/Extrp[[2, 1]])/(1/Extrp[[1, 1]] - 1/Extrp[[2, 1]])];
 
 
 (* ::Input:: *)
