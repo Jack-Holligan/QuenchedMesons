@@ -23,7 +23,10 @@ channel_observables = [f"{channel}_masses" for channel in mass_channels] + [
 ]
 
 
-csvs = ["csvs/w0.csv", "csvs/ensemble_masses.csv"]
+csvs = expand(
+    "csvs/{basename}.csv",
+    basename=["w0", "ensemble_masses", "continuum", "large_N", "sumrules"],
+)
 
 tables = [
     "tables/w0.tex",
@@ -491,8 +494,8 @@ rule contlim_tables:
 
 rule contlim_csv:
     input:
-        data=contlim_table_inputs,
-        script="src/contlim.py",
+        data=[all_continua(Nc) for Nc in Ncs],
+        script="src/continuum_csv.py",
     output:
         "csvs/continuum.csv",
     conda:
