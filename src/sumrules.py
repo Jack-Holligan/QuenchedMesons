@@ -9,6 +9,14 @@ from uncertainties import ufloat
 Ncs = [4, 6, 8]
 reps = {"F": "fundamental", "AS": "antisymmetric", "S": "symmetric"}
 observables = ["masses", "decayconsts"]
+channel_names = {
+    "PS": "pseudoscalar",
+    "V": "vector",
+    "AV": "axialvector",
+    "T": "tensor",
+    "AT": "axialtensor",
+    "S": "scalar",
+}
 
 
 def value_or_none(func):
@@ -96,7 +104,9 @@ def get_single_large_N_data(rep):
         with open(f"processed_data/largeN/{rep}_{observable}.txt", "r") as f:
             for line in f:
                 split_line = line.split()
-                data[split_line[0]] = ufloat(*map(float, split_line[1:3]))
+                data[f"{channel_names[split_line[0]]}_{observable}"] = ufloat(
+                    *map(float, split_line[1:3])
+                )
 
     return data
 
