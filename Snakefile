@@ -468,9 +468,9 @@ rule w0_table_csv:
         "python {input.script} {input.metadata} --output_table {output.table} --output_csv {output.csv}"
 
 
-def all_continua(Nc):
+def all_continua(Nc, slug=""):
     return [
-        f"processed_data/Sp{Nc}/continuum/{rep}/{channel_observable}_{rep}_Sp{Nc}.dat"
+        f"processed_data/Sp{Nc}/continuum/{rep}/{channel_observable}_{rep}_Sp{Nc}{slug}.dat"  # fmt: skip (work around Snakefmt bug)
         for rep in reps
         for channel_observable in channel_observables
         if channel_observable.split("_")[0] in metadata.ensembles[Nc][rep]
@@ -494,7 +494,8 @@ rule contlim_tables:
 
 rule contlim_csv:
     input:
-        data=[all_continua(Nc) for Nc in Ncs],
+        data=[all_continua(Nc) for Nc in Ncs]
+        + [all_continua(Nc, "_highbeta") for Nc in Ncs],
         script="src/continuum_csv.py",
     output:
         "csvs/continuum.csv",
