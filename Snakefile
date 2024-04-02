@@ -29,37 +29,37 @@ csvs = expand(
 )
 
 tables = [
-    "tables/w0.tex",
-    *expand("tables/chiral_Sp{Nc}.tex", Nc=Ncs),
-    "tables/chiral_largeN.tex",
-    "tables/sumrules.tex",
+    "assets/tables/w0.tex",
+    *expand("assets/tables/chiral_Sp{Nc}.tex", Nc=Ncs),
+    "assets/tables/chiral_largeN.tex",
+    "assets/tables/sumrules.tex",
 ]
 
 largeN_plots = expand(
-    "plots/largeN_{rep}_{channel_observable}.pdf",
+    "assets/plots/largeN_{rep}_{channel_observable}.pdf",
     rep=reps,
     channel_observable=channel_observables,
 )
-chiral_plots = expand(
-    "plots/chiral_{observable}_Sp{Nc}.pdf",
-    Nc=Ncs,
-    observable=["mass", "decayconst"],
+box_plots = expand(
+    "assets/plots/{representation}{observable}.pdf",
+    representation=["Fundamental", "Antisymmetric", "Symmetric"],
+    observable=["Decay", "Mass"],
 )
 continuum_plots = [
-    f"plots/continuum_Sp{Nc}_{channel_observable}_{rep}.pdf"
+    f"assets/plots/continuum_Sp{Nc}_{channel_observable}_{rep}.pdf"
     for rep in reps
     for channel_observable in channel_observables
     for Nc in Ncs
     if channel_observable.split("_")[0] in metadata.ensembles[Nc][rep]
 ]
 finitesize_plots = expand(
-    "plots/Sp6_beta15.6_mF{mass}_finitesize.pdf",
+    "assets/plots/Sp6_beta15.6_mF{mass}_finitesize.pdf",
     mass=[-0.8, -0.81],
 )
 
-plots = [largeN_plots, chiral_plots, continuum_plots, finitesize_plots]
+plots = [largeN_plots, box_plots, continuum_plots, finitesize_plots]
 
-definitions = "definitions.tex"
+definitions = "assets/definitions.tex"
 
 
 rule all:
@@ -328,6 +328,15 @@ rule box_plot:
         "wolframscript -file {input.script} > {log}"
 
 
+rule collate_box_plots:
+    input:
+        "processed_data/boxplots/{slug}.pdf",
+    output:
+        "assets/plots/{slug}.pdf",
+    shell:
+        "cp {input} {output}"
+
+
 rule generate_large_N_script:
     input:
         "src/largeN.wls",
@@ -409,7 +418,7 @@ rule relocate_finite_size:
     input:
         "processed_data/Sp{Nc}/beta{beta}/Sp{Nc}_beta{beta}_m{Rep}{mass}.pdf",
     output:
-        "plots/Sp{Nc}_beta{beta}_m{Rep}{mass}_finitesize.pdf",
+        "assets/plots/Sp{Nc}_beta{beta}_m{Rep}{mass}_finitesize.pdf",
     shell:
         "cp {input} {output}"
 
@@ -418,16 +427,7 @@ rule collate_large_N_plots:
     input:
         "processed_data/largeN/{rep}_{channel}_{observable}.pdf",
     output:
-        "plots/largeN_{rep}_{channel}_{observable}.pdf",
-    shell:
-        "cp {input} {output}"
-
-
-rule collate_chiral_plots:
-    input:
-        "processed_data/Sp{Nc}/continuum/chiral_{observable}_Sp{Nc}.pdf",
-    output:
-        "plots/chiral_{observable}_Sp{Nc}.pdf",
+        "assets/plots/largeN_{rep}_{channel}_{observable}.pdf",
     shell:
         "cp {input} {output}"
 
@@ -436,7 +436,7 @@ rule collate_contlim_plots:
     input:
         "processed_data/Sp{Nc}/continuum/{rep}/{channel}_{observable}_{rep}_Sp{Nc}.pdf",
     output:
-        "plots/continuum_Sp{Nc}_{channel}_{observable}_{rep}.pdf",
+        "assets/plots/continuum_Sp{Nc}_{channel}_{observable}_{rep}.pdf",
     shell:
         "cp {input} {output}"
 
@@ -445,7 +445,7 @@ rule collate_finitesize_plots:
     input:
         "processed_data/Sp{Nc}/beta{beta}/Sp{Nc}_beta{beta}_m{rep}{mass}.pdf",
     output:
-        "plots/finitesize_Sp{Nc}_beta{beta}_m{rep}{mass}.pdf",
+        "assets/plots/finitesize_Sp{Nc}_beta{beta}_m{rep}{mass}.pdf",
     shell:
         "cp {input} {output}"
 
@@ -464,7 +464,7 @@ rule w0_table_csv:
         data=w0_data,
         script="src/tabulate_w0.py",
     output:
-        table="tables/w0.tex",
+        table="assets/tables/w0.tex",
         csv="csvs/w0.csv",
     conda:
         "environment.yml"
@@ -490,7 +490,7 @@ rule contlim_tables:
         data=contlim_table_inputs,
         script="src/LatexChiral.sh",
     output:
-        table="tables/chiral_Sp{Nc}.tex",
+        table="assets/tables/chiral_Sp{Nc}.tex",
         caption="processed_data/Sp{Nc}/continuum/caption_vars.tex",
     shell:
         "bash src/LatexChiral.sh {wildcards.Nc} processed_data/Sp{wildcards.Nc}/continuum {output.table} {output.caption}"
@@ -522,7 +522,7 @@ rule large_N_table:
         data=large_N_table_inputs,
         script="src/LatexChiral_LargeN.sh",
     output:
-        table="tables/chiral_largeN.tex",
+        table="assets/tables/chiral_largeN.tex",
         caption="processed_data/largeN/caption_vars.tex",
     shell:
         "bash {input.script} processed_data/largeN {output.table} {output.caption}"
@@ -546,7 +546,7 @@ rule sum_rules:
         large_N_data=large_N_table_inputs,
         finite_N_data=[all_continua(Nc) for Nc in Ncs],
     output:
-        table="tables/sumrules.tex",
+        table="assets/tables/sumrules.tex",
         csv="csvs/sumrules.csv",
     conda:
         "environment.yml"
