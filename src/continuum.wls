@@ -108,7 +108,7 @@ Clear[Evaluate[Observable<>channel<>ToString[i]]];Evaluate[Symbol[Observable<>ch
 
 (* ::Input:: *)
 ChannelSymbol=If[ToString[Rep]=="S","\\mathcal{"<>shortchannel<>"}","\\mathrm{"<>If[ToString[Rep]=="AS",ToLowerCase[shortchannel],shortchannel]<>"}"];
-If[StringMatchQ[Observable,"decayconsts"],ylabel=MaTeX["\\hat{f}^2_{"<>ChannelSymbol<>"}",FontSize->24],If[StringMatchQ[Observable,"masses"],ylabel=MaTeX["\\hat{m}^2_{"<>ChannelSymbol<>"}",FontSize->24]]];
+If[StringMatchQ[Observable,"decayconsts"],ylabel=MaTeX["\\hat{f}^2_{"<>ChannelSymbol<>"}",FontSize->20],If[StringMatchQ[Observable,"masses"],ylabel=MaTeX["\\hat{m}^2_{"<>ChannelSymbol<>"}",FontSize->20]]];
 xvalues={};yvalues={};
 For[i=1,i<=Length[Betas],++i,{AppendTo[xvalues,Evaluate[Symbol["massPS"<>ToString[i]]][[;;,5]]+Evaluate[Symbol["massPS"<>ToString[i]]][[;;,6]]],AppendTo[xvalues,Evaluate[Symbol["massPS"<>ToString[i]]][[;;,5]]-Evaluate[Symbol["massPS"<>ToString[i]]][[;;,6]]]}]
 For[i=1,i<=Length[Betas],++i,{AppendTo[yvalues,Evaluate[Symbol[Observable<>channel<>ToString[i]]][[;;,5]]+Evaluate[Symbol[Observable<>channel<>ToString[i]]][[;;,6]]],AppendTo[yvalues,Evaluate[Symbol[Observable<>channel<>ToString[i]]][[;;,5]]-Evaluate[Symbol[Observable<>channel<>ToString[i]]][[;;,6]]]}]
@@ -132,7 +132,7 @@ ObservableFinal={x/.tmp[[2,1]], L/.tmp[[2,2]], W/.tmp[[2,3]], tmp[[1]]/Observabl
 
 (* ::Input:: *)
 For[i=1,i<=Length[Betas],++i,
-Evaluate[Symbol["plot"<>Observable<>channel<>ToString[i]]]=ErrorListPlot[Table[{{Evaluate[Symbol["massPS"<>ToString[i]]][[t,5]],Evaluate[Symbol[StringJoin[Observable,channel,ToString[i]]]][[t,5]]},ErrorBar[Evaluate[Symbol["massPS"<>ToString[i]]][[t,6]],Evaluate[Symbol[StringJoin[Observable,channel,ToString[i]]]][[t,6]]]},{t,Dimensions[Evaluate[Symbol["massPS"<>ToString[i]]]][[1]]}],Frame->True,FrameLabel->{MaTeX["\\hat{m}^2_{\\rm PS}",FontSize->24],ylabel},LabelStyle->Directive[18,Black,FontFamily->Times],RotateLabel->False,PlotStyle->Colours[[i]] ,PlotLegends->{MaTeX["\\beta="<>ToString[NumberForm[Betas[[i]],{3,2}]],FontSize->24]},PlotRange->{{-0.1,1.1Max[xvalues]},{0,1.1Max[yvalues]}}]];
+Evaluate[Symbol["plot"<>Observable<>channel<>ToString[i]]]=ErrorListPlot[Table[{{Evaluate[Symbol["massPS"<>ToString[i]]][[t,5]],Evaluate[Symbol[StringJoin[Observable,channel,ToString[i]]]][[t,5]]},ErrorBar[Evaluate[Symbol["massPS"<>ToString[i]]][[t,6]],Evaluate[Symbol[StringJoin[Observable,channel,ToString[i]]]][[t,6]]]},{t,Dimensions[Evaluate[Symbol["massPS"<>ToString[i]]]][[1]]}],Frame->True,FrameLabel->{MaTeX["\\hat{m}^2_{\\rm PS}",FontSize->20],ylabel},LabelStyle->Directive[18,Black,FontFamily->Times],RotateLabel->False,PlotStyle->Colours[[i]] ,PlotLegends->{MaTeX["\\beta="<>ToString[NumberForm[Betas[[i]],{3,2}]],FontSize->20]},PlotRange->{{-0.1,1.1Max[xvalues]},{0,1.1Max[yvalues]}}]];
 
 
 (* ::Input:: *)
@@ -205,7 +205,7 @@ If[UseObservable,{CombinedResultsFinal=ArrayReshape[Riffle[ObservableFinal,resul
 
 
 (* ::Input:: *)
-If[UseObservable,{DashAllBeta=ErrorListPlot[{{{0,CombinedResultsFinal[[1,1]]},ErrorBar[CombinedResultsFinal[[1,2]]]}},PlotMarkers->{"\[FilledSquare]",15},PlotRange->{{-0.1,1.1Max[xvalues]},{0,1.1Max[yvalues,CombinedResultsFinal[[1,1]]+CombinedResultsFinal[[1,2]]]}},AxesOrigin->{-0.1,0},Frame->True,FrameLabel->{"\!\(\*SubsuperscriptBox[OverscriptBox[\(m\), \(^\)], \(PS\), \(2\)]\)",ylabel},LabelStyle->Directive[15,Black],PlotLegends->{MaTeX["\\text{Extrapolation}",FontSize->24]}];
+If[UseObservable,{DashAllBeta=ErrorListPlot[{{{0,CombinedResultsFinal[[1,1]]},ErrorBar[CombinedResultsFinal[[1,2]]]}},PlotMarkers->{"\[FilledSquare]",15},PlotRange->{{-0.1,1.1Max[xvalues]},{0,1.1Max[yvalues,CombinedResultsFinal[[1,1]]+CombinedResultsFinal[[1,2]]]}},AxesOrigin->{-0.1,0},Frame->True,FrameLabel->{"\!\(\*SubsuperscriptBox[OverscriptBox[\(m\), \(^\)], \(PS\), \(2\)]\)",ylabel},LabelStyle->Directive[15,Black],PlotLegends->{MaTeX["\\text{Extrapolation}",FontSize->20]}];
 AppendTo[showplots,DashAllBeta];
 line=Plot[{f[CombinedResultsFinal[[1,1]],CombinedResultsFinal[[2,1]],x,CombinedResultsFinal[[3,1]],0]+CombinedResultsFinal[[1,2]],f[CombinedResultsFinal[[1,1]],CombinedResultsFinal[[2,1]],x,CombinedResultsFinal[[3,1]],0]-CombinedResultsFinal[[1,2]]},{x,0,1.1Max[xvalues]},PlotStyle->{{Dashed,Black,Thickness[0.001]},{Dashed,Black,Thickness[0.001]}},Filling->True,AxesOrigin->{-0.1,0},Frame->True,FrameLabel->{"\!\(\*SubsuperscriptBox[OverscriptBox[\(m\), \(^\)], \(PS\), \(2\)]\)",ylabel},LabelStyle->Directive[22,Black]];
 AppendTo[showplots,line];
@@ -230,7 +230,7 @@ For[i=2,i<=Length[Betas],++i,{BootstrappingXdataHighBeta=Join[BootstrappingXdata
 ResultsHighBeta=Table[n=k;tmp=NMinimize[{Sum[Sum[(f[x,L,massPSbootsHighBeta[[i,k]],W,1/BootstrappingXdataHighBeta[[i,3]]]-ObservableBootsHighBeta[[i,k]])InvCovHighBeta[[i,j]](f[x,L,massPSbootsHighBeta[[j,k]],W,1/BootstrappingXdataHighBeta[[j,3]]]-ObservableBootsHighBeta[[j,k]]),{i,1,Length[BootstrappingXdataHighBeta[[;;,1]]]}],{j,1,Length[BootstrappingXdataHighBeta[[;;,1]]]}],0.8*FinalHighBeta[[1]]<=x<=1.2*FinalHighBeta[[1]]},{x,L,W},Method->"NelderMead"];{x/.tmp[[2,1]],L/.tmp[[2,2]],W/.tmp[[2,3]],tmp[[1]]/ObservableDofHighBeta},{k,1,Nboots}];
 resultsholder=Table[gaussian=DistributionFitTest[Abs[ResultsHighBeta[[;;,i]]], Automatic,"HypothesisTestData"]["FittedDistribution"];{gaussian[[1]], gaussian[[2]]}, {i, 1, 3}];
 CombinedResultsHighBeta=ArrayReshape[Riffle[FinalHighBeta,resultsholder[[;;,2]]],{4,2}];
-DashHighBeta=ErrorListPlot[{{{0,CombinedResultsHighBeta[[1,1]]},ErrorBar[CombinedResultsHighBeta[[1,2]]]}},PlotMarkers->{"\[FilledUpTriangle]",15},PlotStyle->Black,PlotRange->{{-0.1,1.1Max[xvalues]},{0,1.1Max[yvalues,CombinedResultsHighBeta[[1,1]]+CombinedResultsHighBeta[[1,2]]]}},AxesOrigin->{-0.1,0},Frame->True,FrameLabel->{"\!\(\*SubsuperscriptBox[OverscriptBox[\(m\), \(^\)], \(PS\), \(2\)]\)",ylabel},LabelStyle->Directive[15,Black],PlotLegends->{MaTeX["\\text{Extrapolation (higher }\\beta)",FontSize->24]}];
+DashHighBeta=ErrorListPlot[{{{0,CombinedResultsHighBeta[[1,1]]},ErrorBar[CombinedResultsHighBeta[[1,2]]]}},PlotMarkers->{"\[FilledUpTriangle]",15},PlotStyle->Black,PlotRange->{{-0.1,1.1Max[xvalues]},{0,1.1Max[yvalues,CombinedResultsHighBeta[[1,1]]+CombinedResultsHighBeta[[1,2]]]}},AxesOrigin->{-0.1,0},Frame->True,FrameLabel->{"\!\(\*SubsuperscriptBox[OverscriptBox[\(m\), \(^\)], \(PS\), \(2\)]\)",ylabel},LabelStyle->Directive[15,Black],PlotLegends->{Column[MaTeX[{"\\text{Extrapolation}", "\\text{(higher }\\beta)"},FontSize->20],Alignment->Left]}];
 AppendTo[showplots,DashHighBeta];
 LineHighBeta=Plot[{f[CombinedResultsHighBeta[[1,1]],CombinedResultsHighBeta[[2,1]],x,CombinedResultsHighBeta[[3,1]],0]+CombinedResultsHighBeta[[1,2]],f[CombinedResultsHighBeta[[1,1]],CombinedResultsHighBeta[[2,1]],x,CombinedResultsHighBeta[[3,1]],0]-CombinedResultsHighBeta[[1,2]]},{x,0,1.1Max[xvalues]},PlotStyle->{{Dashed,Gray,Opacity[0.0001]},{Dashed,Gray,Opacity[0.0001]}},Filling->True,AxesOrigin->{-0.1,0},Frame->True,FrameLabel->{"\!\(\*SubsuperscriptBox[OverscriptBox[\(m\), \(^\)], \(PS\), \(2\)]\)",ylabel},LabelStyle->Directive[22,Black]];
 AppendTo[showplots,LineHighBeta];
