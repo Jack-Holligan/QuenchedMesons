@@ -298,28 +298,32 @@ rule collate_box_plot_inputs:
         "bash {input.script} processed_data/Sp{wildcards.Nc}/continuum {wildcards.Nc}"
 
 
-rule generate_box_plot_scripts:
-    input:
-        "src/boxplot.wls",
-    output:
-        "processed_data/Sp{Nc}/continuum/boxplot.wls",
-    shell:
-        "sed 's/_SED_NC_/{wildcards.Nc}/' {input} > {output}"
-
-
 rule box_plot:
     input:
-        inputs=expand(
-            "processed_data/Sp{{Nc}}/continuum/{rep}/{rep}_{observable}.txt",
-            rep=["F", "AS", "S"],
+        finite_N_inputs=expand(
+            "processed_data/Sp{Nc}/continuum/{rep}/{rep}_{observable}.txt",
+            rep=reps,
+            observable=["masses", "decayconsts"],
+            Nc=Ncs,
+        ),
+        large_N_inputs=expand(
+            "processed_data/largeN/{rep}_{observable}.txt",
+            rep=reps,
             observable=["masses", "decayconsts"],
         ),
-        script="processed_data/Sp{Nc}/continuum/boxplot.wls",
+        script="src/boxplot.wls",
     output:
-        "processed_data/Sp{Nc}/continuum/chiral_mass_Sp{Nc}.pdf",
-        "processed_data/Sp{Nc}/continuum/chiral_decayconst_Sp{Nc}.pdf",
+        boxplots=expand(
+            "processed_data/boxplots/{representation}{observable}.pdf",
+            representation=["Fundamental", "Antisymmetric", "Symmetric"],
+            observable=["Decay", "Mass"],
+        ),
+        ratioplots=expand(
+            "processed_data/boxplots/ftomRatio{rep}.pdf",
+            rep=reps,
+        ),
     log:
-        "processed_data/Sp{Nc}/continuum/boxplot.log",
+        "processed_data/boxplots/boxplot.log",
     shell:
         "wolframscript -file {input.script} > {log}"
 
