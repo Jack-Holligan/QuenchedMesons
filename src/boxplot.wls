@@ -129,7 +129,7 @@ FDecayPlot=Show[DecaysFPlots, PlotRange -> {All, {-0.01, 0.1}}, ImageSize -> 800
  GridLines -> {Table[
     i, {i, Nc // Length, (Nc // Length)*(DecayChannels // Length) - 1,
      Nc // Length}], Table[i, {i, 1/100, 0.5, 1/100}]},
- GridLinesStyle -> {Line, Dotted}, ImagePadding -> {{80, 10}, {3, None}},
+ GridLinesStyle -> {Line, Dotted}, ImagePadding -> {{90, 10}, {3, None}},
  PlotLabel -> MaTeX["\\text{(f) fermions}", FontSize -> 24]]
 
 Export[Outputpath <> "/FundamentalDecay.pdf", FDecayPlot, "PDF"];
@@ -193,7 +193,7 @@ ASDecayPlot=Show[DecaysASPlots, PlotRange -> {All, {-0.02, 0.35}}, ImageSize -> 
  GridLines -> {Table[
     i, {i, Nc // Length, (Nc // Length)*(DecayChannels // Length) - 1,
      Nc // Length}], Table[i, {i, 1/100, 0.5, 1/100}]},
- GridLinesStyle -> {Line, Dotted}, ImagePadding -> {{80, 10}, {3, None}},
+ GridLinesStyle -> {Line, Dotted}, ImagePadding -> {{90, 10}, {3, None}},
  PlotLabel -> MaTeX["\\text{(as) fermions}", FontSize -> 24]]
 
 Export[Outputpath <> "/AntisymmetricDecay.pdf", ASDecayPlot, "PDF"];
@@ -257,7 +257,7 @@ SDecayPlot=Show[DecaysSPlots, PlotRange -> {All, {-0.05, 0.8}}, ImageSize -> 800
  GridLines -> {Table[
     i, {i, Nc // Length, (Nc // Length)*(DecayChannels // Length),
      Nc // Length}], Table[i, {i, 0, 0.8, 1/20}]},
- GridLinesStyle -> {Line, Dotted}, ImagePadding -> {{80, 10}, {3, None}},
+ GridLinesStyle -> {Line, Dotted}, ImagePadding -> {{90, 10}, {3, None}},
  PlotLabel -> MaTeX["\\text{(s) fermions}", FontSize -> 24]]
 
 Export[Outputpath <> "/SymmetricDecay.pdf", SDecayPlot, "PDF"];
