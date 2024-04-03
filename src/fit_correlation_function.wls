@@ -40,7 +40,6 @@ plaqbootavg=Mean[plaqboot][[1]];
 Casimir:=If[StringMatchQ[ToString[Rep],"F"],(1+Nc)/4,If[StringMatchQ[ToString[Rep],"AS"],Nc/2,If[StringMatchQ[ToString[Rep],"S"],Nc/2+1]]];Subscript[\[CapitalDelta], \[CapitalSigma]]:=-12.82; Subscript[\[CapitalDelta], \[Gamma]5\[Gamma]\[Mu]]:=-3.0;Subscript[\[CapitalDelta], \[Gamma]\[Mu]]:=-7.75
 ZV=1+Casimir*(Subscript[\[CapitalDelta], \[CapitalSigma]]+Subscript[\[CapitalDelta], \[Gamma]\[Mu]])*Nc/(beta*plaqbootavg*8\[Pi]^2);
 ZA=1+Casimir*(Subscript[\[CapitalDelta], \[CapitalSigma]]+Subscript[\[CapitalDelta], \[Gamma]5\[Gamma]\[Mu]])*Nc/(beta*plaqbootavg*8\[Pi]^2);
-GradientFlow=_SED_GRADIENTFLOW_;
 ChiSqCrit[dof_,percent_]:=Quiet[(\[Chi]/.NSolve[CDF[ChiSquareDistribution[dof],\[Chi]]-percent==0][[1]])/dof];
 (*Function that returns the REDUCED \[Chi]^2 value for a given number of degrees of freedom (dof) that corresponds to a given certainty (percent)*)
 BinWidth:=0.05
@@ -223,8 +222,8 @@ If[UsePS,FinalChiSq=FINALSPS[[-1,1]]];
 
 
 (* ::Input:: *)
-If[UsePS,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_pseudoscalar_masses_boots.csv"],(PSBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_pseudoscalar_masses_boots.csv"], ""]];
-If[UsePS,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_pseudoscalar_decayconsts_boots.csv"],(ZA*PSBoots[[i,3]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_pseudoscalar_decayconsts_boots.csv"], ""]];
+If[UsePS,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_pseudoscalar_masses_boots.csv"],(PSBoots[[i,2]])^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_pseudoscalar_masses_boots.csv"], ""]];
+If[UsePS,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_pseudoscalar_decayconsts_boots.csv"],(ZA*PSBoots[[i,3]])^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_pseudoscalar_decayconsts_boots.csv"], ""]];
 (*Write all bootstraps to an output file for use in the chiral extrapolation.*)
 
 
@@ -262,8 +261,8 @@ If[UsePS,amplitudePS=Around[FINALSPS[[1,1]],FINALSPS[[1,2]]];
 massPS=Around[FINALSPS[[2,1]],FINALSPS[[2,2]]];
 fPS=Around[FINALSPS[[3,1]],FINALSPS[[3,2]]];
 amplitudePS=amplitudePS^2;
-massPS=(GradientFlow*massPS)^2;
-fPS=(GradientFlow*fPS)^2;]
+massPS=(massPS)^2;
+fPS=(fPS)^2;]
 
 
 (* ::Input:: *)
@@ -429,8 +428,8 @@ If[UseV,FinalChiSq=FINALSV[[-1,1]]];
 
 
 (* ::Input:: *)
-If[UseV,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_vector_masses_boots.csv"],(VBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_vector_masses_boots.csv"], ""]];
-If[UseV,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_vector_decayconsts_boots.csv"],VBoots[[i,1]]*(ZV*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_vector_decayconsts_boots.csv"], ""]];
+If[UseV,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_vector_masses_boots.csv"],(VBoots[[i,2]])^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_vector_masses_boots.csv"], ""]];
+If[UseV,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_vector_decayconsts_boots.csv"],VBoots[[i,1]]*(ZV)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_vector_decayconsts_boots.csv"], ""]];
 (*Write all bootstraps to an output file for use in the chiral extrapolation.*)
 
 
@@ -464,8 +463,8 @@ If[UseV,Export[StringJoin[Outputpath,"/vectorCSD.pdf"],HistogramPlotV,"PDF"], Ex
 (*Square measurements, if necessary, accounting for propagation of errors and renormalise decay constants.*)
 If[UseV,fV2=Around[FINALSV[[1,1]],FINALSV[[1,2]]];
 massV=Around[FINALSV[[2,1]],FINALSV[[2,2]]];
-fV2=fV2*(GradientFlow)^2;
-massV=(GradientFlow*massV)^2;
+fV2=fV2;
+massV=(massV)^2;
 FINALSV[[1,1]]=ZV^2*fV2["Value"];
 FINALSV[[1,2]]=ZV^2*fV2["Error"];
 FINALSV[[2,1]]=massV["Value"];
@@ -626,8 +625,8 @@ If[UseAV,FinalChiSq=FINALSAV[[-1,1]]];
 
 
 (* ::Input:: *)
-If[UseAV,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_masses_boots.csv"],(AVBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_masses_boots.csv"], ""]];
-If[UseAV,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_decayconsts_boots.csv"],AVBoots[[i,1]]*(ZA*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_decayconsts_boots.csv"], ""]];
+If[UseAV,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_masses_boots.csv"],(AVBoots[[i,2]])^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_masses_boots.csv"], ""]];
+If[UseAV,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_decayconsts_boots.csv"],AVBoots[[i,1]]*(ZA)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialvector_decayconsts_boots.csv"], ""]];
 (*Write all bootstraps to an output file for use in the chiral extrapolation.*)
 
 
@@ -661,8 +660,8 @@ If[UseAV,Export[StringJoin[Outputpath,"/axialvectorCSD.pdf"],HistogramPlotAV,"PD
 (*Square measurements, if necessary, accounting for propagation of errors and renormalise decay constants.*)
 If[UseAV,fAV2=Around[FINALSAV[[1,1]],FINALSAV[[1,2]]];
 massAV=Around[FINALSAV[[2,1]],FINALSAV[[2,2]]];
-fAV2=fAV2*(GradientFlow)^2;
-massAV=(GradientFlow*massAV)^2;
+fAV2=fAV2;
+massAV=(massAV)^2;
 FINALSAV[[1,1]]=ZA^2*fAV2["Value"];
 FINALSAV[[1,2]]=ZA^2*fAV2["Error"];
 FINALSAV[[2,1]]=massAV["Value"];
@@ -819,7 +818,7 @@ If[UseS,FinalChiSq=FINALSS[[-1,1]]];
 
 
 (* ::Input:: *)
-If[UseS,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_scalar_masses_boots.csv"],(SBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_scalar_masses_boots.csv"], ""]];
+If[UseS,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_scalar_masses_boots.csv"],(SBoots[[i,2]])^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_scalar_masses_boots.csv"], ""]];
 (*Write all bootstraps to an output file for use in the chiral extrapolation.*)
 
 
@@ -852,7 +851,7 @@ If[UseS,Export[StringJoin[Outputpath,"/scalarCSD.pdf"],HistogramPlotS,"PDF"], Ex
 (* ::Input:: *)
 (*Square measurements, if necessary, accounting for propagation of errors and renormalise decay constants.*)
 If[UseS,massS=Around[FINALSS[[2,1]],FINALSS[[2,2]]];
-massS=(GradientFlow*massS)^2;
+massS=(massS)^2;
 FINALSS[[2,1]]=massS["Value"];
 FINALSS[[2,2]]=massS["Error"];]
 
@@ -1011,7 +1010,7 @@ If[UseT,FinalChiSq=FINALST[[-1,1]]];
 
 
 (* ::Input:: *)
-If[UseT,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_tensor_masses_boots.csv"],(TBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_tensor_masses_boots.csv"], ""]];
+If[UseT,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_tensor_masses_boots.csv"],(TBoots[[i,2]])^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_tensor_masses_boots.csv"], ""]];
 (*Write all bootstraps to an output file for use in the chiral extrapolation.*)
 
 
@@ -1044,7 +1043,7 @@ If[UseT,Export[StringJoin[Outputpath,"/tensorCSD.pdf"],HistogramPlotT,"PDF"], Ex
 (* ::Input:: *)
 (*Square measurements, if necessary, accounting for propagation of errors and renormalise decay constants.*)
 If[UseT,massT=Around[FINALST[[2,1]],FINALST[[2,2]]];
-massT=(GradientFlow*massT)^2;
+massT=(massT)^2;
 FINALST[[2,1]]=massT["Value"];
 FINALST[[2,2]]=massT["Error"];]
 
@@ -1203,7 +1202,7 @@ If[UseAT,FinalChiSq=FINALSAT[[-1,1]]];
 
 
 (* ::Input:: *)
-If[UseAT,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialtensor_masses_boots.csv"],(ATBoots[[i,2]]*GradientFlow)^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialtensor_masses_boots.csv"], ""]];
+If[UseAT,For[i=1,i<=Nboot,++i,Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialtensor_masses_boots.csv"],(ATBoots[[i,2]])^2]], Write[StringJoin[Outputpath, "/", FilenameSlug,"_axialtensor_masses_boots.csv"], ""]];
 (*Write all bootstraps to an output file for use in the chiral extrapolation.*)
 
 
@@ -1236,7 +1235,7 @@ If[UseAT,Export[StringJoin[Outputpath,"/axialtensorCSD.pdf"],HistogramPlotAT,"PD
 (* ::Input:: *)
 (*Square measurements, if necessary, accounting for propagation of errors and renormalise decay constants.*)
 If[UseAT,massAT=Around[FINALSAT[[2,1]],FINALSAT[[2,2]]];
-massAT=(GradientFlow*massAT)^2;
+massAT=(massAT)^2;
 FINALSAT[[2,1]]=massAT["Value"];
 FINALSAT[[2,2]]=massAT["Error"];]
 
