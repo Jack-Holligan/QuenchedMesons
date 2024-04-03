@@ -190,7 +190,7 @@ def write_csv_row(group_family, Nc, representation, Nf, data, writer):
     to_write = {
         "group_family": group_family,
         "Nc": Nc,
-        "representation": representation,
+        "representation": reps[representation],
         "Nf": Nf,
     }
     for s in "s0", "s1", "s2":

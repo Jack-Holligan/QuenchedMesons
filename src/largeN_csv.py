@@ -34,6 +34,7 @@ def get_file_data(representation, observable):
         "mass_hat_squared": "masses",
         "decayconst_hat_squared_over_Nc": "decayconsts",
     }
+    representations = {"AS": "antisymmetric", "F": "fundamental", "S": "symmetric"}
     filename = f"processed_data/LargeN/{representation}_{plurals[observable]}.txt"
     try:
         with open(filename, "r") as f:
@@ -44,7 +45,7 @@ def get_file_data(representation, observable):
     data = []
     for line in lines:
         datum = {
-            "representation": representation,
+            "representation": representations[representation],
             "observable": observable,
         }
         for label, element in zip(

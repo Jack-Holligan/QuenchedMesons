@@ -33,21 +33,23 @@ def get_file_data(filename):
     result = {
         key: None
         for key in [
-            "mass_value",
-            "mass_uncertainty",
-            "decayconst_value",
-            "decayconst_uncertainty",
+            "mass_squared_value",
+            "mass_squared_uncertainty",
+            "decayconst_squared_value",
+            "decayconst_squared_uncertainty",
+            "chisquare",
         ]
     }
     with open(filename, "r") as f:
         content = f.readlines()
 
     if len(content) >= 6:
-        get_single_line("mass_value", 2, content, result)
-        get_single_line("mass_uncertainty", 3, content, result)
+        get_single_line("mass_squared_value", 2, content, result)
+        get_single_line("mass_squared_uncertainty", 3, content, result)
+        get_single_line("chisquare", -4, content, result)
     if len(content) >= 8:
-        get_single_line("decayconst_value", 0, content, result)
-        get_single_line("decayconst_uncertainty", 1, content, result)
+        get_single_line("decayconst_squared_value", 0, content, result)
+        get_single_line("decayconst_squared_uncertainty", 1, content, result)
 
     return result
 
@@ -87,10 +89,11 @@ def main():
             "representation",
             "channel",
             "valence_mass",
-            "mass_value",
-            "mass_uncertainty",
-            "decayconst_value",
-            "decayconst_uncertainty",
+            "mass_squared_value",
+            "mass_squared_uncertainty",
+            "decayconst_squared_value",
+            "decayconst_squared_uncertainty",
+            "chisquare",
         ],
     )
     writer.writeheader()

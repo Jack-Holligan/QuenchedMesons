@@ -14,14 +14,19 @@ def get_args():
 
 def get_file_data(representation, Nc, channel, observable, slug="", note=None):
     plurals = {"mass": "masses", "decayconst": "decayconsts"}
+    descriptions = {
+        "mass": "mass_hat_squared",
+        "decayconst": "decayconst_hat_squared_over_Nc",
+    }
+    representations = {"F": "fundamental", "AS": "antisymmetric", "S": "symmetric"}
     filename = (
         f"processed_data/Sp{Nc}/continuum/{representation}/"
         f"{channel}_{plurals[observable]}_{representation}_Sp{Nc}{slug}.dat"
     )
     datum = {
         "Nc": Nc,
-        "representation": representation,
-        "observable": observable,
+        "representation": representations[representation],
+        "observable": descriptions[observable],
         "channel": channel,
         "note": note,
     }
