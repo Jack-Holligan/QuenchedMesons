@@ -183,7 +183,7 @@ rule collate_boots:
 
 def wflow_log(wildcards):
     ensemble = metadata.flow_ensembles[int(wildcards.Nc)][float(wildcards.beta)]
-    return f"raw_data/Sp{{Nc}}/beta{{beta}}/wflow_nc{{Nc}}S{ensemble['Ns']}T{ensemble['Nt']}B{{beta}}.out"
+    return f"raw_data/Sp{{Nc}}/beta{{beta}}/wflow_nc{{Nc}}S{ensemble['NS']}T{ensemble['NT']}B{{beta}}.out"
 
 
 rule wilson_flow:

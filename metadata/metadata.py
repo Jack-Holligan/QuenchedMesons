@@ -61,7 +61,7 @@ flow_ensembles = {
                 for ensemble in puregauge_metadata.values()
                 if ensemble["Nc"] == Nc and ensemble["beta"] == beta
             ],
-            key=lambda ensemble: (ensemble["Ns"], ensemble["Nt"]),
+            key=lambda ensemble: (ensemble["NS"], ensemble["NT"]),
         )[-1]
         for beta in beta_set
     }

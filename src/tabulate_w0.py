@@ -56,7 +56,7 @@ def tabulate(w0s, f=stdout):
     print(r"\hline", file=f)
     for Nc, Nc_w0s in group_by_Nc(w0s).items():
         num_rows = len(Nc_w0s)
-        row_template = ["", "{beta}", r"${Ns}^3 \times {Nt}$", "${w0:.02uSL}$"]
+        row_template = ["", "{beta}", r"${NS}^3 \times {NT}$", "${w0:.02uSL}$"]
         contents = [list(map(lambda e: e.format(**w0), row_template)) for w0 in Nc_w0s]
         contents[0][0] = f"\\multirow{{{num_rows}}}*{{{Nc // 2}}}"
 
@@ -82,8 +82,8 @@ def write_csv(w0s, output_file):
             {
                 "Nc": w0["Nc"],
                 "beta": w0["beta"],
-                "NS": w0["Ns"],
-                "NT": w0["Nt"],
+                "NS": w0["NS"],
+                "NT": w0["NT"],
                 "w0_value": w0["w0"].nominal_value,
                 "w0_uncertainty": w0["w0"].std_dev,
             }
