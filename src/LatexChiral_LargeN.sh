@@ -51,7 +51,6 @@ do
         chi2=$(cat ${rep}_decayconsts.txt | grep -w ${channel} | awk '{print $4}')
         if [[ "${chi2}" != "--" ]]
         then
-            echo $chi2
             chi2=$(echo ${chi2} | xargs printf "%1.2f")
         fi
 
