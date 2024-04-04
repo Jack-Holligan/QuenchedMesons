@@ -1,13 +1,11 @@
-csvs
-plots
-tables
-definitions.tex
+/csvs
+/assets
 
-input_files
-raw_data
-processed_data
-metadata
+/input_files
+/raw_data
+/processed_data
+/metadata
 
-tmp
+/tmp
 
-.snakemake
+/.snakemake
