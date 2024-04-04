@@ -239,12 +239,12 @@ Export[OutputFilenameBase<>"_highbeta.dat",Array["--"&,{4,2}],"Table","FieldSepa
 
 
 (* ::Input:: *)
-FinalPlot=If[UseObservable,Show[showplots,PlotLabel->MaTeX["\\chi^2/\\text{d.o.f.}="<>ToString[NumberForm[ObservableFinal[[4]],{3,2}]],FontSize->24],Epilog->{Directive[Red,Opacity[0.1]],limit1,limit2}]]
+FinalPlot=Show[showplots,PlotLabel->MaTeX["\\chi^2/\\text{d.o.f.}="<>ToString[NumberForm[ObservableFinal[[4]],{3,2}]],FontSize->24],Epilog->{Directive[Red,Opacity[0.1]],If[UseObservable,limit1,Nothing],If[UseObservable,limit2,Nothing]}];
 
 
 (* ::Input:: *)
-If[UseObservable,Export[OutputFilenameBase<>".pdf",FinalPlot,"PDF",AllowRasterization->False,ImageResolution->1200];];
+Export[OutputFilenameBase<>".pdf",FinalPlot,"PDF",AllowRasterization->False,ImageResolution->1200];
 
 
 (* ::Input:: *)
-If[UseObservable,{Export[OutputFilenameBase<>".dat",CombinedResultsFinal,"Table","FieldSeparators"->" "];},{Export[OutputFilenameBase<>".dat",Array["--"&,{4,2}],"Table","FieldSeparators"->" "];Export[OutputFilenameBase<>".pdf",""];}];
+If[UseObservable,{Export[OutputFilenameBase<>".dat",CombinedResultsFinal,"Table","FieldSeparators"->" "];},Export[OutputFilenameBase<>".dat",Array["--"&,{4,2}],"Table","FieldSeparators"->" "]];
