@@ -107,8 +107,8 @@ Clear[Evaluate[Observable<>channel<>ToString[i]]];Evaluate[Symbol[Observable<>ch
 
 
 (* ::Input:: *)
-ChannelSymbol=If[ToString[Rep]=="S","\\mathcal{"<>shortchannel<>"}","\\mathrm{"<>If[ToString[Rep]=="AS",ToLowerCase[shortchannel],shortchannel]<>"}"];
-If[StringMatchQ[Observable,"decayconsts"],ylabel=MaTeX["\\hat{f}^2_{"<>ChannelSymbol<>"}",FontSize->20],If[StringMatchQ[Observable,"masses"],ylabel=MaTeX["\\hat{m}^2_{"<>ChannelSymbol<>"}",FontSize->20]]];
+ChannelSymbol[shortchannel_]:=If[ToString[Rep]=="S","\\mathcal{"<>shortchannel<>"}","\\mathrm{"<>If[ToString[Rep]=="AS",ToLowerCase[shortchannel],shortchannel]<>"}"];
+If[StringMatchQ[Observable,"decayconsts"],ylabel=MaTeX["\\hat{f}^2_{"<>ChannelSymbol[shortchannel]<>"}",FontSize->20],If[StringMatchQ[Observable,"masses"],ylabel=MaTeX["\\hat{m}^2_{"<>ChannelSymbol[shortchannel]<>"}",FontSize->20]]];
 xvalues={};yvalues={};
 For[i=1,i<=Length[Betas],++i,{AppendTo[xvalues,Evaluate[Symbol["massPS"<>ToString[i]]][[;;,5]]+Evaluate[Symbol["massPS"<>ToString[i]]][[;;,6]]],AppendTo[xvalues,Evaluate[Symbol["massPS"<>ToString[i]]][[;;,5]]-Evaluate[Symbol["massPS"<>ToString[i]]][[;;,6]]]}]
 For[i=1,i<=Length[Betas],++i,{AppendTo[yvalues,Evaluate[Symbol[Observable<>channel<>ToString[i]]][[;;,5]]+Evaluate[Symbol[Observable<>channel<>ToString[i]]][[;;,6]]],AppendTo[yvalues,Evaluate[Symbol[Observable<>channel<>ToString[i]]][[;;,5]]-Evaluate[Symbol[Observable<>channel<>ToString[i]]][[;;,6]]]}]
@@ -132,7 +132,7 @@ ObservableFinal={x/.tmp[[2,1]], L/.tmp[[2,2]], W/.tmp[[2,3]], tmp[[1]]/Observabl
 
 (* ::Input:: *)
 For[i=1,i<=Length[Betas],++i,
-Evaluate[Symbol["plot"<>Observable<>channel<>ToString[i]]]=ErrorListPlot[Table[{{Evaluate[Symbol["massPS"<>ToString[i]]][[t,5]],Evaluate[Symbol[StringJoin[Observable,channel,ToString[i]]]][[t,5]]},ErrorBar[Evaluate[Symbol["massPS"<>ToString[i]]][[t,6]],Evaluate[Symbol[StringJoin[Observable,channel,ToString[i]]]][[t,6]]]},{t,Dimensions[Evaluate[Symbol["massPS"<>ToString[i]]]][[1]]}],Axes->False,Frame->True,FrameLabel->{MaTeX["\\hat{m}^2_{\\rm PS}",FontSize->20],ylabel},LabelStyle->Directive[18,Black,FontFamily->Times],RotateLabel->False,PlotStyle->Colours[[i]] ,PlotLegends->{MaTeX["\\beta="<>ToString[NumberForm[Betas[[i]],{3,2}]],FontSize->20]},PlotRange->{{-0.1,1.1Max[xvalues]},{0,1.1Max[yvalues]}}]];
+Evaluate[Symbol["plot"<>Observable<>channel<>ToString[i]]]=ErrorListPlot[Table[{{Evaluate[Symbol["massPS"<>ToString[i]]][[t,5]],Evaluate[Symbol[StringJoin[Observable,channel,ToString[i]]]][[t,5]]},ErrorBar[Evaluate[Symbol["massPS"<>ToString[i]]][[t,6]],Evaluate[Symbol[StringJoin[Observable,channel,ToString[i]]]][[t,6]]]},{t,Dimensions[Evaluate[Symbol["massPS"<>ToString[i]]]][[1]]}],Axes->False,Frame->True,FrameLabel->{MaTeX["\\hat{m}^2_{"<>ChannelSymbol["PS"]<>"}",FontSize->20],ylabel},LabelStyle->Directive[18,Black,FontFamily->Times],RotateLabel->False,PlotStyle->Colours[[i]] ,PlotLegends->{MaTeX["\\beta="<>ToString[NumberForm[Betas[[i]],{3,2}]],FontSize->20]},PlotRange->{{-0.1,1.1Max[xvalues]},{0,1.1Max[yvalues]}}]];
 
 
 (* ::Input:: *)
