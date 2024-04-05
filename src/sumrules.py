@@ -144,7 +144,7 @@ def print_bunches(data, slugs=defaultdict(lambda: ""), output_file=stdout):
         print(r"\hline", file=output_file)
         for rep, s_data in Nc_data.items():
             print_single(
-                f"$Sp({Nc})$, ({reps[rep].lower()})",
+                f"$Sp({Nc})$, ({rep.lower()})",
                 s_data,
                 s0_slug=slugs[rep],
                 output_file=output_file,
