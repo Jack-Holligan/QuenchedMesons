@@ -239,7 +239,7 @@ Export[OutputFilenameBase<>"_highbeta.dat",Array["--"&,{4,2}],"Table","FieldSepa
 
 
 (* ::Input:: *)
-FinalPlot=Show[showplots,PlotLabel->MaTeX["\\chi^2/\\text{d.o.f.}="<>ToString[NumberForm[ObservableFinal[[4]],{3,2}]],FontSize->24],Epilog->{Directive[Red,Opacity[0.1]],If[UseObservable,limit1,Nothing],If[UseObservable,limit2,Nothing]}];
+FinalPlot=Show[showplots,If[UseObservable,PlotLabel->MaTeX["\\chi^2/\\text{d.o.f.}="<>ToString[NumberForm[ObservableFinal[[4]],{3,2}]],FontSize->24],Nothing],Epilog->{Directive[Red,Opacity[0.1]],If[UseObservable,limit1,Nothing],If[UseObservable,limit2,Nothing]}];
 
 
 (* ::Input:: *)
