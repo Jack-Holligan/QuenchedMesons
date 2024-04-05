@@ -40,7 +40,7 @@ do
 
     if [[ "${o2}" == "--" ]] || [[ "${o2}" == "" ]]
     then
-        echo "-- & -- \\\\" >> "${output_file}"
+        echo "\$\cdots\$ & \$\cdots\$ \\\\" >> "${output_file}"
     else
         o=$(echo ${o2} | awk '{print sqrt($1)}')
         oError=$(echo ${oError2} ${o} | awk '{print $1 /2 /$2}')
@@ -90,7 +90,7 @@ do
 
     if [[ "${o2}" == "--" ]] || [[ "${o2}" == "" ]]
     then
-        echo "-- & -- \\\\" >> "${output_file}"
+        echo "\$\cdots\$ & \$\cdots\$ \\\\" >> "${output_file}"
     else
         o=$(echo ${o2} | awk '{print sqrt($1)}')
         oError=$(echo ${oError2} ${o} | awk '{print $1 /2 /$2}')
@@ -140,7 +140,7 @@ do
 
     if [[ "${o2}" == "--" ]] || [[ "${o2}" == "" ]]
     then
-        echo "-- & -- \\\\" >> "${output_file}"
+        echo "\$\cdots\$ & \$\cdots\$ \\\\" >> "${output_file}"
     else
         o=$(echo ${o2} | awk '{print sqrt($1)}')
         oError=$(echo ${oError2} ${o} | awk '{print $1 /2 /$2}')
@@ -190,7 +190,7 @@ do
 
     if [[ "${o2}" == "--" ]] || [[ "${o2}" == "" ]]
     then
-        echo "-- & -- \\\\" >> "${output_file}"
+        echo "\$\cdots\$ & \$\cdots\$ \\\\" >> "${output_file}"
     else
         o=$(echo ${o2} | awk '{print sqrt($1)}')
         oError=$(echo ${oError2} ${o} | awk '{print $1 /2 /$2}')
@@ -240,7 +240,7 @@ do
 
     if [[ "${o2}" == "--" ]] || [[ "${o2}" == "" ]]
     then
-        echo "-- & -- \\\\" >> "${output_file}"
+        echo "\$\cdots\$ & \$\cdots\$ \\\\" >> "${output_file}"
     else
         o=$(echo ${o2} | awk '{print sqrt($1)}')
         oError=$(echo ${oError2} ${o} | awk '{print $1 /2 /$2}')
@@ -290,7 +290,7 @@ do
 
     if [[ "${o2}" == "--" ]] || [[ "${o2}" == "" ]]
     then
-        echo "-- & -- \\\\" >> "${output_file}"
+        echo "\$\cdots\$ & \$\cdots\$ \\\\" >> "${output_file}"
     else
         o=$(echo ${o2} | awk '{print sqrt($1)}')
         oError=$(echo ${oError2} ${o} | awk '{print $1 /2 /$2}')
@@ -340,7 +340,7 @@ do
 
     if [[ "${o2}" == "--" ]] || [[ "${o2}" == "" ]]
     then
-        echo "-- & -- \\\\" >> "${output_file}"
+        echo "\$\cdots\$ & \$\cdots\$ \\\\" >> "${output_file}"
     else
         o=$(echo ${o2} | awk '{print sqrt($1)}')
         oError=$(echo ${oError2} ${o} | awk '{print $1 /2 /$2}')
@@ -390,7 +390,7 @@ do
 
     if [[ "${o2}" == "--" ]] || [[ "${o2}" == "" ]]
     then
-        echo "-- & -- \\\\" >> "${output_file}"
+        echo "\$\cdots\$ & \$\cdots\$ \\\\" >> "${output_file}"
     else
         o=$(echo ${o2} | awk '{print sqrt($1)}')
         oError=$(echo ${oError2} ${o} | awk '{print $1 /2 /$2}')

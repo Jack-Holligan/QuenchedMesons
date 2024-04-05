@@ -38,7 +38,7 @@ do
 
     if [ ${o} == "--" ]
     then
-        echo "-- & -- \\\\" >> "${output_file}"
+        echo "\$\cdots\$ & \$\cdots\$ \\\\" >> "${output_file}"
     else
         num=1
         tmp=${oError}
@@ -65,8 +65,11 @@ do
             then
                 caption_chisquare=${chi2}
             fi
-        else
+        elif [[ "${chi2}" != "--" ]]
+        then
             echo -n "${chi2}" >> "${output_file}"
+        else
+            echo -n "\$\cdots\$" >> "${output_file}"
         fi
         echo "\\\\" >> "${output_file}"
     fi
@@ -90,7 +93,7 @@ do
 
     if [ ${o} == "--" ]
     then
-        echo "-- & -- \\\\" >> "${output_file}"
+        echo "\$\cdots\$ & \$\cdots\$ \\\\" >> "${output_file}"
     else
         num=1
         tmp=${oError}
@@ -117,8 +120,11 @@ do
             then
                 caption_chisquare=${chi2}
             fi
-        else
+        elif [[ "${chi2}" != "--" ]]
+        then
             echo -n "${chi2}" >> "${output_file}"
+        else
+            echo -n "\$\cdots\$" >> "${output_file}"
         fi
         echo "\\\\" >> "${output_file}"
     fi
@@ -142,7 +148,7 @@ do
 
     if [ ${o} == "--" ]
     then
-        echo "-- & -- \\\\" >> "${output_file}"
+        echo "\$\cdots\$ & \$\cdots\$ \\\\" >> "${output_file}"
     else
         num=1
         tmp=${oError}
@@ -169,8 +175,11 @@ do
             then
                 caption_chisquare=${chi2}
             fi
-        else
+        elif [[ "${chi2}" != "--" ]]
+        then
             echo -n "${chi2}" >> "${output_file}"
+        else
+            echo -n "\$\cdots\$" >> "${output_file}"
         fi
         echo "\\\\" >> "${output_file}"
     fi
@@ -194,7 +203,7 @@ do
 
     if [ ${o} == "--" ]
     then
-        echo "-- & -- \\\\" >> "${output_file}"
+        echo "\$\cdots\$ & \$\cdots\$ \\\\" >> "${output_file}"
     else
         num=1
         tmp=${oError}
@@ -221,8 +230,11 @@ do
             then
                 caption_chisquare=${chi2}
             fi
-        else
+        elif [[ "${chi2}" != "--" ]]
+        then
             echo -n "${chi2}" >> "${output_file}"
+        else
+            echo -n "\$\cdots\$" >> "${output_file}"
         fi
         echo "\\\\" >> "${output_file}"
     fi
@@ -246,7 +258,7 @@ do
 
     if [ ${o} == "--" ]
     then
-        echo "-- & -- \\\\" >> "${output_file}"
+        echo "\$\cdots\$ & \$\cdots\$ \\\\" >> "${output_file}"
     else
         num=1
         tmp=${oError}
@@ -273,8 +285,11 @@ do
             then
                 caption_chisquare=${chi2}
             fi
-        else
+        elif [[ "${chi2}" != "--" ]]
+        then
             echo -n "${chi2}" >> "${output_file}"
+        else
+            echo -n "\$\cdots\$" >> "${output_file}"
         fi
         echo "\\\\" >> "${output_file}"
     fi
@@ -298,7 +313,7 @@ do
 
     if [ ${o} == "--" ]
     then
-        echo "-- & -- \\\\" >> "${output_file}"
+        echo "\$\cdots\$ & \$\cdots\$ \\\\" >> "${output_file}"
     else
         num=1
         tmp=${oError}
@@ -325,8 +340,11 @@ do
             then
                 caption_chisquare=${chi2}
             fi
-        else
+        elif [[ "${chi2}" != "--" ]]
+        then
             echo -n "${chi2}" >> "${output_file}"
+        else
+            echo -n "\$\cdots\$" >> "${output_file}"
         fi
         echo "\\\\" >> "${output_file}"
     fi
@@ -350,7 +368,7 @@ do
 
     if [ ${o} == "--" ]
     then
-        echo "-- & -- \\\\" >> "${output_file}"
+        echo "\$\cdots\$ & \$\cdots\$ \\\\" >> "${output_file}"
     else
         num=1
         tmp=${oError}
@@ -377,8 +395,11 @@ do
             then
                 caption_chisquare=${chi2}
             fi
-        else
+        elif [[ "${chi2}" != "--" ]]
+        then
             echo -n "${chi2}" >> "${output_file}"
+        else
+            echo -n "\$\cdots\$" >> "${output_file}"
         fi
         echo "\\\\" >> "${output_file}"
     fi
@@ -402,7 +423,7 @@ do
 
     if [ ${o} == "--" ]
     then
-        echo "-- & -- \\\\" >> "${output_file}"
+        echo "\$\cdots\$ & \$\cdots\$ \\\\" >> "${output_file}"
     else
         num=1
         tmp=${oError}
@@ -429,8 +450,11 @@ do
             then
                 caption_chisquare=${chi2}
             fi
-        else
+        elif [[ "${chi2}" != "--" ]]
+        then
             echo -n "${chi2}" >> "${output_file}"
+        else
+            echo -n "\$\cdots\$" >> "${output_file}"
         fi
         echo "\\\\" >> "${output_file}"
     fi
