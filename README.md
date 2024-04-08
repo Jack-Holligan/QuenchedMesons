@@ -48,7 +48,7 @@ components are joined together using Make. The code has been tested with
   you should be able to reproduce the full analysis
   by typing
 
-      snakemake --use-conda --max-cores [cores] --resource mathematica_licenses=[licenses] --retries 2
+      snakemake --use-conda --cores [cores] --resource mathematica_licenses=[licenses] --retries 2
 
   where:
 
