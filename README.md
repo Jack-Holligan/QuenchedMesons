@@ -9,7 +9,7 @@ The analysis is written in a mix of WolframScript and Python. The various
 components are joined together using Make. The code has been tested with
 
 * Mathematica 14.0 with MaTeX installed
-* [Snakemake 8.2.1][snakemake], installed via Mamba
+* [Snakemake 8.10.0][snakemake], installed via Mamba
 * Python 3.12
   (with requirements as documented in `environment.yml`,
   and installed using Snakemake)
