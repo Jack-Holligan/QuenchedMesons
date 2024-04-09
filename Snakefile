@@ -324,6 +324,8 @@ rule box_plot:
         ),
     log:
         "processed_data/boxplots/boxplot.log",
+    resources:
+        mathematica_licenses=1,
     shell:
         "wolframscript -file {input.script} > {log}"
 
@@ -358,6 +360,8 @@ rule large_N:
         "processed_data/largeN/{rep}_{channel}_{observable}.txt",
     log:
         "processed_data/largeN/largeN_{observable}_{channel}_{rep}.log",
+    resources:
+        mathematica_licenses=1,
     shell:
         "wolframscript -file {input.script} > {log}"
 
@@ -410,6 +414,8 @@ rule finite_size:
         ),
     log:
         "processed_data/Sp6/beta15.6/finitesize.log",
+    resources:
+        mathematica_licenses=1,
     shell:
         "wolframscript -file {input.script} > {log}"
 
