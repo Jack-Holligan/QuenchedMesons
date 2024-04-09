@@ -20,7 +20,7 @@ fitform=a*x+b;
 
 (* ::Input:: *)
 BaseDirectory=Directory[]<>"/processed_data";
-OutputDirectory=BaseDirectory<>"/LargeN";
+OutputDirectory=BaseDirectory<>"/largeN";
 
 
 (* ::Section:: *)
