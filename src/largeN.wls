@@ -28,7 +28,7 @@ OutputDirectory=BaseDirectory<>"/largeN";
 
 
 (* ::Input:: *)
-data=Table[(ArrayReshape[Import[BaseDirectory<>"/Sp"<>ToString[Nc[[n]]]<>"/Continuum/"<>Rep<>"/"<>Rep<>"_"<>observable<>".txt","Table"],{Length[Channels[observable]],2}]/.{x_,y_}->Around[x,y])[[Channels[observable][shortchannel]]],{n,1,Length[Nc]}];
+data=Table[(ArrayReshape[Import[BaseDirectory<>"/Sp"<>ToString[Nc[[n]]]<>"/continuum/"<>Rep<>"/"<>Rep<>"_"<>observable<>".txt","Table"],{Length[Channels[observable]],2}]/.{x_,y_}->Around[x,y])[[Channels[observable][shortchannel]]],{n,1,Length[Nc]}];
 
 (* ::Input:: *)
 (*Import mass / decay data and square-root. Results are now Overscript[m, ^] / Overscript[f, ^].*)
