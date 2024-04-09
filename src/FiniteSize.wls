@@ -32,4 +32,4 @@ Show[lplot,pplot,ImageSize->800,Frame->True,FrameLabel->{MaTeX["m_{\\infty}L",Fo
 
 
 (* ::Input:: *)
-Do[Export[Outputpath<>"/sp6_beta15.6_m"<>Rep<>ToString[baremasses[[i]]]<>".pdf",Plotter[i],"PDF",AllowRasterization->False],{i,3}];
+Do[Export[Outputpath<>"/Sp6_beta15.6_m"<>Rep<>ToString[baremasses[[i]]]<>".pdf",Plotter[i],"PDF",AllowRasterization->False],{i,3}];
