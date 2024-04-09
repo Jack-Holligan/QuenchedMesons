@@ -35,7 +35,7 @@ def get_file_data(representation, observable):
         "decayconst_hat_squared_over_Nc": "decayconsts",
     }
     representations = {"AS": "antisymmetric", "F": "fundamental", "S": "symmetric"}
-    filename = f"processed_data/LargeN/{representation}_{plurals[observable]}.txt"
+    filename = f"processed_data/largeN/{representation}_{plurals[observable]}.txt"
     try:
         with open(filename, "r") as f:
             lines = f.readlines()
