@@ -90,8 +90,11 @@ Mathematica functions that are not bitwise reproducible between CPU architecture
 As such,
 not all results obtained will be bitwise identical
 when run on different computers.
+Parallelism effects
+may also cause results to differ very slightly
+between different runs on the same hardware.
 Such differences are well outside the precision we consider in this work,
-and do not affect ourconclusions.
+and do not affect our conclusions.
 
 This analysis was originally performed manually using Mathematica,
 and was automated after the fact
