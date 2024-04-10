@@ -1,0 +1,11 @@
+/csvs
+/assets
+
+/input_files
+/raw_data
+/processed_data
+/metadata
+
+/tmp
+
+/.snakemake
