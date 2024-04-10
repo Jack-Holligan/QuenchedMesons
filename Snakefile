@@ -41,9 +41,9 @@ largeN_plots = expand(
     channel_observable=channel_observables,
 )
 box_plots = expand(
-    "assets/plots/{representation}{observable}.pdf",
-    representation=["Fundamental", "Antisymmetric", "Symmetric"],
-    observable=["Decay", "Mass"],
+    "assets/plots/{representation}_{observable}.pdf",
+    representation=["fundamental", "antisymmetric", "symmetric"],
+    observable=["mass", "decayconst"],
 )
 continuum_plots = [
     f"assets/plots/continuum_Sp{Nc}_{channel_observable}_{rep}.pdf"
@@ -300,34 +300,19 @@ rule collate_box_plot_inputs:
 
 rule box_plot:
     input:
-        finite_N_inputs=expand(
-            "processed_data/Sp{Nc}/continuum/{rep}/{rep}_{observable}.txt",
-            rep=reps,
-            observable=["masses", "decayconsts"],
-            Nc=Ncs,
-        ),
-        large_N_inputs=expand(
-            "processed_data/largeN/{rep}_{observable}.txt",
-            rep=reps,
-            observable=["masses", "decayconsts"],
-        ),
-        script="src/boxplot.wls",
+        large_N_csv="csvs/large_N.csv",
+        continuum_csv="csvs/continuum.csv",
+        script="src/boxplot.py",
     output:
-        boxplots=expand(
-            "processed_data/boxplots/{representation}{observable}.pdf",
-            representation=["Fundamental", "Antisymmetric", "Symmetric"],
-            observable=["Decay", "Mass"],
+        expand(
+            "processed_data/boxplots/{representation}_{observable}.pdf",
+            representation=["symmetric", "antisymmetric", "fundamental"],
+            observable=["mass", "decayconst"],
         ),
-        ratioplots=expand(
-            "processed_data/boxplots/ftomRatio{rep}.pdf",
-            rep=reps,
-        ),
-    log:
-        "processed_data/boxplots/boxplot.log",
-    resources:
-        mathematica_licenses=1,
+    conda:
+        "environment.yml"
     shell:
-        "wolframscript -file {input.script} > {log}"
+        "python {input.script}"
 
 
 rule collate_box_plots:
